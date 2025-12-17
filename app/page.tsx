@@ -64,12 +64,6 @@ export default function Home() {
   const whatsappUrlWithMessage = `${whatsappUrl}?text=${whatsappMessage}`;
   const locationUrl = 'https://maps.app.goo.gl/TfNNCKN6BnggyMoJ8';
 
-  // Gallery images array
-  const galleryImages = Array.from({ length: 12 }, (_, i) => ({
-    src: `/gallery/${i + 1}.jpg`,
-    alt: `Lumina Hair Studio Galeri ${i + 1}`,
-  }));
-
   const openLightbox = (index: number) => {
     setCurrentImageIndex(index);
     setIsLightboxOpen(true);
@@ -387,10 +381,8 @@ export default function Home() {
             </p>
           </div>
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
-            {galleryImages.map((img, index) => {
+            {galleryImages.map((image, index) => {
               const hasError = imageErrors.has(index);
-              // galleryImages is string[], so img is always a string
-              const imageSrc: string = typeof img === 'string' ? img : String(img);
               
               return (
                 <div
@@ -420,12 +412,14 @@ export default function Home() {
                       </div>
                     </div>
                   ) : (
-<Image
-  src={galleryImages[currentImageIndex].src}
-  alt={galleryImages[currentImageIndex].alt}
-  width={1600}
-  height={1200}
-/>                  )}
+                    <Image
+                      src={image.src}
+                      alt={image.alt}
+                      width={400}
+                      height={500}
+                      className="w-full h-full object-cover"
+                    />
+                  )}
                   <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors pointer-events-none" />
                 </div>
               );
@@ -517,11 +511,12 @@ export default function Home() {
             <div className="relative w-full h-full rounded-2xl overflow-hidden shadow-2xl flex items-center justify-center">
               {!imageErrors.has(currentImageIndex) ? (
                 <Image
-  src={galleryImages[currentImageIndex].src}
-  alt={galleryImages[currentImageIndex].alt}
-  width={1600}
-  height={1200}
-/>
+                  src={galleryImages[currentImageIndex].src}
+                  alt={galleryImages[currentImageIndex].alt}
+                  width={1600}
+                  height={1200}
+                  className="w-full h-full object-contain"
+                />
               ) : (
                 <div className="w-full h-full bg-gradient-to-br from-purple-200 via-pink-200 to-purple-300 flex items-center justify-center">
                   <div className="text-center p-8">

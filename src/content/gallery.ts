@@ -1,10 +1,15 @@
 // src/content/gallery.ts
 
 // Gallery images configuration
-export const galleryImages: string[] = Array.from(
-  { length: 12 },
-  (_, i) => `/gallery/${i + 1}.jpg`
-);
+export type GalleryImage = {
+  src: string;
+  alt: string;
+};
+
+export const galleryImages: GalleryImage[] = Array.from({ length: 12 }, (_, i) => ({
+  src: `/gallery/${i + 1}.jpg`,
+  alt: `Lumina Hair Studio Galeri ${i + 1}`,
+}));
 
 // Gallery section metadata
 export const galleryTitle = "Önce & Sonra";
