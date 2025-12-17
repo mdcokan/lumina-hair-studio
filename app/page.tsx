@@ -421,18 +421,11 @@ export default function Home() {
                     </div>
                   ) : (
 <Image
-  src={typeof img === "string" ? img : img.src}
-  alt={typeof img === "string" ? `Lumina Hair Studio Galeri ${index + 1}` : img.alt}
-  width={1200}
-  height={900}
-  className="w-full h-[220px] sm:h-[240px] object-cover rounded-2xl shadow-md"
-  sizes="(max-width: 768px) 50vw, (max-width: 1024px) 33vw, 25vw"
-  onError={() => {
-    setImageErrors((prev) => new Set(prev).add(index));
-  }}
-/>
-
-                  )}
+  src={galleryImages[currentImageIndex].src}
+  alt={galleryImages[currentImageIndex].alt}
+  width={1600}
+  height={1200}
+/>                  )}
                   <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors pointer-events-none" />
                 </div>
               );
@@ -524,14 +517,11 @@ export default function Home() {
             <div className="relative w-full h-full rounded-2xl overflow-hidden shadow-2xl flex items-center justify-center">
               {!imageErrors.has(currentImageIndex) ? (
                 <Image
-                  src={galleryImages[currentImageIndex]}
-                  alt={`Lumina Hair Studio Galeri ${currentImageIndex + 1}`}
-                  width={1600}
-                  height={1200}
-                  className="w-full h-full object-contain rounded-2xl"
-                  sizes="90vw"
-                  priority
-                />
+  src={galleryImages[currentImageIndex].src}
+  alt={galleryImages[currentImageIndex].alt}
+  width={1600}
+  height={1200}
+/>
               ) : (
                 <div className="w-full h-full bg-gradient-to-br from-purple-200 via-pink-200 to-purple-300 flex items-center justify-center">
                   <div className="text-center p-8">

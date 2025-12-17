@@ -1,3 +1,5 @@
+// src/content/gallery.ts
+
 // Gallery images configuration
 export const galleryImages: string[] = Array.from(
   { length: 12 },
@@ -5,8 +7,8 @@ export const galleryImages: string[] = Array.from(
 );
 
 // Gallery section metadata
-export const galleryTitle = 'Önce & Sonra';
-export const galleryDescription = 'Müşterilerimizin dönüşüm hikayeleri';
+export const galleryTitle = "Önce & Sonra";
+export const galleryDescription = "Müşterilerimizin dönüşüm hikayeleri";
 
 // Video links for the Videos section
 export const videoLinks = [
@@ -40,9 +42,8 @@ export const videoLinks = [
     title: "Instagram Reels • Salon Anı 3",
     platform: "instagram",
   },
-];
+] as const;
 
 // Videos section metadata
-export const videosTitle = 'Videolar';
-export const videosDescription = 'Çalışmalarımızdan örnekler';
-
+export const videosTitle = "Videolar";
+export const videosDescription = "Çalışmalarımızdan örnekler";
