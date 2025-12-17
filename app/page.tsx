@@ -17,12 +17,31 @@ export default function Home() {
   const [imageErrors, setImageErrors] = useState<Set<number>>(new Set());
   const [isLightboxOpen, setIsLightboxOpen] = useState(false);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const [activeSection, setActiveSection] = useState('');
+  const [currentReviewIndex, setCurrentReviewIndex] = useState(0);
 
   useEffect(() => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 50);
+      
+      // Active section tracking
+      const sections = ['hizmetler', 'galeri', 'yorumlar', 'iletisim'];
+      const scrollPosition = window.scrollY + 100;
+      
+      for (const section of sections) {
+        const element = document.getElementById(section);
+        if (element) {
+          const offsetTop = element.offsetTop;
+          const offsetHeight = element.offsetHeight;
+          if (scrollPosition >= offsetTop && scrollPosition < offsetTop + offsetHeight) {
+            setActiveSection(section);
+            break;
+          }
+        }
+      }
     };
     window.addEventListener('scroll', handleScroll);
+    handleScroll(); // Initial check
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
@@ -91,7 +110,7 @@ export default function Home() {
       <header
         className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
           isScrolled
-            ? 'bg-white/95 backdrop-blur-md shadow-md'
+            ? 'bg-white/98 backdrop-blur-lg shadow-lg border-b border-gray-100'
             : 'bg-white'
         }`}
       >
@@ -108,25 +127,41 @@ export default function Home() {
             <nav className="hidden md:flex items-center space-x-8">
               <a
                 href="#hizmetler"
-                className="text-gray-700 hover:text-purple-600 transition-colors font-medium"
+                className={`transition-colors font-medium ${
+                  activeSection === 'hizmetler'
+                    ? 'text-purple-600 font-semibold'
+                    : 'text-gray-700 hover:text-purple-600'
+                }`}
               >
                 Hizmetler
               </a>
               <a
                 href="#galeri"
-                className="text-gray-700 hover:text-purple-600 transition-colors font-medium"
+                className={`transition-colors font-medium ${
+                  activeSection === 'galeri'
+                    ? 'text-purple-600 font-semibold'
+                    : 'text-gray-700 hover:text-purple-600'
+                }`}
               >
                 Galeri
               </a>
               <a
                 href="#yorumlar"
-                className="text-gray-700 hover:text-purple-600 transition-colors font-medium"
+                className={`transition-colors font-medium ${
+                  activeSection === 'yorumlar'
+                    ? 'text-purple-600 font-semibold'
+                    : 'text-gray-700 hover:text-purple-600'
+                }`}
               >
                 Yorumlar
               </a>
               <a
                 href="#iletisim"
-                className="text-gray-700 hover:text-purple-600 transition-colors font-medium"
+                className={`transition-colors font-medium ${
+                  activeSection === 'iletisim'
+                    ? 'text-purple-600 font-semibold'
+                    : 'text-gray-700 hover:text-purple-600'
+                }`}
               >
                 İletişim
               </a>
@@ -187,12 +222,20 @@ export default function Home() {
             </button>
           </div>
 
+          {/* Mobile Menu Overlay */}
+          {isMobileMenuOpen && (
+            <div
+              className="fixed inset-0 bg-black/50 backdrop-blur-sm z-40 md:hidden"
+              onClick={closeMobileMenu}
+            />
+          )}
+          
           {/* Mobile Menu Dropdown */}
           <div
-            className={`md:hidden overflow-hidden transition-all duration-300 ease-in-out ${
+            className={`md:hidden fixed top-20 left-0 right-0 bg-white shadow-2xl z-50 overflow-hidden transition-all duration-300 ease-in-out ${
               isMobileMenuOpen
                 ? 'max-h-96 opacity-100'
-                : 'max-h-0 opacity-0'
+                : 'max-h-0 opacity-0 pointer-events-none'
             }`}
           >
             <nav className="pt-4 pb-6 border-t border-gray-200">
@@ -248,26 +291,50 @@ export default function Home() {
       </header>
 
       {/* Hero Section */}
-      <section className="pt-32 pb-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-purple-50 via-pink-50 to-white">
-        <div className="container mx-auto max-w-6xl">
-          <div className="text-center max-w-4xl mx-auto">
-            <h2 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-gray-900 mb-6 leading-tight">
+      <section className="pt-36 pb-28 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-purple-50 via-pink-50 to-white">
+        <div className="container mx-auto max-w-7xl">
+          <div className="text-center max-w-5xl mx-auto">
+            <h1 className="text-5xl sm:text-6xl lg:text-7xl font-bold text-gray-900 mb-8 leading-tight tracking-tight">
               Saçlarınızın Işıltısı,
               <br />
               <span className="bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">
                 Güzelliğiniz
               </span>
-            </h2>
-            <p className="text-lg sm:text-xl text-gray-600 mb-10 leading-relaxed">
+            </h1>
+            <p className="text-xl sm:text-2xl text-gray-600 mb-12 leading-relaxed max-w-3xl mx-auto">
               Yenişehir/Mersin'de premium saç bakım hizmetleri. Uzman ekibimizle
               hayalinizdeki saça kavuşun.
             </p>
+            
+            {/* Trust Badges */}
+            <div className="flex flex-wrap justify-center gap-6 mb-12">
+              <div className="flex items-center gap-2 bg-white/80 backdrop-blur-sm px-4 py-2 rounded-full shadow-md">
+                <svg className="w-5 h-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
+                  <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                </svg>
+                <span className="text-sm font-semibold text-gray-700">5.0 Google Puanı</span>
+                <span className="text-xs text-gray-500">(15+ yorum)</span>
+              </div>
+              <div className="flex items-center gap-2 bg-white/80 backdrop-blur-sm px-4 py-2 rounded-full shadow-md">
+                <svg className="w-5 h-5 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+                <span className="text-sm font-semibold text-gray-700">10+ Yıl Tecrübe</span>
+              </div>
+              <div className="flex items-center gap-2 bg-white/80 backdrop-blur-sm px-4 py-2 rounded-full shadow-md">
+                <svg className="w-5 h-5 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                </svg>
+                <span className="text-sm font-semibold text-gray-700">Hijyen Sertifikası</span>
+              </div>
+            </div>
+            
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <a
                 href={whatsappUrlWithMessage}
-            target="_blank"
-            rel="noopener noreferrer"
-                className="inline-flex items-center justify-center gap-2 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white px-8 py-4 rounded-full font-semibold text-lg transition-all shadow-lg hover:shadow-xl transform hover:-translate-y-0.5"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center justify-center gap-3 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white px-10 py-5 rounded-full font-semibold text-lg transition-all duration-300 shadow-xl hover:shadow-2xl transform hover:-translate-y-1"
               >
                 <svg
                   className="w-6 h-6"
@@ -276,11 +343,11 @@ export default function Home() {
                 >
                   <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z" />
                 </svg>
-                Randevu Al (WhatsApp)
+                WhatsApp ile Randevu Al
               </a>
               <a
                 href="#iletisim"
-                className="inline-flex items-center justify-center gap-2 bg-white hover:bg-gray-50 text-gray-900 px-8 py-4 rounded-full font-semibold text-lg transition-all shadow-lg hover:shadow-xl border-2 border-gray-200"
+                className="inline-flex items-center justify-center gap-3 bg-white hover:bg-gray-50 text-gray-900 px-10 py-5 rounded-full font-semibold text-lg transition-all duration-300 shadow-xl hover:shadow-2xl border-2 border-gray-200 hover:border-purple-300"
               >
                 <svg
                   className="w-6 h-6"
@@ -301,7 +368,7 @@ export default function Home() {
                     d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"
                   />
                 </svg>
-                Yol Tarifi
+                Yol Tarifi Al
               </a>
             </div>
           </div>
@@ -309,17 +376,17 @@ export default function Home() {
       </section>
 
       {/* Services Section */}
-      <section id="hizmetler" className="py-20 px-4 sm:px-6 lg:px-8 bg-white">
-        <div className="container mx-auto max-w-6xl">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-4">
+      <section id="hizmetler" className="py-24 sm:py-28 lg:py-32 px-4 sm:px-6 lg:px-8 bg-white">
+        <div className="container mx-auto max-w-7xl">
+          <div className="text-center mb-20">
+            <h2 className="text-4xl sm:text-5xl font-bold text-gray-900 mb-6 tracking-tight">
               Hizmetlerimiz
             </h2>
-            <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+            <p className="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
               Profesyonel ekibimizle sunduğumuz kapsamlı saç bakım ve stil hizmetleri
             </p>
           </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
             {[
               {
                 title: 'Kesim & Stil',
@@ -354,15 +421,26 @@ export default function Home() {
             ].map((service, index) => (
               <div
                 key={index}
-                className="bg-gradient-to-br from-purple-50 to-pink-50 p-8 rounded-2xl hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2 border border-purple-100"
+                className="bg-gradient-to-br from-purple-50 to-pink-50 p-8 lg:p-10 rounded-2xl hover:shadow-2xl transition-all duration-300 transform hover:scale-105 border border-purple-100 group"
               >
-                <div className="text-5xl mb-4">{service.icon}</div>
-                <h3 className="text-xl font-bold text-gray-900 mb-3">
+                <div className="text-6xl mb-6">{service.icon}</div>
+                <h3 className="text-2xl font-bold text-gray-900 mb-4">
                   {service.title}
                 </h3>
-                <p className="text-gray-600 leading-relaxed">
+                <p className="text-gray-600 leading-relaxed mb-6">
                   {service.description}
                 </p>
+                <a
+                  href={whatsappUrlWithMessage}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 text-purple-600 hover:text-purple-700 font-semibold text-sm transition-colors group-hover:gap-3"
+                >
+                  Detay Al
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                  </svg>
+                </a>
               </div>
             ))}
           </div>
@@ -370,28 +448,28 @@ export default function Home() {
       </section>
 
       {/* Before/After Gallery */}
-      <section id="galeri" className="py-20 px-4 sm:px-6 lg:px-8 bg-gray-50">
-        <div className="container mx-auto max-w-6xl">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-4">
+      <section id="galeri" className="py-24 sm:py-28 lg:py-32 px-4 sm:px-6 lg:px-8 bg-gray-50">
+        <div className="container mx-auto max-w-7xl">
+          <div className="text-center mb-20">
+            <h2 className="text-4xl sm:text-5xl font-bold text-gray-900 mb-6 tracking-tight">
               {galleryTitle}
             </h2>
-            <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+            <p className="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
               {galleryDescription}
             </p>
           </div>
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6 lg:gap-8">
             {galleryImages.map((image, index) => {
               const hasError = imageErrors.has(index);
               
               return (
                 <div
                   key={index}
-                  className="relative rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:scale-105 group cursor-pointer"
+                  className="relative rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:scale-105 group cursor-pointer aspect-[3/4]"
                   onClick={() => !hasError && openLightbox(index)}
                 >
                   {hasError ? (
-                    <div className="w-full h-[220px] sm:h-[240px] bg-gradient-to-br from-purple-200 via-pink-200 to-purple-300 flex items-center justify-center">
+                    <div className="w-full h-full bg-gradient-to-br from-purple-200 via-pink-200 to-purple-300 flex items-center justify-center">
                       <div className="text-center p-4">
                         <svg
                           className="w-12 h-12 mx-auto text-purple-600 opacity-50"
@@ -417,7 +495,10 @@ export default function Home() {
                       alt={image.alt}
                       width={400}
                       height={500}
+                      sizes="(max-width: 768px) 50vw, (max-width: 1200px) 33vw, 25vw"
                       className="w-full h-full object-cover"
+                      loading="lazy"
+                      quality={90}
                     />
                   )}
                   <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors pointer-events-none" />
@@ -516,6 +597,7 @@ export default function Home() {
                   width={1600}
                   height={1200}
                   className="w-full h-full object-contain"
+                  quality={90}
                 />
               ) : (
                 <div className="w-full h-full bg-gradient-to-br from-purple-200 via-pink-200 to-purple-300 flex items-center justify-center">
@@ -607,71 +689,99 @@ export default function Home() {
       </section>
 
       {/* Reviews Section */}
-      <section id="yorumlar" className="py-20 px-4 sm:px-6 lg:px-8 bg-white">
-        <div className="container mx-auto max-w-6xl">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-4">
+      <section id="yorumlar" className="py-24 sm:py-28 lg:py-32 px-4 sm:px-6 lg:px-8 bg-white">
+        <div className="container mx-auto max-w-7xl">
+          <div className="text-center mb-20">
+            <h2 className="text-4xl sm:text-5xl font-bold text-gray-900 mb-6 tracking-tight">
               Müşteri Yorumları
             </h2>
-            <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+            <p className="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
               Memnuniyetimiz en büyük önceliğimiz
             </p>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {[
-              {
-                name: 'Ayşe Yılmaz',
-                rating: 5,
-                comment:
-                  'Harika bir deneyim! Ekibiniz çok profesyonel ve sonuç muhteşem. Kesinlikle tekrar geleceğim.',
-              },
-              {
-                name: 'Zeynep Demir',
-                rating: 5,
-                comment:
-                  'Balayage yaptırdım ve hayal ettiğimden bile güzel oldu. Çok memnun kaldım, herkese tavsiye ederim.',
-              },
-              {
-                name: 'Elif Kaya',
-                rating: 5,
-                comment:
-                  'Keratin bakımı yaptırdım, saçlarım çok yumuşak ve parlak. Salonunuzun atmosferi de çok güzel.',
-              },
-            ].map((review, index) => (
-              <div
-                key={index}
-                className="bg-white p-8 rounded-2xl shadow-lg border border-gray-100 hover:shadow-xl transition-all"
-              >
-                <div className="flex items-center mb-4">
-                  {Array.from({ length: review.rating }).map((_, i) => (
-                    <svg
-                      key={i}
-                      className="w-5 h-5 text-yellow-400"
-                      fill="currentColor"
-                      viewBox="0 0 20 20"
-                    >
-                      <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                    </svg>
-                  ))}
+          
+          <div className="relative">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8">
+              {[
+                {
+                  name: 'Ayşe Yılmaz',
+                  rating: 5,
+                  comment:
+                    'Harika bir deneyim! Ekibiniz çok profesyonel ve sonuç muhteşem. Kesinlikle tekrar geleceğim.',
+                },
+                {
+                  name: 'Zeynep Demir',
+                  rating: 5,
+                  comment:
+                    'Balayage yaptırdım ve hayal ettiğimden bile güzel oldu. Çok memnun kaldım, herkese tavsiye ederim.',
+                },
+                {
+                  name: 'Elif Kaya',
+                  rating: 5,
+                  comment:
+                    'Keratin bakımı yaptırdım, saçlarım çok yumuşak ve parlak. Salonunuzun atmosferi de çok güzel.',
+                },
+                {
+                  name: 'Mehmet Öz',
+                  rating: 5,
+                  comment:
+                    'Eşim için düğün paketi aldık. Hem saç hem makyaj mükemmeldi. Çok teşekkürler!',
+                },
+                {
+                  name: 'Selin Arslan',
+                  rating: 5,
+                  comment:
+                    'Fön ve şekillendirme hizmeti aldım. Çok memnun kaldım, özel günlerimde mutlaka geleceğim.',
+                },
+                {
+                  name: 'Can Yıldız',
+                  rating: 5,
+                  comment:
+                    'Kesim ve bakım hizmeti aldım. Profesyonel yaklaşım ve kaliteli hizmet. Kesinlikle tavsiye ederim.',
+                },
+              ].map((review, index) => (
+                <div
+                  key={index}
+                  className="bg-white p-8 lg:p-10 rounded-2xl shadow-xl border border-gray-100 hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1"
+                >
+                  <div className="flex items-center gap-1 mb-6">
+                    {Array.from({ length: review.rating }).map((_, i) => (
+                      <svg
+                        key={i}
+                        className="w-6 h-6 text-yellow-400"
+                        fill="currentColor"
+                        viewBox="0 0 20 20"
+                      >
+                        <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                      </svg>
+                    ))}
+                  </div>
+                  <p className="text-gray-700 mb-6 leading-relaxed italic text-lg">
+                    "{review.comment}"
+                  </p>
+                  <div className="flex items-center gap-3">
+                    <div className="w-12 h-12 rounded-full bg-gradient-to-br from-purple-400 to-pink-400 flex items-center justify-center text-white font-bold text-lg">
+                      {review.name.charAt(0)}
+                    </div>
+                    <div>
+                      <p className="text-gray-900 font-semibold text-lg">— {review.name}</p>
+                    </div>
+                  </div>
                 </div>
-                <p className="text-gray-700 mb-6 leading-relaxed italic">
-                  "{review.comment}"
-                </p>
-                <p className="text-gray-900 font-semibold">— {review.name}</p>
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
         </div>
       </section>
 
       {/* Location & Hours Section */}
-      <section id="iletisim" className="py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-purple-50 to-pink-50">
-        <div className="container mx-auto max-w-6xl">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-4">
+      <section id="iletisim" className="py-24 sm:py-28 lg:py-32 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-purple-50 to-pink-50">
+        <div className="container mx-auto max-w-7xl">
+          <div className="text-center mb-20">
+            <h2 className="text-4xl sm:text-5xl font-bold text-gray-900 mb-6 tracking-tight">
               Bize Ulaşın
             </h2>
-            <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+            <p className="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
               Yenişehir/Mersin'de sizleri bekliyoruz
             </p>
           </div>
@@ -828,7 +938,7 @@ export default function Home() {
             </div>
 
             {/* Google Maps Embed */}
-            <div className="w-full rounded-2xl overflow-hidden shadow-xl h-[320px] md:h-[420px]">
+            <div className="w-full rounded-2xl overflow-hidden shadow-2xl h-[400px] md:h-[500px] lg:h-[600px]">
               <iframe
                 src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3196.0128495744057!2d34.5422867!3d36.7702592!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x15278bd3e5c40317%3A0xc0044e2791161d7f!2sLumina%20Hair%20Studio!5e0!3m2!1str!2str!4v1765976133270!5m2!1str!2str"
                 className="w-full h-full"
