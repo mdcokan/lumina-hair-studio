@@ -346,7 +346,9 @@ export default function Home() {
                 WhatsApp ile Randevu Al
               </a>
               <a
-                href="#iletisim"
+                href={locationUrl}
+                target="_blank"
+                rel="noopener noreferrer"
                 className="inline-flex items-center justify-center gap-3 bg-white hover:bg-gray-50 text-gray-900 px-10 py-5 rounded-full font-semibold text-lg transition-all duration-300 shadow-xl hover:shadow-2xl border-2 border-gray-200 hover:border-purple-300"
               >
                 <svg
@@ -938,7 +940,7 @@ export default function Home() {
             </div>
 
             {/* Google Maps Embed */}
-            <div className="w-full rounded-2xl overflow-hidden shadow-2xl h-[400px] md:h-[500px] lg:h-[600px]">
+            <div className="w-full rounded-2xl overflow-hidden shadow-2xl aspect-video">
               <iframe
                 src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3196.0128495744057!2d34.5422867!3d36.7702592!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x15278bd3e5c40317%3A0xc0044e2791161d7f!2sLumina%20Hair%20Studio!5e0!3m2!1str!2str!4v1765976133270!5m2!1str!2str"
                 className="w-full h-full"
