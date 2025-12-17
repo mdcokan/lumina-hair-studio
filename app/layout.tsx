@@ -15,7 +15,7 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   metadataBase: new URL('https://lumina-hair-studio.vercel.app'),
   title: "Lumina Hair Studio | Yenişehir Mersin Premium Kuaför Salonu",
-  description: "Yenişehir/Mersin'de Lumina Hair Studio: saç kesimi, boya, balayage, keratin bakımı ve özel gün paketleri. 10+ yıl tecrübe, 5.0 Google puanı. WhatsApp'tan hızlı randevu alın.",
+  description: "Yenişehir/Mersin'de kişiye özel saç kesimi, renklendirme ve bakım. Google 5.0 puan, hijyen odaklı hizmet. Randevu için WhatsApp.",
   keywords: [
     "kuaför mersin",
     "saç kesimi mersin",
@@ -23,17 +23,21 @@ export const metadata: Metadata = {
     "balayage mersin",
     "keratin bakımı mersin",
     "yenişehir kuaför",
-    "premium kuaför",
+    "premium kuaför mersin",
     "saç bakımı mersin",
     "düğün saç mersin",
-    "lumina hair studio"
+    "lumina hair studio",
+    "kişiye özel saç kesimi",
+    "hijyen odaklı kuaför",
+    "mersin saç tasarımı",
+    "profesyonel saç bakımı"
   ],
   authors: [{ name: "Lumina Hair Studio" }],
   creator: "Lumina Hair Studio",
   publisher: "Lumina Hair Studio",
   openGraph: {
     title: "Lumina Hair Studio | Yenişehir Mersin Premium Kuaför Salonu",
-    description: "Yenişehir/Mersin'de Lumina Hair Studio: saç kesimi, boya, balayage, keratin bakımı ve özel gün paketleri. 10+ yıl tecrübe, 5.0 Google puanı.",
+    description: "Yenişehir/Mersin'de kişiye özel saç kesimi, renklendirme ve bakım. Google 5.0 puan, hijyen odaklı hizmet. Randevu için WhatsApp.",
     type: "website",
     locale: "tr_TR",
     siteName: "Lumina Hair Studio",
@@ -50,7 +54,7 @@ export const metadata: Metadata = {
   twitter: {
     card: "summary_large_image",
     title: "Lumina Hair Studio | Yenişehir Mersin Premium Kuaför",
-    description: "Yenişehir/Mersin'de premium saç bakım hizmetleri. 10+ yıl tecrübe, 5.0 Google puanı.",
+    description: "Yenişehir/Mersin'de kişiye özel saç kesimi, renklendirme ve bakım. Google 5.0 puan, hijyen odaklı hizmet.",
     images: ["/og-image.jpg"],
   },
   robots: {

@@ -294,16 +294,17 @@ export default function Home() {
       <section className="pt-36 pb-28 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-purple-50 via-pink-50 to-white">
         <div className="container mx-auto max-w-7xl">
           <div className="text-center max-w-5xl mx-auto">
-            <h1 className="text-5xl sm:text-6xl lg:text-7xl font-bold text-gray-900 mb-8 leading-tight tracking-tight">
-              Saçlarınızın Işıltısı,
+            <h1 className="text-5xl sm:text-6xl lg:text-7xl font-bold text-gray-900 mb-6 leading-tight tracking-tight">
+              Saçınıza ışıltı,
               <br />
               <span className="bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">
-                Güzelliğiniz
+                size güven.
               </span>
             </h1>
             <p className="text-xl sm:text-2xl text-gray-600 mb-12 leading-relaxed max-w-3xl mx-auto">
-              Yenişehir/Mersin'de premium saç bakım hizmetleri. Uzman ekibimizle
-              hayalinizdeki saça kavuşun.
+              Yenişehir/Mersin'de kişiye özel saç kesimi, renklendirme ve bakım uygulamaları ile 
+              hayalinizdeki görünüme kavuşun. Profesyonel ekibimiz, modern teknikler ve premium 
+              ürünlerle saçlarınıza özenle yaklaşıyor.
             </p>
             
             {/* Trust Badges */}
@@ -312,20 +313,19 @@ export default function Home() {
                 <svg className="w-5 h-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
                   <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
                 </svg>
-                <span className="text-sm font-semibold text-gray-700">5.0 Google Puanı</span>
-                <span className="text-xs text-gray-500">(15+ yorum)</span>
-              </div>
-              <div className="flex items-center gap-2 bg-white/80 backdrop-blur-sm px-4 py-2 rounded-full shadow-md">
-                <svg className="w-5 h-5 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
-                <span className="text-sm font-semibold text-gray-700">10+ Yıl Tecrübe</span>
+                <span className="text-sm font-semibold text-gray-700">Google 5.0 ★</span>
               </div>
               <div className="flex items-center gap-2 bg-white/80 backdrop-blur-sm px-4 py-2 rounded-full shadow-md">
                 <svg className="w-5 h-5 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
                 </svg>
-                <span className="text-sm font-semibold text-gray-700">Hijyen Sertifikası</span>
+                <span className="text-sm font-semibold text-gray-700">Hijyen Odaklı Hizmet</span>
+              </div>
+              <div className="flex items-center gap-2 bg-white/80 backdrop-blur-sm px-4 py-2 rounded-full shadow-md">
+                <svg className="w-5 h-5 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                </svg>
+                <span className="text-sm font-semibold text-gray-700">Kişiye Özel Danışmanlık</span>
               </div>
             </div>
             
@@ -392,32 +392,32 @@ export default function Home() {
             {[
               {
                 title: 'Kesim & Stil',
-                description: 'Modern ve klasik kesim teknikleri ile hayalinizdeki görünüme kavuşun.',
+                description: 'Yüz hatlarınıza uygun, kişiye özel kesim teknikleri ile modern ve klasik stilleri harmanlayarak hayalinizdeki görünüme ulaşın. Her kesim, saç tipiniz ve yaşam tarzınıza göre özenle tasarlanır.',
                 icon: '✂️',
               },
               {
                 title: 'Boyama & Balayage',
-                description: 'Profesyonel boyama teknikleri ile saçlarınıza yeni bir ışıltı katın.',
+                description: 'Profesyonel renklendirme teknikleri ve premium boyalar ile saçlarınıza doğal ışıltı kazandırın. Balayage, ombre ve full color uygulamalarında uzman ekibimiz size eşlik eder.',
                 icon: '🎨',
               },
               {
                 title: 'Saç Bakımı',
-                description: 'Derinlemesine bakım tedavileri ile saçlarınızı güçlendirin.',
+                description: 'Derinlemesine bakım tedavileri ile saçlarınızı güçlendirin, nemlendirin ve parlaklık kazandırın. Saç tipinize özel seçilen profesyonel bakım ürünleri ile sağlıklı saçlara kavuşun.',
                 icon: '💆',
               },
               {
                 title: 'Fön & Şekillendirme',
-                description: 'Özel günleriniz için profesyonel fön ve şekillendirme hizmetleri.',
+                description: 'Özel günleriniz ve günlük yaşamınız için profesyonel fön ve şekillendirme hizmetleri. Modern teknikler ile istediğiniz stile kavuşun ve gün boyu koruyun.',
                 icon: '✨',
               },
               {
                 title: 'Keratin Bakımı',
-                description: 'Düzleştirme ve yumuşatma için premium keratin tedavileri.',
+                description: 'Premium keratin tedavileri ile saçlarınızı düzleştirin, yumuşatın ve yönetilebilir hale getirin. Friz kontrolü ve uzun süreli parlaklık için ideal çözüm.',
                 icon: '🌟',
               },
               {
                 title: 'Özel Paketler',
-                description: 'Düğün, nişan ve özel günler için özel paket hizmetlerimiz.',
+                description: 'Düğün, nişan ve özel günleriniz için kapsamlı paket hizmetlerimiz. Saç tasarımından makyaja kadar tüm ihtiyaçlarınızı tek çatı altında karşılıyoruz.',
                 icon: '💐',
               },
             ].map((service, index) => (
@@ -445,6 +445,32 @@ export default function Home() {
                 </a>
               </div>
             ))}
+          </div>
+        </div>
+      </section>
+
+      {/* About Us Section */}
+      <section id="hakkimizda" className="py-24 sm:py-28 lg:py-32 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-purple-50 to-pink-50">
+        <div className="container mx-auto max-w-7xl">
+          <div className="text-center mb-20">
+            <h2 className="text-4xl sm:text-5xl font-bold text-gray-900 mb-6 tracking-tight">
+              Hakkımızda
+            </h2>
+            <div className="max-w-4xl mx-auto">
+              <p className="text-xl text-gray-700 leading-relaxed mb-6">
+                Lumina Hair Studio olarak, Yenişehir/Mersin'de saç bakım ve stil alanında 
+                müşterilerimize en yüksek kalitede hizmet sunmayı hedefliyoruz. 
+              </p>
+              <p className="text-xl text-gray-700 leading-relaxed mb-6">
+                Uzman ekibimiz, modern teknikler ve premium ürünler kullanarak her müşterimize 
+                kişiye özel çözümler sunar. Hijyen standartlarımız ve müşteri memnuniyeti 
+                odaklı yaklaşımımız ile saçlarınıza ışıltı, size güven veriyoruz.
+              </p>
+              <p className="text-xl text-gray-700 leading-relaxed">
+                Google 5.0 puanımız ve 15+ müşteri yorumumuz, kalite anlayışımızın en güzel 
+                göstergesidir. Sizleri de Lumina Hair Studio ailesine katılmaya davet ediyoruz.
+              </p>
+            </div>
           </div>
         </div>
       </section>
