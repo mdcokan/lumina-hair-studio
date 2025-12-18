@@ -21,20 +21,20 @@ export default function Home() {
   const locationUrl = 'https://www.google.com/maps/place/Yenişehir,+Mersin';
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-gradient-to-b from-[#faf8ff] via-[#fff5f9] to-white">
       {/* Sticky Header */}
       <header
-        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
+        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ease-in-out ${
           isScrolled
-            ? 'bg-white/95 backdrop-blur-md shadow-md'
-            : 'bg-white'
+            ? 'bg-white/80 backdrop-blur-xl shadow-sm border-b border-[#e8e0f5]/50'
+            : 'bg-white/60 backdrop-blur-md'
         }`}
       >
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-20">
             {/* Logo */}
             <div className="flex items-center">
-              <h1 className="text-2xl sm:text-3xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">
+              <h1 className="text-2xl sm:text-3xl font-bold bg-gradient-to-r from-[#7C6AE6] to-[#E8B4D9] bg-clip-text text-transparent tracking-tight">
                 Lumina Hair Studio
               </h1>
             </div>
@@ -43,25 +43,25 @@ export default function Home() {
             <nav className="hidden md:flex items-center space-x-8">
               <a
                 href="#hizmetler"
-                className="text-gray-700 hover:text-purple-600 transition-colors font-medium"
+                className="text-[#4a4a4a] hover:text-[#7C6AE6] transition-all duration-500 font-medium"
               >
                 Hizmetler
               </a>
               <a
                 href="#galeri"
-                className="text-gray-700 hover:text-purple-600 transition-colors font-medium"
+                className="text-[#4a4a4a] hover:text-[#7C6AE6] transition-all duration-500 font-medium"
               >
                 Galeri
               </a>
               <a
                 href="#yorumlar"
-                className="text-gray-700 hover:text-purple-600 transition-colors font-medium"
+                className="text-[#4a4a4a] hover:text-[#7C6AE6] transition-all duration-500 font-medium"
               >
                 Yorumlar
               </a>
               <a
                 href="#iletisim"
-                className="text-gray-700 hover:text-purple-600 transition-colors font-medium"
+                className="text-[#4a4a4a] hover:text-[#7C6AE6] transition-all duration-500 font-medium"
               >
                 İletişim
               </a>
@@ -72,7 +72,7 @@ export default function Home() {
               href={whatsappUrlWithMessage}
               target="_blank"
               rel="noopener noreferrer"
-              className="hidden sm:flex items-center gap-2 bg-green-500 hover:bg-green-600 text-white px-4 py-2.5 rounded-full font-medium transition-all shadow-lg hover:shadow-xl"
+              className="hidden sm:flex items-center gap-2 bg-[#7C6AE6] hover:bg-[#6B5AD6] text-white px-5 py-2.5 rounded-full font-medium transition-all duration-500 shadow-lg hover:shadow-xl hover:shadow-[#7C6AE6]/30"
             >
               <svg
                 className="w-5 h-5"
@@ -85,7 +85,7 @@ export default function Home() {
             </a>
 
             {/* Mobile Menu Button */}
-            <button className="md:hidden text-gray-700">
+            <button className="md:hidden text-[#4a4a4a] hover:text-[#7C6AE6] transition-colors duration-500">
               <svg
                 className="w-6 h-6"
                 fill="none"
@@ -105,26 +105,37 @@ export default function Home() {
       </header>
 
       {/* Hero Section */}
-      <section className="pt-32 pb-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-purple-50 via-pink-50 to-white">
+      <section className="pt-36 pb-28 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-[#faf8ff] via-[#fff5f9] to-white">
         <div className="container mx-auto max-w-6xl">
           <div className="text-center max-w-4xl mx-auto">
-            <h2 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-gray-900 mb-6 leading-tight">
+            <h2 className="text-5xl sm:text-6xl lg:text-7xl font-bold text-[#2d2d2d] mb-8 leading-tight tracking-tight">
               Saçlarınızın Işıltısı,
               <br />
-              <span className="bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">
+              <span className="bg-gradient-to-r from-[#7C6AE6] to-[#E8B4D9] bg-clip-text text-transparent">
                 Güzelliğiniz
               </span>
             </h2>
-            <p className="text-lg sm:text-xl text-gray-600 mb-10 leading-relaxed">
+            <p className="text-xl sm:text-2xl text-[#6b6b6b] mb-12 leading-relaxed">
               Yenişehir/Mersin'de premium saç bakım hizmetleri. Uzman ekibimizle
               hayalinizdeki saça kavuşun.
             </p>
+            
+            {/* Trust Badges */}
+            <div className="flex flex-wrap justify-center gap-4 mb-12">
+              <div className="flex items-center gap-2 bg-white/90 backdrop-blur-sm px-5 py-2.5 rounded-full shadow-sm border border-[#e8e0f5]">
+                <svg className="w-5 h-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
+                  <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                </svg>
+                <span className="text-sm font-semibold text-[#4a4a4a]">Google 5.0 ★</span>
+              </div>
+            </div>
+            
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <a
                 href={whatsappUrlWithMessage}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center justify-center gap-2 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white px-8 py-4 rounded-full font-semibold text-lg transition-all shadow-lg hover:shadow-xl transform hover:-translate-y-0.5"
+                className="inline-flex items-center justify-center gap-3 bg-[#7C6AE6] hover:bg-[#6B5AD6] text-white px-10 py-5 rounded-full font-semibold text-lg transition-all duration-500 shadow-xl hover:shadow-2xl hover:shadow-[#7C6AE6]/30 transform hover:-translate-y-1"
               >
                 <svg
                   className="w-6 h-6"
@@ -137,7 +148,7 @@ export default function Home() {
               </a>
               <a
                 href="#iletisim"
-                className="inline-flex items-center justify-center gap-2 bg-white hover:bg-gray-50 text-gray-900 px-8 py-4 rounded-full font-semibold text-lg transition-all shadow-lg hover:shadow-xl border-2 border-gray-200"
+                className="inline-flex items-center justify-center gap-3 bg-white hover:bg-[#faf8ff] text-[#2d2d2d] px-10 py-5 rounded-full font-semibold text-lg transition-all duration-500 shadow-xl hover:shadow-2xl border-2 border-[#e8e0f5] hover:border-[#7C6AE6]/30"
               >
                 <svg
                   className="w-6 h-6"
@@ -166,17 +177,17 @@ export default function Home() {
       </section>
 
       {/* Services Section */}
-      <section id="hizmetler" className="py-20 px-4 sm:px-6 lg:px-8 bg-white">
+      <section id="hizmetler" className="py-24 sm:py-28 px-4 sm:px-6 lg:px-8 bg-white">
         <div className="container mx-auto max-w-6xl">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-4">
+          <div className="text-center mb-20">
+            <h2 className="text-4xl sm:text-5xl font-bold text-[#2d2d2d] mb-6 tracking-tight">
               Hizmetlerimiz
             </h2>
-            <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+            <p className="text-xl text-[#6b6b6b] max-w-2xl mx-auto leading-relaxed">
               Profesyonel ekibimizle sunduğumuz kapsamlı saç bakım ve stil hizmetleri
             </p>
           </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
             {[
               {
                 title: 'Kesim & Stil',
@@ -211,13 +222,13 @@ export default function Home() {
             ].map((service, index) => (
               <div
                 key={index}
-                className="bg-gradient-to-br from-purple-50 to-pink-50 p-8 rounded-2xl hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2 border border-purple-100"
+                className="bg-white p-8 lg:p-10 rounded-[24px] hover:shadow-[0_8px_30px_rgba(124,106,230,0.12)] transition-all duration-500 transform hover:-translate-y-2 border border-[#f0eef8]"
               >
-                <div className="text-5xl mb-4">{service.icon}</div>
-                <h3 className="text-xl font-bold text-gray-900 mb-3">
+                <div className="text-6xl mb-6">{service.icon}</div>
+                <h3 className="text-2xl font-bold text-[#2d2d2d] mb-4">
                   {service.title}
                 </h3>
-                <p className="text-gray-600 leading-relaxed">
+                <p className="text-[#6b6b6b] leading-relaxed">
                   {service.description}
                 </p>
               </div>
@@ -227,26 +238,26 @@ export default function Home() {
       </section>
 
       {/* Before/After Gallery */}
-      <section id="galeri" className="py-20 px-4 sm:px-6 lg:px-8 bg-gray-50">
+      <section id="galeri" className="py-24 sm:py-28 px-4 sm:px-6 lg:px-8 bg-gradient-to-b from-white to-[#faf8ff]">
         <div className="container mx-auto max-w-6xl">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-4">
+          <div className="text-center mb-20">
+            <h2 className="text-4xl sm:text-5xl font-bold text-[#2d2d2d] mb-6 tracking-tight">
               Önce & Sonra
             </h2>
-            <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+            <p className="text-xl text-[#6b6b6b] max-w-2xl mx-auto leading-relaxed">
               Müşterilerimizin dönüşüm hikayeleri
             </p>
           </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
             {Array.from({ length: 6 }).map((_, index) => (
               <div
                 key={index}
-                className="relative aspect-[4/5] rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:scale-105 group"
+                className="relative aspect-[4/5] rounded-[24px] overflow-hidden shadow-[0_4px_20px_rgba(124,106,230,0.08)] hover:shadow-[0_8px_30px_rgba(124,106,230,0.12)] transition-all duration-500 transform hover:scale-[1.02] group"
               >
-                <div className="w-full h-full bg-gradient-to-br from-purple-200 via-pink-200 to-purple-300 flex items-center justify-center">
+                <div className="w-full h-full bg-gradient-to-br from-[#D4C5F4] via-[#E8B4D9] to-[#D4C5F4] flex items-center justify-center">
                   <div className="text-center p-4">
                     <svg
-                      className="w-16 h-16 mx-auto text-purple-600 opacity-50"
+                      className="w-16 h-16 mx-auto text-[#7C6AE6] opacity-40"
                       fill="none"
                       stroke="currentColor"
                       viewBox="0 0 24 24"
@@ -258,12 +269,12 @@ export default function Home() {
                         d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
                       />
                     </svg>
-                    <p className="mt-2 text-sm text-purple-700 font-medium">
+                    <p className="mt-2 text-sm text-[#7C6AE6] font-medium">
                       Fotoğraf {index + 1}
                     </p>
                   </div>
                 </div>
-                <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors" />
+                <div className="absolute inset-0 bg-black/0 group-hover:bg-black/5 transition-all duration-500" />
               </div>
             ))}
           </div>
@@ -271,17 +282,17 @@ export default function Home() {
       </section>
 
       {/* Reviews Section */}
-      <section id="yorumlar" className="py-20 px-4 sm:px-6 lg:px-8 bg-white">
+      <section id="yorumlar" className="py-24 sm:py-28 px-4 sm:px-6 lg:px-8 bg-white">
         <div className="container mx-auto max-w-6xl">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-4">
+          <div className="text-center mb-20">
+            <h2 className="text-4xl sm:text-5xl font-bold text-[#2d2d2d] mb-6 tracking-tight">
               Müşteri Yorumları
             </h2>
-            <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+            <p className="text-xl text-[#6b6b6b] max-w-2xl mx-auto leading-relaxed">
               Memnuniyetimiz en büyük önceliğimiz
             </p>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8">
             {[
               {
                 name: 'Ayşe Yılmaz',
@@ -304,9 +315,9 @@ export default function Home() {
             ].map((review, index) => (
               <div
                 key={index}
-                className="bg-white p-8 rounded-2xl shadow-lg border border-gray-100 hover:shadow-xl transition-all"
+                className="bg-white p-8 lg:p-10 rounded-[24px] shadow-[0_4px_20px_rgba(124,106,230,0.08)] border border-[#f0eef8] hover:shadow-[0_8px_30px_rgba(124,106,230,0.12)] transition-all duration-500 transform hover:-translate-y-1"
               >
-                <div className="flex items-center mb-4">
+                <div className="flex items-center mb-6">
                   {Array.from({ length: review.rating }).map((_, i) => (
                     <svg
                       key={i}
@@ -318,24 +329,51 @@ export default function Home() {
                     </svg>
                   ))}
                 </div>
-                <p className="text-gray-700 mb-6 leading-relaxed italic">
+                <p className="text-[#4a4a4a] mb-6 leading-relaxed italic text-lg">
                   "{review.comment}"
                 </p>
-                <p className="text-gray-900 font-semibold">— {review.name}</p>
+                <p className="text-[#2d2d2d] font-semibold text-lg">— {review.name}</p>
               </div>
             ))}
           </div>
         </div>
       </section>
 
+      {/* CTA Section */}
+      <section className="py-16 px-4 sm:px-6 lg:px-8 bg-gradient-to-r from-[#7C6AE6]/10 via-[#E8B4D9]/10 to-[#7C6AE6]/10">
+        <div className="container mx-auto max-w-6xl text-center">
+          <h2 className="text-3xl sm:text-4xl font-bold text-[#2d2d2d] mb-4 tracking-tight">
+            Hayalinizdeki Saça Kavuşun
+          </h2>
+          <p className="text-lg text-[#6b6b6b] mb-8 max-w-2xl mx-auto">
+            Profesyonel ekibimizle randevu alın ve saçlarınıza özenle yaklaşalım
+          </p>
+          <a
+            href={whatsappUrlWithMessage}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center justify-center gap-3 bg-[#7C6AE6] hover:bg-[#6B5AD6] text-white px-10 py-5 rounded-full font-semibold text-lg transition-all duration-500 shadow-xl hover:shadow-2xl hover:shadow-[#7C6AE6]/30 transform hover:-translate-y-1"
+          >
+            <svg
+              className="w-6 h-6"
+              fill="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z" />
+            </svg>
+            WhatsApp ile Randevu Al
+          </a>
+        </div>
+      </section>
+
       {/* Location & Hours Section */}
-      <section id="iletisim" className="py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-purple-50 to-pink-50">
+      <section id="iletisim" className="py-24 sm:py-28 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-[#faf8ff] via-[#fff5f9] to-white">
         <div className="container mx-auto max-w-6xl">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-4">
+          <div className="text-center mb-20">
+            <h2 className="text-4xl sm:text-5xl font-bold text-[#2d2d2d] mb-6 tracking-tight">
               Bize Ulaşın
             </h2>
-            <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+            <p className="text-xl text-[#6b6b6b] max-w-2xl mx-auto leading-relaxed">
               Yenişehir/Mersin'de sizleri bekliyoruz
             </p>
           </div>
@@ -343,9 +381,9 @@ export default function Home() {
             {/* Address & Hours */}
             <div className="space-y-8">
               <div>
-                <h3 className="text-2xl font-bold text-gray-900 mb-4 flex items-center gap-2">
+                <h3 className="text-2xl font-bold text-[#2d2d2d] mb-4 flex items-center gap-2">
                   <svg
-                    className="w-6 h-6 text-purple-600"
+                    className="w-6 h-6 text-[#7C6AE6]"
                     fill="none"
                     stroke="currentColor"
                     viewBox="0 0 24 24"
@@ -365,7 +403,7 @@ export default function Home() {
                   </svg>
                   Adres
                 </h3>
-                <p className="text-gray-700 text-lg leading-relaxed">
+                <p className="text-[#4a4a4a] text-lg leading-relaxed">
                   Yenişehir Mahallesi
                   <br />
                   Örnek Sokak No: 123
@@ -376,7 +414,7 @@ export default function Home() {
                   href={locationUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 mt-4 text-purple-600 hover:text-purple-700 font-medium"
+                  className="inline-flex items-center gap-2 mt-4 text-[#7C6AE6] hover:text-[#6B5AD6] font-medium transition-colors duration-500"
                 >
                   <svg
                     className="w-5 h-5"
@@ -395,9 +433,9 @@ export default function Home() {
                 </a>
               </div>
               <div>
-                <h3 className="text-2xl font-bold text-gray-900 mb-4 flex items-center gap-2">
+                <h3 className="text-2xl font-bold text-[#2d2d2d] mb-4 flex items-center gap-2">
                   <svg
-                    className="w-6 h-6 text-purple-600"
+                    className="w-6 h-6 text-[#7C6AE6]"
                     fill="none"
                     stroke="currentColor"
                     viewBox="0 0 24 24"
@@ -411,7 +449,7 @@ export default function Home() {
                   </svg>
                   Çalışma Saatleri
                 </h3>
-                <div className="space-y-2 text-gray-700 text-lg">
+                <div className="space-y-2 text-[#4a4a4a] text-lg">
                   <div className="flex justify-between">
                     <span>Pazartesi - Cuma</span>
                     <span className="font-semibold">09:00 - 19:00</span>
@@ -427,9 +465,9 @@ export default function Home() {
                 </div>
               </div>
               <div>
-                <h3 className="text-2xl font-bold text-gray-900 mb-4 flex items-center gap-2">
+                <h3 className="text-2xl font-bold text-[#2d2d2d] mb-4 flex items-center gap-2">
                   <svg
-                    className="w-6 h-6 text-purple-600"
+                    className="w-6 h-6 text-[#7C6AE6]"
                     fill="none"
                     stroke="currentColor"
                     viewBox="0 0 24 24"
@@ -443,10 +481,10 @@ export default function Home() {
                   </svg>
                   İletişim
                 </h3>
-                <p className="text-gray-700 text-lg mb-4">
+                <p className="text-[#4a4a4a] text-lg mb-4">
                   <a
                     href={phoneLink}
-                    className="hover:text-purple-600 transition-colors font-semibold"
+                    className="hover:text-[#7C6AE6] transition-colors duration-500 font-semibold"
                   >
                     {phoneDisplay}
                   </a>
@@ -454,7 +492,7 @@ export default function Home() {
                 <div className="flex flex-col sm:flex-row gap-3">
                   <a
                     href={phoneLink}
-                    className="inline-flex items-center justify-center gap-2 bg-purple-600 hover:bg-purple-700 text-white px-6 py-3 rounded-full font-medium transition-all shadow-lg hover:shadow-xl"
+                    className="inline-flex items-center justify-center gap-2 bg-[#7C6AE6] hover:bg-[#6B5AD6] text-white px-6 py-3 rounded-full font-medium transition-all duration-500 shadow-lg hover:shadow-xl hover:shadow-[#7C6AE6]/30"
                   >
                     <svg
                       className="w-5 h-5"
@@ -475,7 +513,7 @@ export default function Home() {
                     href={whatsappUrlWithMessage}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center justify-center gap-2 bg-green-500 hover:bg-green-600 text-white px-6 py-3 rounded-full font-medium transition-all shadow-lg hover:shadow-xl"
+                    className="inline-flex items-center justify-center gap-2 bg-[#7C6AE6] hover:bg-[#6B5AD6] text-white px-6 py-3 rounded-full font-medium transition-all duration-500 shadow-lg hover:shadow-xl hover:shadow-[#7C6AE6]/30"
                   >
                     <svg
                       className="w-5 h-5"
@@ -491,11 +529,11 @@ export default function Home() {
             </div>
 
             {/* Map Placeholder */}
-            <div className="relative rounded-2xl overflow-hidden shadow-xl h-full min-h-[400px]">
-              <div className="absolute inset-0 bg-gradient-to-br from-purple-200 via-pink-200 to-purple-300 flex items-center justify-center">
+            <div className="relative rounded-[24px] overflow-hidden shadow-[0_4px_20px_rgba(124,106,230,0.08)] h-full min-h-[400px]">
+              <div className="absolute inset-0 bg-gradient-to-br from-[#D4C5F4] via-[#E8B4D9] to-[#D4C5F4] flex items-center justify-center">
                 <div className="text-center p-8">
                   <svg
-                    className="w-24 h-24 mx-auto text-purple-600 opacity-50 mb-4"
+                    className="w-24 h-24 mx-auto text-[#7C6AE6] opacity-40 mb-4"
                     fill="none"
                     stroke="currentColor"
                     viewBox="0 0 24 24"
@@ -507,10 +545,10 @@ export default function Home() {
                       d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7"
                     />
                   </svg>
-                  <p className="text-purple-700 font-medium text-lg">
+                  <p className="text-[#7C6AE6] font-medium text-lg">
                     Harita Buraya Eklenecek
                   </p>
-                  <p className="text-purple-600 text-sm mt-2">
+                  <p className="text-[#7C6AE6]/70 text-sm mt-2">
                     Google Maps embed kodu buraya eklenebilir
                   </p>
                 </div>
@@ -521,25 +559,25 @@ export default function Home() {
       </section>
 
       {/* Footer */}
-      <footer className="bg-gray-900 text-white py-12 px-4 sm:px-6 lg:px-8">
+      <footer className="bg-gradient-to-b from-[#faf8ff] to-white py-12 px-4 sm:px-6 lg:px-8 border-t border-[#e8e0f5]/50">
         <div className="container mx-auto max-w-6xl">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
             <div>
-              <h3 className="text-2xl font-bold mb-4 bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">
+              <h3 className="text-2xl font-bold mb-4 bg-gradient-to-r from-[#7C6AE6] to-[#E8B4D9] bg-clip-text text-transparent tracking-tight">
                 Lumina Hair Studio
               </h3>
-              <p className="text-gray-400 leading-relaxed">
+              <p className="text-[#6b6b6b] leading-relaxed">
                 Yenişehir/Mersin'de premium saç bakım ve stil hizmetleri sunan
                 profesyonel kuaför salonu.
               </p>
             </div>
             <div>
-              <h4 className="text-lg font-semibold mb-4">Hızlı Linkler</h4>
-              <ul className="space-y-2 text-gray-400">
+              <h4 className="text-lg font-semibold mb-4 text-[#2d2d2d]">Hızlı Linkler</h4>
+              <ul className="space-y-2 text-[#6b6b6b]">
                 <li>
                   <a
                     href="#hizmetler"
-                    className="hover:text-white transition-colors"
+                    className="hover:text-[#7C6AE6] transition-colors duration-500"
                   >
                     Hizmetler
                   </a>
@@ -547,7 +585,7 @@ export default function Home() {
                 <li>
                   <a
                     href="#galeri"
-                    className="hover:text-white transition-colors"
+                    className="hover:text-[#7C6AE6] transition-colors duration-500"
                   >
                     Galeri
                   </a>
@@ -555,7 +593,7 @@ export default function Home() {
                 <li>
                   <a
                     href="#yorumlar"
-                    className="hover:text-white transition-colors"
+                    className="hover:text-[#7C6AE6] transition-colors duration-500"
                   >
                     Yorumlar
                   </a>
@@ -563,7 +601,7 @@ export default function Home() {
                 <li>
                   <a
                     href="#iletisim"
-                    className="hover:text-white transition-colors"
+                    className="hover:text-[#7C6AE6] transition-colors duration-500"
                   >
                     İletişim
                   </a>
@@ -571,12 +609,12 @@ export default function Home() {
               </ul>
             </div>
             <div>
-              <h4 className="text-lg font-semibold mb-4">İletişim</h4>
-              <ul className="space-y-2 text-gray-400">
+              <h4 className="text-lg font-semibold mb-4 text-[#2d2d2d]">İletişim</h4>
+              <ul className="space-y-2 text-[#6b6b6b]">
                 <li>
                   <a
                     href={phoneLink}
-                    className="hover:text-white transition-colors"
+                    className="hover:text-[#7C6AE6] transition-colors duration-500"
                   >
                     {phoneDisplay}
                   </a>
@@ -586,7 +624,7 @@ export default function Home() {
                     href={whatsappUrl}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="hover:text-white transition-colors"
+                    className="hover:text-[#7C6AE6] transition-colors duration-500"
                   >
                     WhatsApp
                   </a>
@@ -594,7 +632,7 @@ export default function Home() {
               </ul>
             </div>
           </div>
-          <div className="border-t border-gray-800 pt-8 text-center text-gray-400">
+          <div className="pt-8 text-center text-[#6b6b6b] border-t border-[#e8e0f5]/50">
             <p>&copy; {new Date().getFullYear()} Lumina Hair Studio. Tüm hakları saklıdır.</p>
           </div>
         </div>
@@ -602,10 +640,10 @@ export default function Home() {
 
       {/* Floating WhatsApp Button */}
       <a
-        href={whatsappUrl}
+        href={whatsappUrlWithMessage}
         target="_blank"
         rel="noopener noreferrer"
-        className="fixed bottom-6 right-6 z-50 w-16 h-16 bg-green-500 hover:bg-green-600 rounded-full flex items-center justify-center shadow-2xl hover:shadow-green-500/50 transition-all transform hover:scale-110 animate-pulse"
+        className="fixed bottom-6 right-6 z-50 w-16 h-16 bg-[#7C6AE6] hover:bg-[#6B5AD6] rounded-full flex items-center justify-center shadow-2xl hover:shadow-[#7C6AE6]/50 transition-all duration-500 transform hover:scale-110"
         aria-label="WhatsApp ile iletişime geç"
       >
         <svg
