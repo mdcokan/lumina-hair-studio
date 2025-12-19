@@ -14,9 +14,10 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL('https://lumina-hair-studio.vercel.app'),
+  metadataBase: new URL("https://www.lumina-hairstudio.com"),
   title: "Lumina Hair Studio | Yenişehir Mersin Kadın Kuaförü",
-  description: "Yenişehir Mersin'de kadınlara özel saç kesimi, renklendirme ve bakım. Lumina Hair Studio'da profesyonel ve premium kuaför hizmetleri.",
+  description:
+    "Yenişehir Mersin'de kadınlara özel saç kesimi, renklendirme ve bakım. Lumina Hair Studio'da profesyonel ve premium kuaför hizmetleri.",
   keywords: [
     "kuaför mersin",
     "saç kesimi mersin",
@@ -31,14 +32,26 @@ export const metadata: Metadata = {
     "kişiye özel saç kesimi",
     "hijyen odaklı kuaför",
     "mersin saç tasarımı",
-    "profesyonel saç bakımı"
+    "profesyonel saç bakımı",
   ],
   authors: [{ name: "Lumina Hair Studio" }],
   creator: "Lumina Hair Studio",
   publisher: "Lumina Hair Studio",
+
+  // ✅ FAVICON + APPLE ICON + MANIFEST
+  icons: {
+    icon: [
+      { url: "/favicon.ico" },
+      { url: "/favicon-96x96.png", sizes: "96x96", type: "image/png" },
+    ],
+    apple: [{ url: "/apple-touch-icon.png", sizes: "180x180" }],
+  },
+  manifest: "/site.webmanifest",
+
   openGraph: {
     title: "Lumina Hair Studio | Yenişehir Mersin Kadın Kuaförü",
-    description: "Yenişehir Mersin'de kadınlara özel saç kesimi, renklendirme ve bakım. Lumina Hair Studio'da profesyonel ve premium kuaför hizmetleri.",
+    description:
+      "Yenişehir Mersin'de kadınlara özel saç kesimi, renklendirme ve bakım. Lumina Hair Studio'da profesyonel ve premium kuaför hizmetleri.",
     type: "website",
     locale: "tr_TR",
     siteName: "Lumina Hair Studio",
@@ -55,7 +68,8 @@ export const metadata: Metadata = {
   twitter: {
     card: "summary_large_image",
     title: "Lumina Hair Studio | Yenişehir Mersin Kadın Kuaförü",
-    description: "Yenişehir Mersin'de kadınlara özel saç kesimi, renklendirme ve bakım. Lumina Hair Studio'da profesyonel ve premium kuaför hizmetleri.",
+    description:
+      "Yenişehir Mersin'de kadınlara özel saç kesimi, renklendirme ve bakım. Lumina Hair Studio'da profesyonel ve premium kuaför hizmetleri.",
     images: ["/og-image.jpg"],
   },
   robots: {
@@ -96,9 +110,7 @@ export default function RootLayout({
 
   return (
     <html lang="tr">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
+      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
         {/* Google Analytics 4 */}
         <Script
           src="https://www.googletagmanager.com/gtag/js?id=G-BE965WRSRJ"
@@ -112,6 +124,7 @@ export default function RootLayout({
             gtag('config', 'G-BE965WRSRJ');
           `}
         </Script>
+
         {/* Google Ads */}
         <Script
           src="https://www.googletagmanager.com/gtag/js?id=AW-17775158966"
@@ -125,10 +138,13 @@ export default function RootLayout({
             gtag('config', 'AW-17775158966');
           `}
         </Script>
+
+        {/* LocalBusiness JSON-LD */}
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
+
         {children}
       </body>
     </html>
