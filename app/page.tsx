@@ -324,24 +324,24 @@ export default function Home() {
             className="h-full w-full object-cover object-center"
           />
         </div>
-        <div className="absolute inset-0 z-10 bg-gradient-to-b from-black/70 via-black/60 to-black/85" />
+        <div className="absolute inset-0 z-10 bg-gradient-to-b from-black/55 via-black/45 to-black/70" />
         <div className="relative z-20 container mx-auto max-w-7xl py-36">
-          <div className="text-center max-w-5xl mx-auto">
-            <h1 className="text-5xl sm:text-6xl lg:text-7xl font-bold text-[#F5F3EF] mb-6 leading-tight tracking-tight">
+          <div className="text-center flex flex-col gap-4 md:gap-6 max-w-5xl mx-auto">
+            <h1 className="text-4xl md:text-6xl font-bold text-[#F5F3EF] leading-relaxed tracking-tight">
               Saçınıza ışıltı,
               <br />
               <span className="text-[#D8CFC4]">
                 size güven.
               </span>
             </h1>
-            <p className="text-xl sm:text-2xl text-[#CFC7BC] mb-12 leading-relaxed max-w-3xl mx-auto">
+            <p className="text-xl sm:text-2xl text-[#CFC7BC] leading-relaxed max-w-md md:max-w-xl mx-auto">
               Yenişehir/Mersin'de kişiye özel saç kesimi, renklendirme ve bakım uygulamaları ile 
               hayalinizdeki görünüme kavuşun. Profesyonel ekibimiz, modern teknikler ve premium 
               ürünlerle saçlarınıza özenle yaklaşıyor.
             </p>
             
             {/* Trust Badges */}
-            <div className="flex flex-wrap justify-center gap-6 mb-12">
+            <div className="flex flex-wrap justify-center gap-6">
               <div className="flex items-center gap-2 bg-[#181818] backdrop-blur-sm px-4 py-2 rounded-full shadow-md border border-[#D8CFC4]/20">
                 <svg className="w-5 h-5 text-[#D8CFC4]" fill="currentColor" viewBox="0 0 20 20">
                   <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
