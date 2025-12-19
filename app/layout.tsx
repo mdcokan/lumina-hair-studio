@@ -42,7 +42,7 @@ export const metadata: Metadata = {
     type: "website",
     locale: "tr_TR",
     siteName: "Lumina Hair Studio",
-    url: "https://lumina-hair-studio.vercel.app",
+    url: "https://www.lumina-hairstudio.com",
     images: [
       {
         url: "/og-image.jpg",
@@ -91,7 +91,7 @@ export default function RootLayout({
       addressCountry: "TR",
     },
     sameAs: [],
-    url: "http://localhost:3000",
+    url: "https://www.lumina-hairstudio.com",
   };
 
   return (
