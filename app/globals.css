@@ -1,24 +1,33 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #2d2d2d;
+  /* Luxury Minimal / Premium Theme - Black & Beige */
+  --background: #0E0E0E; /* Jet Black */
+  --foreground: #F5F3EF; /* Primary Text on dark */
   
-  /* Soft Luxury Color System */
-  --primary-purple: #7C6AE6;
-  --primary-purple-light: #9B8AEF;
-  --primary-purple-dark: #6B5AD6;
-  --secondary-pink: #E8B4D9;
-  --secondary-lilac: #D4C5F4;
-  --text-dark: #2d2d2d;
-  --text-medium: #4a4a4a;
-  --text-light: #6b6b6b;
-  --border-light: #f0eef8;
-  --border-lilac: #e8e0f5;
-  --bg-gradient-start: #faf8ff;
-  --bg-gradient-end: #fff5f9;
-  --shadow-soft: 0 4px 20px rgba(124, 106, 230, 0.08);
-  --shadow-hover: 0 8px 30px rgba(124, 106, 230, 0.12);
+  /* Color Palette */
+  --jet-black: #0E0E0E;
+  --soft-charcoal: #181818;
+  --charcoal-medium: #1F1F1F;
+  --warm-beige: #D8CFC4;
+  --cream-light: #EFE9E2;
+  --beige-accent: #C4B5A8;
+  --primary-text: #F5F3EF;
+  --secondary-text: #CFC7BC;
+  --dark-text: #1A1A1A; /* On beige backgrounds */
+  --border-beige: rgba(216, 207, 196, 0.2);
+  --border-beige-hover: rgba(216, 207, 196, 0.45);
+  --beige-alpha-08: rgba(216, 207, 196, 0.08);
+  --beige-alpha-12: rgba(216, 207, 196, 0.12);
+  --beige-alpha-20: rgba(216, 207, 196, 0.2);
+  
+  /* Legacy compatibility */
+  --text-dark: #1A1A1A;
+  --text-medium: #CFC7BC;
+  --text-light: #CFC7BC;
+  --border-light: rgba(216, 207, 196, 0.2);
+  --bg-gradient-start: #0E0E0E;
+  --bg-gradient-end: #0E0E0E;
 }
 
 @theme inline {
@@ -27,16 +36,21 @@
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
   
-  /* Custom colors */
-  --color-primary: var(--primary-purple);
-  --color-primary-light: var(--primary-purple-light);
-  --color-primary-dark: var(--primary-purple-dark);
-  --color-secondary: var(--secondary-pink);
-  --color-lilac: var(--secondary-lilac);
+  /* Luxury Minimal Theme Colors */
+  --color-jet-black: var(--jet-black);
+  --color-soft-charcoal: var(--soft-charcoal);
+  --color-charcoal-medium: var(--charcoal-medium);
+  --color-warm-beige: var(--warm-beige);
+  --color-cream-light: var(--cream-light);
+  --color-beige-accent: var(--beige-accent);
+  --color-primary-text: var(--primary-text);
+  --color-secondary-text: var(--secondary-text);
+  --color-dark-text: var(--dark-text);
+  --color-border-beige: var(--border-beige);
 }
 
 body {
-  background: linear-gradient(to bottom, var(--bg-gradient-start), var(--bg-gradient-end), #ffffff);
+  background: var(--jet-black);
   background-attachment: fixed;
   color: var(--foreground);
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;

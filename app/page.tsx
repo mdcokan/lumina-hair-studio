@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import Image from 'next/image';
 import {
   galleryImages,
@@ -19,6 +19,7 @@ export default function Home() {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [activeSection, setActiveSection] = useState('');
   const [currentReviewIndex, setCurrentReviewIndex] = useState(0);
+  const lastNavAt = useRef<number>(0);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -62,10 +63,16 @@ export default function Home() {
       const handleKeyboard = (e: KeyboardEvent) => {
         if (e.key === 'Escape') {
           setIsLightboxOpen(false);
-        } else if (e.key === 'ArrowLeft') {
-          prevImage();
-        } else if (e.key === 'ArrowRight') {
-          nextImage();
+        } else if (e.key === 'ArrowLeft' || e.key === 'ArrowRight') {
+          const now = Date.now();
+          if (now - lastNavAt.current >= 60) {
+            lastNavAt.current = now;
+            if (e.key === 'ArrowLeft') {
+              prevImage();
+            } else if (e.key === 'ArrowRight') {
+              nextImage();
+            }
+          }
         }
       };
       window.addEventListener('keydown', handleKeyboard);
@@ -75,6 +82,24 @@ export default function Home() {
       };
     }
   }, [isLightboxOpen]);
+
+  // Preload next/prev images when lightbox is open
+  useEffect(() => {
+    if (isLightboxOpen && galleryImages.length > 0) {
+      const current = currentImageIndex;
+      const len = galleryImages.length;
+      const next = (current + 1) % len;
+      const prev = (current - 1 + len) % len;
+
+      // Preload next image
+      const nextImg = new window.Image();
+      nextImg.src = galleryImages[next].src;
+
+      // Preload prev image
+      const prevImg = new window.Image();
+      prevImg.src = galleryImages[prev].src;
+    }
+  }, [isLightboxOpen, currentImageIndex]);
 
   const phoneDisplay = '0 552 380 36 96';
   const phoneLink = 'tel:+905523803696';
@@ -105,20 +130,20 @@ export default function Home() {
   };
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-[#0E0E0E]">
       {/* Sticky Header */}
       <header
         className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
           isScrolled
-            ? 'bg-white/98 backdrop-blur-lg shadow-lg border-b border-gray-100'
-            : 'bg-white'
+            ? 'bg-[#0E0E0E]/98 backdrop-blur-lg shadow-lg border-b border-[#D8CFC4]/20'
+            : 'bg-[#0E0E0E]'
         }`}
       >
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-20">
             {/* Logo */}
             <div className="flex items-center">
-              <h1 className="text-2xl sm:text-3xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">
+              <h1 className="text-2xl sm:text-3xl font-bold text-[#D8CFC4]">
                 Lumina Hair Studio
           </h1>
             </div>
@@ -129,8 +154,8 @@ export default function Home() {
                 href="#hizmetler"
                 className={`transition-colors font-medium ${
                   activeSection === 'hizmetler'
-                    ? 'text-purple-600 font-semibold'
-                    : 'text-gray-700 hover:text-purple-600'
+                    ? 'text-[#D8CFC4] font-semibold'
+                    : 'text-[#CFC7BC] hover:text-[#D8CFC4]'
                 }`}
               >
                 Hizmetler
@@ -139,8 +164,8 @@ export default function Home() {
                 href="#galeri"
                 className={`transition-colors font-medium ${
                   activeSection === 'galeri'
-                    ? 'text-purple-600 font-semibold'
-                    : 'text-gray-700 hover:text-purple-600'
+                    ? 'text-[#D8CFC4] font-semibold'
+                    : 'text-[#CFC7BC] hover:text-[#D8CFC4]'
                 }`}
               >
                 Galeri
@@ -149,8 +174,8 @@ export default function Home() {
                 href="#yorumlar"
                 className={`transition-colors font-medium ${
                   activeSection === 'yorumlar'
-                    ? 'text-purple-600 font-semibold'
-                    : 'text-gray-700 hover:text-purple-600'
+                    ? 'text-[#D8CFC4] font-semibold'
+                    : 'text-[#CFC7BC] hover:text-[#D8CFC4]'
                 }`}
               >
                 Yorumlar
@@ -159,8 +184,8 @@ export default function Home() {
                 href="#iletisim"
                 className={`transition-colors font-medium ${
                   activeSection === 'iletisim'
-                    ? 'text-purple-600 font-semibold'
-                    : 'text-gray-700 hover:text-purple-600'
+                    ? 'text-[#D8CFC4] font-semibold'
+                    : 'text-[#CFC7BC] hover:text-[#D8CFC4]'
                 }`}
               >
                 İletişim
@@ -187,7 +212,7 @@ export default function Home() {
             {/* Mobile Menu Button */}
             <button
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-              className="md:hidden text-gray-700 hover:text-purple-600 transition-colors p-2"
+              className="md:hidden text-[#CFC7BC] hover:text-[#D8CFC4] transition-colors p-2"
               aria-label="Menu"
             >
               {isMobileMenuOpen ? (
@@ -232,39 +257,39 @@ export default function Home() {
           
           {/* Mobile Menu Dropdown */}
           <div
-            className={`md:hidden fixed top-20 left-0 right-0 bg-white shadow-2xl z-50 overflow-hidden transition-all duration-300 ease-in-out ${
+            className={`md:hidden fixed top-20 left-0 right-0 bg-[#181818] shadow-2xl z-50 overflow-hidden transition-all duration-300 ease-in-out ${
               isMobileMenuOpen
                 ? 'max-h-96 opacity-100'
                 : 'max-h-0 opacity-0 pointer-events-none'
             }`}
           >
-            <nav className="pt-4 pb-6 border-t border-gray-200">
+            <nav className="pt-4 pb-6 border-t border-[#D8CFC4]/20">
               <div className="flex flex-col space-y-4">
                 <a
                   href="#hizmetler"
                   onClick={closeMobileMenu}
-                  className="text-gray-700 hover:text-purple-600 transition-colors font-medium text-lg py-2 px-4 rounded-lg hover:bg-purple-50"
+                  className="text-[#CFC7BC] hover:text-[#D8CFC4] transition-colors font-medium text-lg py-2 px-4 rounded-lg hover:bg-[#1F1F1F]"
                 >
                   Hizmetler
                 </a>
                 <a
                   href="#galeri"
                   onClick={closeMobileMenu}
-                  className="text-gray-700 hover:text-purple-600 transition-colors font-medium text-lg py-2 px-4 rounded-lg hover:bg-purple-50"
+                  className="text-[#CFC7BC] hover:text-[#D8CFC4] transition-colors font-medium text-lg py-2 px-4 rounded-lg hover:bg-[#1F1F1F]"
                 >
                   Galeri
                 </a>
                 <a
                   href="#yorumlar"
                   onClick={closeMobileMenu}
-                  className="text-gray-700 hover:text-purple-600 transition-colors font-medium text-lg py-2 px-4 rounded-lg hover:bg-purple-50"
+                  className="text-[#CFC7BC] hover:text-[#D8CFC4] transition-colors font-medium text-lg py-2 px-4 rounded-lg hover:bg-[#1F1F1F]"
                 >
                   Yorumlar
                 </a>
                 <a
                   href="#iletisim"
                   onClick={closeMobileMenu}
-                  className="text-gray-700 hover:text-purple-600 transition-colors font-medium text-lg py-2 px-4 rounded-lg hover:bg-purple-50"
+                  className="text-[#CFC7BC] hover:text-[#D8CFC4] transition-colors font-medium text-lg py-2 px-4 rounded-lg hover:bg-[#1F1F1F]"
                 >
                   İletişim
                 </a>
@@ -291,17 +316,25 @@ export default function Home() {
       </header>
 
       {/* Hero Section */}
-      <section className="pt-36 pb-28 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-purple-50 via-pink-50 to-white">
-        <div className="container mx-auto max-w-7xl">
+      <section className="relative min-h-[85vh] flex items-center px-4 sm:px-6 lg:px-8 overflow-hidden">
+        <div className="absolute inset-0 z-0">
+          <img 
+            src="/images/hero.png" 
+            alt="Lumina Hair Studio Hero" 
+            className="h-full w-full object-cover object-center"
+          />
+        </div>
+        <div className="absolute inset-0 z-10 bg-gradient-to-b from-black/70 via-black/60 to-black/85" />
+        <div className="relative z-20 container mx-auto max-w-7xl py-36">
           <div className="text-center max-w-5xl mx-auto">
-            <h1 className="text-5xl sm:text-6xl lg:text-7xl font-bold text-gray-900 mb-6 leading-tight tracking-tight">
+            <h1 className="text-5xl sm:text-6xl lg:text-7xl font-bold text-[#F5F3EF] mb-6 leading-tight tracking-tight">
               Saçınıza ışıltı,
               <br />
-              <span className="bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">
+              <span className="text-[#D8CFC4]">
                 size güven.
               </span>
             </h1>
-            <p className="text-xl sm:text-2xl text-gray-600 mb-12 leading-relaxed max-w-3xl mx-auto">
+            <p className="text-xl sm:text-2xl text-[#CFC7BC] mb-12 leading-relaxed max-w-3xl mx-auto">
               Yenişehir/Mersin'de kişiye özel saç kesimi, renklendirme ve bakım uygulamaları ile 
               hayalinizdeki görünüme kavuşun. Profesyonel ekibimiz, modern teknikler ve premium 
               ürünlerle saçlarınıza özenle yaklaşıyor.
@@ -309,23 +342,23 @@ export default function Home() {
             
             {/* Trust Badges */}
             <div className="flex flex-wrap justify-center gap-6 mb-12">
-              <div className="flex items-center gap-2 bg-white/80 backdrop-blur-sm px-4 py-2 rounded-full shadow-md">
-                <svg className="w-5 h-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
+              <div className="flex items-center gap-2 bg-[#181818] backdrop-blur-sm px-4 py-2 rounded-full shadow-md border border-[#D8CFC4]/20">
+                <svg className="w-5 h-5 text-[#D8CFC4]" fill="currentColor" viewBox="0 0 20 20">
                   <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
                 </svg>
-                <span className="text-sm font-semibold text-gray-700">Google 5.0 ★</span>
+                <span className="text-sm font-semibold text-[#D8CFC4]">Google 5.0 ★</span>
               </div>
-              <div className="flex items-center gap-2 bg-white/80 backdrop-blur-sm px-4 py-2 rounded-full shadow-md">
-                <svg className="w-5 h-5 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <div className="flex items-center gap-2 bg-[#181818] backdrop-blur-sm px-4 py-2 rounded-full shadow-md border border-[#D8CFC4]/20">
+                <svg className="w-5 h-5 text-[#D8CFC4]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
                 </svg>
-                <span className="text-sm font-semibold text-gray-700">Hijyen Odaklı Hizmet</span>
+                <span className="text-sm font-semibold text-[#D8CFC4]">Hijyen Odaklı Hizmet</span>
               </div>
-              <div className="flex items-center gap-2 bg-white/80 backdrop-blur-sm px-4 py-2 rounded-full shadow-md">
-                <svg className="w-5 h-5 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <div className="flex items-center gap-2 bg-[#181818] backdrop-blur-sm px-4 py-2 rounded-full shadow-md border border-[#D8CFC4]/20">
+                <svg className="w-5 h-5 text-[#D8CFC4]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                 </svg>
-                <span className="text-sm font-semibold text-gray-700">Kişiye Özel Danışmanlık</span>
+                <span className="text-sm font-semibold text-[#D8CFC4]">Kişiye Özel Danışmanlık</span>
               </div>
             </div>
             
@@ -334,7 +367,7 @@ export default function Home() {
                 href={whatsappUrlWithMessage}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center justify-center gap-3 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white px-10 py-5 rounded-full font-semibold text-lg transition-all duration-300 shadow-xl hover:shadow-2xl transform hover:-translate-y-1"
+                className="inline-flex items-center justify-center gap-3 bg-[#D8CFC4] hover:bg-[#C4B5A8] text-[#0E0E0E] px-10 py-5 rounded-full font-semibold text-lg transition-all duration-300 shadow-xl hover:shadow-2xl transform hover:-translate-y-1"
               >
                 <svg
                   className="w-6 h-6"
@@ -349,7 +382,7 @@ export default function Home() {
                 href={locationUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center justify-center gap-3 bg-white hover:bg-gray-50 text-gray-900 px-10 py-5 rounded-full font-semibold text-lg transition-all duration-300 shadow-xl hover:shadow-2xl border-2 border-gray-200 hover:border-purple-300"
+                className="inline-flex items-center justify-center gap-3 bg-[#181818] hover:bg-[#1F1F1F] text-[#D8CFC4] px-10 py-5 rounded-full font-semibold text-lg transition-all duration-300 shadow-xl hover:shadow-2xl border-2 border-[#D8CFC4]/20 hover:border-[#D8CFC4]/40"
               >
                 <svg
                   className="w-6 h-6"
@@ -378,13 +411,13 @@ export default function Home() {
       </section>
 
       {/* Services Section */}
-      <section id="hizmetler" className="py-24 sm:py-28 lg:py-32 px-4 sm:px-6 lg:px-8 bg-white">
+      <section id="hizmetler" className="py-24 sm:py-28 lg:py-32 px-4 sm:px-6 lg:px-8 bg-[#181818]">
         <div className="container mx-auto max-w-7xl">
           <div className="text-center mb-20">
-            <h2 className="text-4xl sm:text-5xl font-bold text-gray-900 mb-6 tracking-tight">
+            <h2 className="text-4xl sm:text-5xl font-bold text-[#F5F3EF] mb-6 tracking-tight">
               Hizmetlerimiz
             </h2>
-            <p className="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
+            <p className="text-xl text-[#CFC7BC] max-w-3xl mx-auto leading-relaxed">
               Profesyonel ekibimizle sunduğumuz kapsamlı saç bakım ve stil hizmetleri
             </p>
           </div>
@@ -423,20 +456,20 @@ export default function Home() {
             ].map((service, index) => (
               <div
                 key={index}
-                className="bg-gradient-to-br from-purple-50 to-pink-50 p-8 lg:p-10 rounded-2xl hover:shadow-2xl transition-all duration-300 transform hover:scale-105 border border-purple-100 group"
+                className="bg-[#1F1F1F] p-8 lg:p-10 rounded-2xl hover:shadow-2xl transition-all duration-300 transform hover:scale-105 border border-[#D8CFC4]/20 group"
               >
                 <div className="text-6xl mb-6">{service.icon}</div>
-                <h3 className="text-2xl font-bold text-gray-900 mb-4">
+                <h3 className="text-2xl font-bold text-[#F5F3EF] mb-4">
                   {service.title}
                 </h3>
-                <p className="text-gray-600 leading-relaxed mb-6">
+                <p className="text-[#CFC7BC] leading-relaxed mb-6">
                   {service.description}
                 </p>
                 <a
                   href={whatsappUrlWithMessage}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 text-purple-600 hover:text-purple-700 font-semibold text-sm transition-colors group-hover:gap-3"
+                  className="inline-flex items-center gap-2 text-[#D8CFC4] hover:text-[#C4B5A8] font-semibold text-sm transition-colors group-hover:gap-3"
                 >
                   Detay Al
                   <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -450,23 +483,23 @@ export default function Home() {
       </section>
 
       {/* About Us Section */}
-      <section id="hakkimizda" className="py-24 sm:py-28 lg:py-32 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-purple-50 to-pink-50">
+      <section id="hakkimizda" className="py-24 sm:py-28 lg:py-32 px-4 sm:px-6 lg:px-8 bg-[#0E0E0E]">
         <div className="container mx-auto max-w-7xl">
           <div className="text-center mb-20">
-            <h2 className="text-4xl sm:text-5xl font-bold text-gray-900 mb-6 tracking-tight">
+            <h2 className="text-4xl sm:text-5xl font-bold text-[#F5F3EF] mb-6 tracking-tight">
               Hakkımızda
             </h2>
             <div className="max-w-4xl mx-auto">
-              <p className="text-xl text-gray-700 leading-relaxed mb-6">
+              <p className="text-xl text-[#CFC7BC] leading-relaxed mb-6">
                 Lumina Hair Studio olarak, Yenişehir/Mersin'de saç bakım ve stil alanında 
                 müşterilerimize en yüksek kalitede hizmet sunmayı hedefliyoruz. 
               </p>
-              <p className="text-xl text-gray-700 leading-relaxed mb-6">
+              <p className="text-xl text-[#CFC7BC] leading-relaxed mb-6">
                 Uzman ekibimiz, modern teknikler ve premium ürünler kullanarak her müşterimize 
                 kişiye özel çözümler sunar. Hijyen standartlarımız ve müşteri memnuniyeti 
                 odaklı yaklaşımımız ile saçlarınıza ışıltı, size güven veriyoruz.
               </p>
-              <p className="text-xl text-gray-700 leading-relaxed">
+              <p className="text-xl text-[#CFC7BC] leading-relaxed">
                 Google 5.0 puanımız ve 15+ müşteri yorumumuz, kalite anlayışımızın en güzel 
                 göstergesidir. Sizleri de Lumina Hair Studio ailesine katılmaya davet ediyoruz.
               </p>
@@ -476,13 +509,13 @@ export default function Home() {
       </section>
 
       {/* Before/After Gallery */}
-      <section id="galeri" className="py-24 sm:py-28 lg:py-32 px-4 sm:px-6 lg:px-8 bg-gray-50">
+      <section id="galeri" className="py-24 sm:py-28 lg:py-32 px-4 sm:px-6 lg:px-8 bg-[#181818]">
         <div className="container mx-auto max-w-7xl">
           <div className="text-center mb-20">
-            <h2 className="text-4xl sm:text-5xl font-bold text-gray-900 mb-6 tracking-tight">
+            <h2 className="text-4xl sm:text-5xl font-bold text-[#F5F3EF] mb-6 tracking-tight">
               {galleryTitle}
             </h2>
-            <p className="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
+            <p className="text-xl text-[#CFC7BC] max-w-3xl mx-auto leading-relaxed">
               {galleryDescription}
             </p>
           </div>
@@ -497,10 +530,10 @@ export default function Home() {
                   onClick={() => !hasError && openLightbox(index)}
                 >
                   {hasError ? (
-                    <div className="w-full h-full bg-gradient-to-br from-purple-200 via-pink-200 to-purple-300 flex items-center justify-center">
+                    <div className="w-full h-full bg-[#1F1F1F] flex items-center justify-center border border-[#D8CFC4]/20">
                       <div className="text-center p-4">
                         <svg
-                          className="w-12 h-12 mx-auto text-purple-600 opacity-50"
+                          className="w-12 h-12 mx-auto text-[#D8CFC4] opacity-50"
                           fill="none"
                           stroke="currentColor"
                           viewBox="0 0 24 24"
@@ -512,7 +545,7 @@ export default function Home() {
                             d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
                           />
                         </svg>
-                        <p className="mt-2 text-xs text-purple-700 font-medium">
+                        <p className="mt-2 text-xs text-[#D8CFC4] font-medium">
                           Fotoğraf {index + 1}
                         </p>
                       </div>
@@ -540,13 +573,13 @@ export default function Home() {
       {/* Lightbox Modal */}
       {isLightboxOpen && (
         <div
-          className="fixed inset-0 z-[100] flex items-center justify-center bg-black/90 backdrop-blur-sm p-4"
+          className="fixed inset-0 z-[100] flex items-center justify-center bg-black/90 backdrop-blur-sm p-4 transition-opacity duration-150 ease-out"
           onClick={closeLightbox}
         >
           {/* Close Button */}
           <button
             onClick={closeLightbox}
-            className="absolute top-4 right-4 z-10 w-10 h-10 flex items-center justify-center bg-white/10 hover:bg-white/20 rounded-full text-white transition-all backdrop-blur-sm"
+            className="absolute top-4 right-4 z-10 w-10 h-10 flex items-center justify-center bg-[#D8CFC4]/10 hover:bg-[#D8CFC4]/20 rounded-full text-[#D8CFC4] transition-opacity duration-150 ease-out backdrop-blur-sm"
             aria-label="Kapat"
           >
             <svg
@@ -570,7 +603,7 @@ export default function Home() {
               e.stopPropagation();
               prevImage();
             }}
-            className="absolute left-4 top-1/2 -translate-y-1/2 z-10 w-12 h-12 md:w-14 md:h-14 flex items-center justify-center bg-white/10 hover:bg-white/20 rounded-full text-white transition-all backdrop-blur-sm"
+            className="absolute left-4 top-1/2 -translate-y-1/2 z-10 w-12 h-12 md:w-14 md:h-14 flex items-center justify-center bg-[#D8CFC4]/10 hover:bg-[#D8CFC4]/20 rounded-full text-[#D8CFC4] transition-opacity duration-150 ease-out backdrop-blur-sm"
             aria-label="Önceki"
           >
             <svg
@@ -594,7 +627,7 @@ export default function Home() {
               e.stopPropagation();
               nextImage();
             }}
-            className="absolute right-4 top-1/2 -translate-y-1/2 z-10 w-12 h-12 md:w-14 md:h-14 flex items-center justify-center bg-white/10 hover:bg-white/20 rounded-full text-white transition-all backdrop-blur-sm"
+            className="absolute right-4 top-1/2 -translate-y-1/2 z-10 w-12 h-12 md:w-14 md:h-14 flex items-center justify-center bg-[#D8CFC4]/10 hover:bg-[#D8CFC4]/20 rounded-full text-[#D8CFC4] transition-opacity duration-150 ease-out backdrop-blur-sm"
             aria-label="Sonraki"
           >
             <svg
@@ -617,7 +650,7 @@ export default function Home() {
             className="relative w-full h-full max-w-6xl max-h-[90vh] flex items-center justify-center"
             onClick={(e) => e.stopPropagation()}
           >
-            <div className="relative w-full h-full rounded-2xl overflow-hidden shadow-2xl flex items-center justify-center">
+            <div className="relative w-full h-full rounded-2xl overflow-hidden shadow-2xl flex items-center justify-center transition-opacity duration-150 ease-out">
               {!imageErrors.has(currentImageIndex) ? (
                 <Image
                   src={galleryImages[currentImageIndex].src}
@@ -626,12 +659,13 @@ export default function Home() {
                   height={1200}
                   className="w-full h-full object-contain"
                   quality={90}
+                  priority={true}
                 />
               ) : (
-                <div className="w-full h-full bg-gradient-to-br from-purple-200 via-pink-200 to-purple-300 flex items-center justify-center">
+                <div className="w-full h-full bg-[#1F1F1F] flex items-center justify-center border border-[#D8CFC4]/20">
                   <div className="text-center p-8">
                     <svg
-                      className="w-24 h-24 mx-auto text-purple-600 opacity-50"
+                      className="w-24 h-24 mx-auto text-[#D8CFC4] opacity-50"
                       fill="none"
                       stroke="currentColor"
                       viewBox="0 0 24 24"
@@ -643,7 +677,7 @@ export default function Home() {
                         d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
                       />
                     </svg>
-                    <p className="mt-4 text-lg text-purple-700 font-medium">
+                    <p className="mt-4 text-lg text-[#D8CFC4] font-medium">
                       Fotoğraf {currentImageIndex + 1}
                     </p>
                   </div>
@@ -652,7 +686,7 @@ export default function Home() {
             </div>
 
             {/* Image Counter */}
-            <div className="absolute bottom-4 left-1/2 -translate-x-1/2 bg-black/50 backdrop-blur-sm text-white px-4 py-2 rounded-full text-sm">
+            <div className="absolute bottom-4 left-1/2 -translate-x-1/2 bg-[#0E0E0E]/80 backdrop-blur-sm text-[#D8CFC4] px-4 py-2 rounded-full text-sm border border-[#D8CFC4]/20">
               {currentImageIndex + 1} / {galleryImages.length}
             </div>
           </div>
@@ -660,13 +694,13 @@ export default function Home() {
       )}
 
       {/* Videos Section */}
-      <section id="videolar" className="py-20 px-4 sm:px-6 lg:px-8 bg-white">
+      <section id="videolar" className="py-20 px-4 sm:px-6 lg:px-8 bg-[#0E0E0E]">
         <div className="container mx-auto max-w-6xl">
           <div className="text-center mb-16">
-            <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-4">
+            <h2 className="text-3xl sm:text-4xl font-bold text-[#F5F3EF] mb-4">
               {videosTitle}
             </h2>
-            <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+            <p className="text-lg text-[#CFC7BC] max-w-2xl mx-auto">
               {videosDescription}
             </p>
           </div>
@@ -674,7 +708,7 @@ export default function Home() {
             {videoLinks.map((video, index) => (
               <div
                 key={index}
-                className="relative rounded-2xl overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300 bg-gray-100"
+                className="relative rounded-2xl overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300 bg-[#1F1F1F] border border-[#D8CFC4]/20"
               >
                 {video.platform === 'youtube' ? (
                   <div className="relative aspect-video w-full">
@@ -692,23 +726,23 @@ export default function Home() {
                     href={video.url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="block relative aspect-video w-full bg-gradient-to-br from-purple-200 via-pink-200 to-purple-300 flex items-center justify-center group"
+                    className="block relative aspect-video w-full bg-[#1F1F1F] flex items-center justify-center group border border-[#D8CFC4]/20"
                   >
                     <div className="text-center p-6">
                       <svg
-                        className="w-16 h-16 mx-auto text-purple-600 opacity-50 group-hover:opacity-75 transition-opacity"
+                        className="w-16 h-16 mx-auto text-[#D8CFC4] opacity-50 group-hover:opacity-75 transition-opacity"
                         fill="currentColor"
                         viewBox="0 0 24 24"
                       >
                         <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z" />
                       </svg>
-                      <p className="mt-4 text-purple-700 font-medium">{video.title}</p>
-                      <p className="mt-2 text-sm text-purple-600">Instagram'da Görüntüle</p>
+                      <p className="mt-4 text-[#D8CFC4] font-medium">{video.title}</p>
+                      <p className="mt-2 text-sm text-[#CFC7BC]">Instagram'da Görüntüle</p>
                     </div>
                   </a>
                 )}
-                <div className="p-4 bg-white">
-                  <h3 className="font-semibold text-gray-900">{video.title}</h3>
+                <div className="p-4 bg-[#181818]">
+                  <h3 className="font-semibold text-[#F5F3EF]">{video.title}</h3>
                 </div>
               </div>
             ))}
@@ -717,13 +751,13 @@ export default function Home() {
       </section>
 
       {/* Reviews Section */}
-      <section id="yorumlar" className="py-24 sm:py-28 lg:py-32 px-4 sm:px-6 lg:px-8 bg-white">
+      <section id="yorumlar" className="py-24 sm:py-28 lg:py-32 px-4 sm:px-6 lg:px-8 bg-[#181818]">
         <div className="container mx-auto max-w-7xl">
           <div className="text-center mb-20">
-            <h2 className="text-4xl sm:text-5xl font-bold text-gray-900 mb-6 tracking-tight">
+            <h2 className="text-4xl sm:text-5xl font-bold text-[#F5F3EF] mb-6 tracking-tight">
               Müşteri Yorumları
             </h2>
-            <p className="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
+            <p className="text-xl text-[#CFC7BC] max-w-3xl mx-auto leading-relaxed">
               Memnuniyetimiz en büyük önceliğimiz
             </p>
           </div>
@@ -770,13 +804,13 @@ export default function Home() {
               ].map((review, index) => (
                 <div
                   key={index}
-                  className="bg-white p-8 lg:p-10 rounded-2xl shadow-xl border border-gray-100 hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1"
+                  className="bg-[#1F1F1F] p-8 lg:p-10 rounded-2xl shadow-xl border border-[#D8CFC4]/20 hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1"
                 >
                   <div className="flex items-center gap-1 mb-6">
                     {Array.from({ length: review.rating }).map((_, i) => (
                       <svg
                         key={i}
-                        className="w-6 h-6 text-yellow-400"
+                        className="w-6 h-6 text-[#D8CFC4]"
                         fill="currentColor"
                         viewBox="0 0 20 20"
                       >
@@ -784,15 +818,15 @@ export default function Home() {
                       </svg>
                     ))}
                   </div>
-                  <p className="text-gray-700 mb-6 leading-relaxed italic text-lg">
+                  <p className="text-[#CFC7BC] mb-6 leading-relaxed italic text-lg">
                     "{review.comment}"
                   </p>
                   <div className="flex items-center gap-3">
-                    <div className="w-12 h-12 rounded-full bg-gradient-to-br from-purple-400 to-pink-400 flex items-center justify-center text-white font-bold text-lg">
+                    <div className="w-12 h-12 rounded-full bg-[#D8CFC4] flex items-center justify-center text-[#0E0E0E] font-bold text-lg">
                       {review.name.charAt(0)}
                     </div>
                     <div>
-                      <p className="text-gray-900 font-semibold text-lg">— {review.name}</p>
+                      <p className="text-[#F5F3EF] font-semibold text-lg">— {review.name}</p>
                     </div>
                   </div>
                 </div>
@@ -803,13 +837,13 @@ export default function Home() {
       </section>
 
       {/* Location & Hours Section */}
-      <section id="iletisim" className="py-24 sm:py-28 lg:py-32 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-purple-50 to-pink-50">
+      <section id="iletisim" className="py-24 sm:py-28 lg:py-32 px-4 sm:px-6 lg:px-8 bg-[#0E0E0E]">
         <div className="container mx-auto max-w-7xl">
           <div className="text-center mb-20">
-            <h2 className="text-4xl sm:text-5xl font-bold text-gray-900 mb-6 tracking-tight">
+            <h2 className="text-4xl sm:text-5xl font-bold text-[#F5F3EF] mb-6 tracking-tight">
               Bize Ulaşın
             </h2>
-            <p className="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
+            <p className="text-xl text-[#CFC7BC] max-w-3xl mx-auto leading-relaxed">
               Yenişehir/Mersin'de sizleri bekliyoruz
             </p>
           </div>
@@ -817,9 +851,9 @@ export default function Home() {
             {/* Address & Hours */}
             <div className="space-y-8">
               <div>
-                <h3 className="text-2xl font-bold text-gray-900 mb-4 flex items-center gap-2">
+                <h3 className="text-2xl font-bold text-[#F5F3EF] mb-4 flex items-center gap-2">
                   <svg
-                    className="w-6 h-6 text-purple-600"
+                    className="w-6 h-6 text-[#D8CFC4]"
                     fill="none"
                     stroke="currentColor"
                     viewBox="0 0 24 24"
@@ -839,7 +873,7 @@ export default function Home() {
                   </svg>
                   Adres
                 </h3>
-                <p className="text-gray-700 text-lg leading-relaxed">
+                <p className="text-[#CFC7BC] text-lg leading-relaxed">
                   Çiftlikköy Sokak 3215 Kapı No: 1 | L.K.V Royal
                   <br />
                   33110 Yenişehir/Mersin
@@ -848,7 +882,7 @@ export default function Home() {
                   href={locationUrl}
                   target="_blank"
                   rel="noreferrer"
-                  className="inline-flex items-center gap-2 mt-4 text-purple-600 hover:text-purple-700 font-medium"
+                  className="inline-flex items-center gap-2 mt-4 text-[#D8CFC4] hover:text-[#C4B5A8] font-medium"
                 >
                   <svg
                     className="w-5 h-5"
@@ -867,9 +901,9 @@ export default function Home() {
                 </a>
               </div>
               <div>
-                <h3 className="text-2xl font-bold text-gray-900 mb-4 flex items-center gap-2">
+                <h3 className="text-2xl font-bold text-[#F5F3EF] mb-4 flex items-center gap-2">
                   <svg
-                    className="w-6 h-6 text-purple-600"
+                    className="w-6 h-6 text-[#D8CFC4]"
                     fill="none"
                     stroke="currentColor"
                     viewBox="0 0 24 24"
@@ -883,7 +917,7 @@ export default function Home() {
                   </svg>
                   Çalışma Saatleri
                 </h3>
-                <div className="space-y-2 text-gray-700 text-lg">
+                <div className="space-y-2 text-[#CFC7BC] text-lg">
                   <div className="flex justify-between">
                     <span>Pazartesi - Cuma</span>
                     <span className="font-semibold">09:00 - 19:00</span>
@@ -899,9 +933,9 @@ export default function Home() {
                 </div>
               </div>
               <div>
-                <h3 className="text-2xl font-bold text-gray-900 mb-4 flex items-center gap-2">
+                <h3 className="text-2xl font-bold text-[#F5F3EF] mb-4 flex items-center gap-2">
                   <svg
-                    className="w-6 h-6 text-purple-600"
+                    className="w-6 h-6 text-[#D8CFC4]"
                     fill="none"
                     stroke="currentColor"
                     viewBox="0 0 24 24"
@@ -915,10 +949,10 @@ export default function Home() {
                   </svg>
                   İletişim
                 </h3>
-                <p className="text-gray-700 text-lg mb-4">
+                <p className="text-[#CFC7BC] text-lg mb-4">
                   <a
                     href={phoneLink}
-                    className="hover:text-purple-600 transition-colors font-semibold"
+                    className="hover:text-[#D8CFC4] transition-colors font-semibold"
                   >
                     {phoneDisplay}
                   </a>
@@ -926,7 +960,7 @@ export default function Home() {
                 <div className="flex flex-col sm:flex-row gap-3">
                   <a
                     href={phoneLink}
-                    className="inline-flex items-center justify-center gap-2 bg-purple-600 hover:bg-purple-700 text-white px-6 py-3 rounded-full font-medium transition-all shadow-lg hover:shadow-xl"
+                    className="inline-flex items-center justify-center gap-2 bg-[#D8CFC4] hover:bg-[#C4B5A8] text-[#0E0E0E] px-6 py-3 rounded-full font-medium transition-all shadow-lg hover:shadow-xl"
                   >
                     <svg
                       className="w-5 h-5"
@@ -959,7 +993,7 @@ export default function Home() {
                     WhatsApp ile İletişime Geç
                   </a>
                 </div>
-                <p className="text-sm text-gray-600 mt-4 text-center sm:text-left">
+                <p className="text-sm text-[#CFC7BC] mt-4 text-center sm:text-left">
                   Google puanı: 5.0 • 15+ yorum
                 </p>
               </div>
@@ -982,25 +1016,25 @@ export default function Home() {
       </section>
 
       {/* Footer */}
-      <footer className="bg-gray-900 text-white py-12 px-4 sm:px-6 lg:px-8">
+      <footer className="bg-[#0E0E0E] text-[#F5F3EF] py-12 px-4 sm:px-6 lg:px-8 border-t border-[#D8CFC4]/20">
         <div className="container mx-auto max-w-6xl">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
             <div>
-              <h3 className="text-2xl font-bold mb-4 bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">
+              <h3 className="text-2xl font-bold mb-4 text-[#D8CFC4]">
                 Lumina Hair Studio
               </h3>
-              <p className="text-gray-400 leading-relaxed">
+              <p className="text-[#CFC7BC] leading-relaxed">
                 Yenişehir/Mersin'de premium saç bakım ve stil hizmetleri sunan
                 profesyonel kuaför salonu.
               </p>
             </div>
             <div>
-              <h4 className="text-lg font-semibold mb-4">Hızlı Linkler</h4>
-              <ul className="space-y-2 text-gray-400">
+              <h4 className="text-lg font-semibold mb-4 text-[#D8CFC4]">Hızlı Linkler</h4>
+              <ul className="space-y-2 text-[#CFC7BC]">
                 <li>
                   <a
                     href="#hizmetler"
-                    className="hover:text-white transition-colors"
+                    className="hover:text-[#D8CFC4] transition-colors"
                   >
                     Hizmetler
                   </a>
@@ -1008,7 +1042,7 @@ export default function Home() {
                 <li>
                   <a
                     href="#galeri"
-                    className="hover:text-white transition-colors"
+                    className="hover:text-[#D8CFC4] transition-colors"
                   >
                     Galeri
                   </a>
@@ -1016,7 +1050,7 @@ export default function Home() {
                 <li>
                   <a
                     href="#yorumlar"
-                    className="hover:text-white transition-colors"
+                    className="hover:text-[#D8CFC4] transition-colors"
                   >
                     Yorumlar
                   </a>
@@ -1024,7 +1058,7 @@ export default function Home() {
                 <li>
                   <a
                     href="#iletisim"
-                    className="hover:text-white transition-colors"
+                    className="hover:text-[#D8CFC4] transition-colors"
                   >
                     İletişim
                   </a>
@@ -1032,12 +1066,12 @@ export default function Home() {
               </ul>
             </div>
             <div>
-              <h4 className="text-lg font-semibold mb-4">İletişim</h4>
-              <ul className="space-y-2 text-gray-400">
+              <h4 className="text-lg font-semibold mb-4 text-[#D8CFC4]">İletişim</h4>
+              <ul className="space-y-2 text-[#CFC7BC]">
                 <li>
                   <a
                     href={phoneLink}
-                    className="hover:text-white transition-colors"
+                    className="hover:text-[#D8CFC4] transition-colors"
                   >
                     {phoneDisplay}
                   </a>
@@ -1047,7 +1081,7 @@ export default function Home() {
                     href={whatsappUrl}
             target="_blank"
             rel="noopener noreferrer"
-                    className="hover:text-white transition-colors"
+                    className="hover:text-[#D8CFC4] transition-colors"
                   >
                     WhatsApp
                   </a>
@@ -1055,7 +1089,7 @@ export default function Home() {
               </ul>
             </div>
           </div>
-          <div className="border-t border-gray-800 pt-8 text-center text-gray-400">
+          <div className="border-t border-[#D8CFC4]/20 pt-8 text-center text-[#CFC7BC]">
             <p>&copy; {new Date().getFullYear()} Lumina Hair Studio. Tüm hakları saklıdır.</p>
           </div>
         </div>
