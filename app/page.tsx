@@ -197,7 +197,7 @@ export default function Home() {
               href={whatsappUrlWithMessage}
               target="_blank"
               rel="noopener noreferrer"
-              className="hidden sm:flex items-center gap-2 bg-green-500 hover:bg-green-600 text-white px-4 py-2.5 rounded-full font-medium transition-all shadow-lg hover:shadow-xl"
+              className="hidden sm:flex items-center gap-2 bg-[#D8CFC4] hover:bg-[#0E0E0E] hover:text-[#D8CFC4] hover:border border-[rgba(216,207,196,0.45)] text-[#0E0E0E] px-4 py-2.5 rounded-full font-medium transition-all shadow-lg hover:shadow-xl"
             >
               <svg
                 className="w-5 h-5"
@@ -326,7 +326,7 @@ export default function Home() {
         </div>
         <div className="absolute inset-0 z-10 bg-gradient-to-b from-black/55 via-black/45 to-black/70" />
         <div className="relative z-20 container mx-auto max-w-7xl py-36">
-          <div className="text-center flex flex-col gap-4 md:gap-6 max-w-5xl mx-auto">
+          <div className="text-center flex flex-col gap-4 md:gap-6 max-w-5xl mx-auto bg-black/10 backdrop-blur-sm rounded-2xl px-6 py-6 md:px-10 md:py-8">
             <h1 className="text-4xl md:text-6xl font-bold text-[#F5F3EF] leading-relaxed tracking-tight">
               Saçınıza ışıltı,
               <br />
@@ -1100,7 +1100,7 @@ export default function Home() {
         href={whatsappUrl}
         target="_blank"
         rel="noopener noreferrer"
-        className="fixed bottom-6 right-6 z-50 w-16 h-16 bg-green-500 hover:bg-green-600 rounded-full flex items-center justify-center shadow-2xl hover:shadow-green-500/50 transition-all transform hover:scale-110 animate-pulse"
+        className="fixed bottom-6 right-6 z-50 w-16 h-16 scale-[0.9] sm:scale-100 bg-green-500 hover:bg-green-600 rounded-full flex items-center justify-center shadow-lg hover:shadow-xl transition-all transform hover:scale-110 animate-pulse"
         aria-label="WhatsApp ile iletişime geç"
       >
         <svg
