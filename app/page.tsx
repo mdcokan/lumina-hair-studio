@@ -491,6 +491,9 @@ export default function Home() {
             </h2>
             <div className="max-w-4xl mx-auto">
               <p className="text-xl text-[#CFC7BC] leading-relaxed mb-6">
+                <strong>Lumina Hair Studio</strong>, Yenişehir Mersin'de kadın kuaförü olarak saç kesimi, renklendirme ve bakım hizmetleri sunan modern bir salondur. Bayan kuaför ve saç tasarım uygulamalarında uzman ekibimizle kişiye özel çözümler sunuyoruz.
+              </p>
+              <p className="text-xl text-[#CFC7BC] leading-relaxed mb-6">
                 Lumina Hair Studio olarak, Yenişehir/Mersin'de saç bakım ve stil alanında 
                 müşterilerimize en yüksek kalitede hizmet sunmayı hedefliyoruz. 
               </p>

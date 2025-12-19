@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
+import Script from "next/script";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -14,8 +15,8 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://lumina-hair-studio.vercel.app'),
-  title: "Lumina Hair Studio | Yenişehir Mersin Premium Kuaför Salonu",
-  description: "Yenişehir/Mersin'de kişiye özel saç kesimi, renklendirme ve bakım. Google 5.0 puan, hijyen odaklı hizmet. Randevu için WhatsApp.",
+  title: "Lumina Hair Studio | Yenişehir Mersin Kadın Kuaförü",
+  description: "Yenişehir Mersin'de kadınlara özel saç kesimi, renklendirme ve bakım. Lumina Hair Studio'da profesyonel ve premium kuaför hizmetleri.",
   keywords: [
     "kuaför mersin",
     "saç kesimi mersin",
@@ -36,8 +37,8 @@ export const metadata: Metadata = {
   creator: "Lumina Hair Studio",
   publisher: "Lumina Hair Studio",
   openGraph: {
-    title: "Lumina Hair Studio | Yenişehir Mersin Premium Kuaför Salonu",
-    description: "Yenişehir/Mersin'de kişiye özel saç kesimi, renklendirme ve bakım. Google 5.0 puan, hijyen odaklı hizmet. Randevu için WhatsApp.",
+    title: "Lumina Hair Studio | Yenişehir Mersin Kadın Kuaförü",
+    description: "Yenişehir Mersin'de kadınlara özel saç kesimi, renklendirme ve bakım. Lumina Hair Studio'da profesyonel ve premium kuaför hizmetleri.",
     type: "website",
     locale: "tr_TR",
     siteName: "Lumina Hair Studio",
@@ -53,8 +54,8 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Lumina Hair Studio | Yenişehir Mersin Premium Kuaför",
-    description: "Yenişehir/Mersin'de kişiye özel saç kesimi, renklendirme ve bakım. Google 5.0 puan, hijyen odaklı hizmet.",
+    title: "Lumina Hair Studio | Yenişehir Mersin Kadın Kuaförü",
+    description: "Yenişehir Mersin'de kadınlara özel saç kesimi, renklendirme ve bakım. Lumina Hair Studio'da profesyonel ve premium kuaför hizmetleri.",
     images: ["/og-image.jpg"],
   },
   robots: {
@@ -98,6 +99,18 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
+        <Script
+          src="https://www.googletagmanager.com/gtag/js?id=AW-17775158966"
+          strategy="afterInteractive"
+        />
+        <Script id="google-ads" strategy="afterInteractive">
+          {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', 'AW-17775158966');
+          `}
+        </Script>
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
