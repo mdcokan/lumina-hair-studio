@@ -318,10 +318,14 @@ export default function Home() {
       {/* Hero Section */}
       <section className="relative min-h-[85vh] flex items-center px-4 sm:px-6 lg:px-8 overflow-hidden">
         <div className="absolute inset-0 z-0">
-          <img 
+          <Image 
             src="/images/hero.png" 
             alt="Lumina Hair Studio Hero" 
-            className="h-full w-full object-cover object-center"
+            fill
+            priority
+            quality={75}
+            sizes="100vw"
+            className="object-cover object-center"
           />
         </div>
         <div className="absolute inset-0 z-10 bg-gradient-to-b from-black/45 via-black/35 to-black/60 md:from-black/55 md:via-black/45 md:to-black/70" />
@@ -562,7 +566,7 @@ export default function Home() {
                       sizes="(max-width: 768px) 50vw, (max-width: 1200px) 33vw, 25vw"
                       className="w-full h-full object-cover"
                       loading="lazy"
-                      quality={90}
+                      quality={75}
                     />
                   )}
                   <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors pointer-events-none" />
@@ -661,7 +665,7 @@ export default function Home() {
                   width={1600}
                   height={1200}
                   className="w-full h-full object-contain"
-                  quality={90}
+                  quality={75}
                   priority={true}
                 />
               ) : (
