@@ -931,8 +931,8 @@ export default function Home() {
       )}
 
       {/* Videos Section */}
-      <section id="videolar" className="py-20 px-4 sm:px-6 lg:px-8 bg-[#0E0E0E]">
-        <div className="container mx-auto max-w-6xl">
+      <section id="videolar" className="py-20 bg-[#0E0E0E]">
+        <div className="max-w-6xl mx-auto px-4 md:px-8">
           <div className="text-center mb-16">
             <h2 className="text-3xl sm:text-4xl font-bold text-[#F5F3EF] mb-4">
               {videosTitle}
@@ -941,35 +941,36 @@ export default function Home() {
               Salonumuzdan kısa anlar—kesim, bakım ve dönüşümler. Beğendiğin stili randevuda birlikte seçelim.
             </p>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          {/* Horizontal Scroll Container */}
+          <div className="flex flex-nowrap overflow-x-auto snap-x snap-mandatory scroll-smooth gap-6 md:gap-8 px-4 md:px-8 pb-2 py-2 scrollbar-hide touch-pan-x">
             {videoLinks.map((video, index) => (
               <div
                 key={index}
-                className="group relative overflow-hidden rounded-2xl border border-white/10 bg-white/5 shadow-[0_10px_30px_rgba(0,0,0,0.35)] transition-all duration-300 hover:-translate-y-1 hover:border-white/20 hover:bg-white/8 hover:shadow-[0_18px_50px_rgba(0,0,0,0.55)] w-full md:max-w-[340px] mx-auto"
+                className="group relative overflow-hidden rounded-2xl border border-white/10 bg-white/5 shadow-[0_10px_30px_rgba(0,0,0,0.35)] transition-all duration-300 hover:-translate-y-1 hover:border-white/20 hover:bg-white/8 hover:shadow-[0_18px_50px_rgba(0,0,0,0.55)] flex-none snap-start w-[78vw] md:w-[380px] lg:w-[340px] xl:w-[360px]"
               >
-                <div className="relative aspect-[9/16] w-full">
-                  <iframe
-                    src={`${video.url}?autoplay=0&mute=1`}
-                    title={video.title}
-                    className="absolute inset-0 w-full h-full rounded-2xl"
-                    allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                    allowFullScreen
-                    loading="lazy"
-                  />
-                  {/* Premium gradient overlay */}
-                  <div className="absolute inset-0 bg-gradient-to-b from-white/5 via-transparent to-black/30 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" />
+                  <div className="relative aspect-[9/16] w-full">
+                    <iframe
+                      src={`${video.url}?autoplay=0&mute=1`}
+                      title={video.title}
+                      className="absolute inset-0 w-full h-full rounded-2xl"
+                      allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                      allowFullScreen
+                      loading="lazy"
+                    />
+                    {/* Premium gradient overlay */}
+                    <div className="absolute inset-0 bg-gradient-to-b from-white/5 via-transparent to-black/30 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" />
+                  </div>
+                  <div className="p-4 bg-[#181818]">
+                    <h3 className="font-semibold text-[#F5F3EF] mb-3">{video.title}</h3>
+                    <a
+                      href="#iletisim"
+                      className="inline-flex items-center gap-2 text-sm font-medium text-white/80 hover:text-white transition-colors"
+                    >
+                      Randevu Al →
+                    </a>
+                  </div>
                 </div>
-                <div className="p-4 bg-[#181818]">
-                  <h3 className="font-semibold text-[#F5F3EF] mb-3">{video.title}</h3>
-                  <a
-                    href="#iletisim"
-                    className="inline-flex items-center gap-2 text-sm font-medium text-white/80 hover:text-white transition-colors"
-                  >
-                    Randevu Al →
-                  </a>
-                </div>
-              </div>
-            ))}
+              ))}
           </div>
         </div>
       </section>
