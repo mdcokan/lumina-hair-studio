@@ -70,13 +70,16 @@ export default function Home() {
   const [userRatingCount, setUserRatingCount] = useState<number | undefined>(undefined);
   const [googleUrl, setGoogleUrl] = useState<string | undefined>(undefined);
   const [placeId, setPlaceId] = useState<string | undefined>(undefined);
+  const [isLoadingReviews, setIsLoadingReviews] = useState(true);
   const [currentSlide, setCurrentSlide] = useState(0);
+  const [expandedReviews, setExpandedReviews] = useState<Set<number>>(new Set());
   const carouselRef = useRef<HTMLDivElement>(null);
   const lastNavAt = useRef<number>(0);
 
   // Fetch Google reviews on mount
   useEffect(() => {
     const fetchReviews = async () => {
+      setIsLoadingReviews(true);
       try {
         const response = await fetch('/api/google-reviews');
         if (response.ok) {
@@ -103,6 +106,7 @@ export default function Home() {
             if (typeof data.placeId === 'string') {
               setPlaceId(data.placeId);
             }
+            setIsLoadingReviews(false);
             return;
           }
         }
@@ -111,6 +115,7 @@ export default function Home() {
       }
       // Fallback to hardcoded reviews if API fails
       setReviews(fallbackReviews);
+      setIsLoadingReviews(false);
     };
 
     fetchReviews();
@@ -654,26 +659,41 @@ export default function Home() {
             ].map((service, index) => (
               <div
                 key={index}
-                className="bg-[#1F1F1F] p-8 lg:p-10 rounded-2xl hover:shadow-2xl transition-all duration-300 transform hover:scale-105 border border-[#D8CFC4]/20 group"
+                className="bg-[#1F1F1F] rounded-[24px] hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-[2px] border border-[#D8CFC4]/20 group overflow-hidden"
               >
-                <div className="text-6xl mb-6">{service.icon}</div>
-                <h3 className="text-2xl font-bold text-[#F5F3EF] mb-4">
-                  {service.title}
-                </h3>
-                <p className="text-[#CFC7BC] leading-relaxed mb-6">
-                  {service.description}
-                </p>
-                <a
-                  href={whatsappUrlWithMessage}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 text-[#D8CFC4] hover:text-[#C4B5A8] font-semibold text-sm transition-colors group-hover:gap-3"
-                >
-                  Detay Al
-                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                  </svg>
-                </a>
+                {/* Service Image */}
+                <div className="relative aspect-[16/10] w-full overflow-hidden rounded-t-[24px]">
+                  <Image
+                    src={`/services/service-${index + 1}.jpg`}
+                    alt={service.title}
+                    fill
+                    sizes="(max-width: 768px) 100vw, 33vw"
+                    className="object-cover transition-transform duration-300 group-hover:scale-[1.03]"
+                  />
+                  {/* Gradient Overlay */}
+                  <div className="absolute inset-0 bg-gradient-to-b from-black/10 via-black/0 to-black/20 pointer-events-none" />
+                </div>
+                
+                {/* Content */}
+                <div className="p-8 lg:p-10">
+                  <h3 className="text-2xl font-bold text-[#F5F3EF] mb-4">
+                    {service.title}
+                  </h3>
+                  <p className="text-[#CFC7BC] leading-relaxed mb-6">
+                    {service.description}
+                  </p>
+                  <a
+                    href={whatsappUrlWithMessage}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-2 text-[#D8CFC4] hover:text-[#C4B5A8] font-semibold text-sm transition-colors group-hover:gap-3"
+                  >
+                    Detay Al
+                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                    </svg>
+                  </a>
+                </div>
               </div>
             ))}
           </div>
@@ -955,43 +975,25 @@ export default function Home() {
       <section id="yorumlar" className="py-24 sm:py-28 lg:py-32 px-4 sm:px-6 lg:px-8 bg-[#181818]">
         <div className="container mx-auto max-w-7xl">
           <div className="mb-20">
-            <div className="flex flex-col sm:flex-row items-center justify-between gap-4 mb-6">
-              <div className="flex-1 text-center sm:text-left">
-                <h2 className="text-4xl sm:text-5xl font-bold text-[#F5F3EF] mb-3 tracking-tight">
-                  Google Yorumları
-                </h2>
-                
-                {/* Doğrulama Badge */}
-                <div className="flex items-center justify-center sm:justify-start gap-1.5 mb-4">
-                  <div className="inline-flex items-center gap-1.5 bg-[#D8CFC4]/10 border border-[#D8CFC4]/20 rounded-full px-2.5 py-1">
-                    <svg
-                      className="w-3.5 h-3.5 text-[#D8CFC4]"
-                      fill="currentColor"
-                      viewBox="0 0 20 20"
-                    >
-                      <path
-                        fillRule="evenodd"
-                        d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-                        clipRule="evenodd"
-                      />
-                    </svg>
-                    <span className="text-[#CFC7BC] text-xs font-medium">
-                      Google'da doğrulanmış müşteri yorumları
-                    </span>
-                  </div>
-                </div>
-
-                {(placeRating !== undefined || userRatingCount !== undefined) && (
-                  <div className="flex flex-col sm:flex-row items-center justify-center sm:justify-start gap-3 text-lg text-[#CFC7BC]">
-                    <div className="flex items-center gap-2">
-                      <div className="flex items-center gap-1">
+            <h2 className="text-4xl sm:text-5xl font-bold text-[#F5F3EF] mb-8 tracking-tight text-center sm:text-left">
+              Google Yorumları
+            </h2>
+            
+            {/* Premium Rating Summary Panel */}
+            {(placeRating !== undefined || userRatingCount !== undefined) && (
+              <div className="bg-gradient-to-br from-[#1F1F1F] to-[#181818] rounded-3xl p-6 lg:p-8 border border-[#D8CFC4]/10 shadow-lg mb-12">
+                <div className="flex flex-col lg:flex-row items-center justify-between gap-6">
+                  {/* Left: Rating Info */}
+                  <div className="flex-1 text-center lg:text-left">
+                    <div className="flex items-center justify-center lg:justify-start gap-3 mb-4">
+                      <div className="flex items-center gap-1.5">
                         {Array.from({ length: 5 }).map((_, i) => {
                           const rating = placeRating || 0;
                           const isFilled = i < Math.floor(rating);
                           return (
                             <svg
                               key={i}
-                              className={`w-5 h-5 ${
+                              className={`w-6 h-6 ${
                                 isFilled ? 'text-[#D8CFC4]' : 'text-[#CFC7BC] opacity-30'
                               }`}
                               fill={isFilled ? 'currentColor' : 'none'}
@@ -1006,63 +1008,66 @@ export default function Home() {
                       </div>
                       {placeRating !== undefined && (
                         <>
-                          <span className="font-semibold text-[#D8CFC4]">
+                          <span className="text-3xl font-bold text-[#F5F3EF]">
                             {placeRating.toFixed(1)}
                           </span>
                           {userRatingCount !== undefined && (
-                            <>
-                              <span className="text-[#CFC7BC]">•</span>
-                              <span className="text-[#CFC7BC]">
-                                {userRatingCount} yorum
-                              </span>
-                            </>
+                            <span className="text-lg text-[#CFC7BC]">
+                              {userRatingCount} yorum
+                            </span>
                           )}
                         </>
                       )}
                     </div>
-                    
-                    {/* CTA Link */}
-                    {(googleUrl || placeId) && (
-                      <a
-                        href={googleUrl || `https://www.google.com/maps/place/?q=place_id:${placeId}&hl=tr&gl=TR`}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="text-[#D8CFC4] hover:text-[#C4B5A8] font-medium text-sm transition-colors flex items-center gap-1 group whitespace-nowrap"
+                    {/* Verification Badge */}
+                    <div className="inline-flex items-center gap-1.5 bg-[#D8CFC4]/10 border border-[#D8CFC4]/20 rounded-full px-3 py-1.5">
+                      <svg
+                        className="w-3.5 h-3.5 text-[#D8CFC4]"
+                        fill="currentColor"
+                        viewBox="0 0 20 20"
                       >
-                        Tüm Google yorumlarını gör
-                        <svg
-                          className="w-4 h-4 transition-transform group-hover:translate-x-1"
-                          fill="none"
-                          stroke="currentColor"
-                          viewBox="0 0 24 24"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth={2}
-                            d="M9 5l7 7-7 7"
-                          />
-                        </svg>
-                      </a>
-                    )}
+                        <path
+                          fillRule="evenodd"
+                          d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                          clipRule="evenodd"
+                        />
+                      </svg>
+                      <span className="text-[#CFC7BC] text-xs font-medium">
+                        Google'da doğrulanmış müşteri yorumları
+                      </span>
+                    </div>
                   </div>
-                )}
+                  
+                  {/* Right: CTA Button */}
+                  {(googleUrl || placeId) && (
+                    <a
+                      href={googleUrl || `https://www.google.com/maps/place/?q=place_id:${placeId}&hl=tr&gl=TR`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex items-center gap-2 bg-white/8 backdrop-blur-sm px-4 py-3 rounded-xl border border-[#D8CFC4]/15 hover:bg-white/12 hover:border-[#D8CFC4]/25 hover:shadow-[0_0_12px_rgba(216,207,196,0.15)] transition-all duration-250 ease-out group shrink-0"
+                    >
+                      <div className="w-5 h-5 rounded-full bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center shadow-sm">
+                        <span className="text-white font-semibold text-[10px] leading-none">G</span>
+                      </div>
+                      <span className="text-[#D8CFC4] font-medium text-sm tracking-tight">Tüm Google yorumlarını gör</span>
+                      <svg
+                        className="w-4 h-4 text-[#D8CFC4] transition-transform group-hover:translate-x-1"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M9 5l7 7-7 7"
+                        />
+                      </svg>
+                    </a>
+                  )}
+                </div>
               </div>
-              {/* Google Badge */}
-              {(googleUrl || placeId) && (
-                <a
-                  href={googleUrl || `https://www.google.com/maps/place/?q=place_id:${placeId}&hl=tr&gl=TR`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center gap-1.5 bg-white/8 backdrop-blur-sm px-2.5 py-1.5 rounded-lg border border-[#D8CFC4]/15 shrink-0 hover:bg-white/12 hover:border-[#D8CFC4]/25 hover:shadow-[0_0_12px_rgba(216,207,196,0.15)] transition-all duration-300 group"
-                >
-                  <div className="w-5 h-5 rounded-full bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center shadow-sm group-hover:shadow-md transition-shadow">
-                    <span className="text-white font-semibold text-[10px] leading-none">G</span>
-                  </div>
-                  <span className="text-[#D8CFC4] font-medium text-xs tracking-tight">Google</span>
-                </a>
-              )}
-            </div>
+            )}
           </div>
           
           <div className="relative">
@@ -1118,38 +1123,196 @@ export default function Home() {
                 }}
               >
                 <div className="flex gap-6 lg:gap-8">
-                  {(reviews.length > 0 ? reviews : fallbackReviews).map((review, index) => (
-                    <div
-                      key={index}
-                      className="flex-shrink-0 w-full md:w-[calc((100%-24px)/2)] lg:w-[calc((100%-48px)/3)] snap-start"
-                    >
-                      <div className="bg-[#1F1F1F] p-8 lg:p-10 rounded-2xl shadow-lg border border-[#D8CFC4]/10 hover:shadow-2xl hover:shadow-[#D8CFC4]/5 transition-all duration-300 transform hover:-translate-y-2 hover:border-[#D8CFC4]/15">
-                        <div className="flex items-center gap-1 mb-6">
-                          {Array.from({ length: review.rating }).map((_, i) => (
-                            <svg
-                              key={i}
-                              className="w-6 h-6 text-[#D8CFC4]"
-                              fill="currentColor"
-                              viewBox="0 0 20 20"
-                            >
-                              <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                            </svg>
-                          ))}
-                        </div>
-                        <p className="text-[#CFC7BC] mb-6 leading-loose italic text-lg font-light">
-                          "{review.comment}"
-                        </p>
-                        <div className="flex items-center gap-3">
-                          <div className="w-12 h-12 rounded-full bg-gradient-to-br from-[#D8CFC4] to-[#C4B5A8] flex items-center justify-center text-[#0E0E0E] font-semibold text-lg shadow-sm">
-                            {review.name.charAt(0)}
+                  {isLoadingReviews ? (
+                    // Skeleton Cards (responsive: mobile 1, tablet 2, desktop 3)
+                    <>
+                      <div
+                        key="skeleton-0"
+                        className="flex-shrink-0 w-full md:w-[calc((100%-24px)/2)] lg:w-[calc((100%-48px)/3)] snap-start"
+                      >
+                        <div className="bg-[#1F1F1F] p-8 lg:p-10 rounded-2xl shadow-lg border border-[#D8CFC4]/10">
+                          {/* Stars Skeleton */}
+                          <div className="flex items-center gap-1 mb-6">
+                            {Array.from({ length: 5 }).map((_, i) => (
+                              <div
+                                key={i}
+                                className="w-6 h-6 rounded bg-[#D8CFC4]/10 animate-shimmer"
+                              />
+                            ))}
                           </div>
-                          <div>
-                            <p className="text-[#F5F3EF] font-semibold text-lg tracking-tight">— {review.name}</p>
+                          {/* Text Skeleton */}
+                          <div className="mb-6 space-y-2">
+                            <div className="h-4 bg-[#D8CFC4]/10 rounded animate-shimmer" />
+                            <div className="h-4 bg-[#D8CFC4]/10 rounded animate-shimmer w-5/6" />
+                            <div className="h-4 bg-[#D8CFC4]/10 rounded animate-shimmer w-4/6" />
+                            <div className="h-4 bg-[#D8CFC4]/10 rounded animate-shimmer w-3/6" />
+                          </div>
+                          {/* Author Skeleton */}
+                          <div className="flex items-center gap-3">
+                            <div className="w-12 h-12 rounded-full bg-[#D8CFC4]/10 animate-shimmer" />
+                            <div className="flex-1">
+                              <div className="h-5 bg-[#D8CFC4]/10 rounded animate-shimmer w-24" />
+                            </div>
                           </div>
                         </div>
                       </div>
-                    </div>
-                  ))}
+                      <div
+                        key="skeleton-1"
+                        className="hidden md:flex flex-shrink-0 w-[calc((100%-24px)/2)] lg:w-[calc((100%-48px)/3)] snap-start"
+                      >
+                        <div className="bg-[#1F1F1F] p-8 lg:p-10 rounded-2xl shadow-lg border border-[#D8CFC4]/10 w-full">
+                          {/* Stars Skeleton */}
+                          <div className="flex items-center gap-1 mb-6">
+                            {Array.from({ length: 5 }).map((_, i) => (
+                              <div
+                                key={i}
+                                className="w-6 h-6 rounded bg-[#D8CFC4]/10 animate-shimmer"
+                              />
+                            ))}
+                          </div>
+                          {/* Text Skeleton */}
+                          <div className="mb-6 space-y-2">
+                            <div className="h-4 bg-[#D8CFC4]/10 rounded animate-shimmer" />
+                            <div className="h-4 bg-[#D8CFC4]/10 rounded animate-shimmer w-5/6" />
+                            <div className="h-4 bg-[#D8CFC4]/10 rounded animate-shimmer w-4/6" />
+                            <div className="h-4 bg-[#D8CFC4]/10 rounded animate-shimmer w-3/6" />
+                          </div>
+                          {/* Author Skeleton */}
+                          <div className="flex items-center gap-3">
+                            <div className="w-12 h-12 rounded-full bg-[#D8CFC4]/10 animate-shimmer" />
+                            <div className="flex-1">
+                              <div className="h-5 bg-[#D8CFC4]/10 rounded animate-shimmer w-24" />
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div
+                        key="skeleton-2"
+                        className="hidden lg:flex flex-shrink-0 w-[calc((100%-48px)/3)] snap-start"
+                      >
+                        <div className="bg-[#1F1F1F] p-8 lg:p-10 rounded-2xl shadow-lg border border-[#D8CFC4]/10 w-full">
+                          {/* Stars Skeleton */}
+                          <div className="flex items-center gap-1 mb-6">
+                            {Array.from({ length: 5 }).map((_, i) => (
+                              <div
+                                key={i}
+                                className="w-6 h-6 rounded bg-[#D8CFC4]/10 animate-shimmer"
+                              />
+                            ))}
+                          </div>
+                          {/* Text Skeleton */}
+                          <div className="mb-6 space-y-2">
+                            <div className="h-4 bg-[#D8CFC4]/10 rounded animate-shimmer" />
+                            <div className="h-4 bg-[#D8CFC4]/10 rounded animate-shimmer w-5/6" />
+                            <div className="h-4 bg-[#D8CFC4]/10 rounded animate-shimmer w-4/6" />
+                            <div className="h-4 bg-[#D8CFC4]/10 rounded animate-shimmer w-3/6" />
+                          </div>
+                          {/* Author Skeleton */}
+                          <div className="flex items-center gap-3">
+                            <div className="w-12 h-12 rounded-full bg-[#D8CFC4]/10 animate-shimmer" />
+                            <div className="flex-1">
+                              <div className="h-5 bg-[#D8CFC4]/10 rounded animate-shimmer w-24" />
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </>
+                  ) : (
+                    // Real Reviews
+                    (reviews.length > 0 ? reviews : fallbackReviews).map((review, index) => {
+                      const isExpanded = expandedReviews.has(index);
+                      const commentLength = review.comment.length;
+                      const shouldShowReadMore = commentLength > 220;
+                      
+                      const toggleExpand = () => {
+                        setExpandedReviews(prev => {
+                          const newSet = new Set(prev);
+                          if (newSet.has(index)) {
+                            newSet.delete(index);
+                          } else {
+                            newSet.add(index);
+                          }
+                          return newSet;
+                        });
+                      };
+                      
+                      return (
+                        <div
+                          key={index}
+                          className="flex-shrink-0 w-full md:w-[calc((100%-24px)/2)] lg:w-[calc((100%-48px)/3)] snap-start"
+                        >
+                          <div className="bg-[#1F1F1F] p-6 lg:p-8 rounded-[24px] shadow-lg border border-[#D8CFC4]/10 hover:shadow-2xl hover:shadow-[#D8CFC4]/5 transition-all duration-250 ease-out transform hover:-translate-y-[2px] hover:border-[#D8CFC4]/15 flex flex-col h-full">
+                            {/* Header: Google Logo + Verified Chip */}
+                            <div className="flex items-center justify-between mb-4">
+                              <div className="flex items-center gap-2">
+                                <div className="w-5 h-5 rounded-full bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center">
+                                  <span className="text-white font-semibold text-[8px] leading-none">G</span>
+                                </div>
+                                <span className="text-[#CFC7BC] text-xs font-medium">Doğrulandı</span>
+                              </div>
+                              {/* Quote Icon */}
+                              <svg
+                                className="w-5 h-5 text-[#D8CFC4]/30"
+                                fill="currentColor"
+                                viewBox="0 0 24 24"
+                              >
+                                <path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l1 2.016c-2.053.783-3.946 2.9-4.946 5.609h4.946v10h-10zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l1 2.016c-2.053.783-3.946 2.9-4.946 5.609h4.946v10h-10z" />
+                              </svg>
+                            </div>
+                            
+                            {/* Stars */}
+                            <div className="flex items-center gap-1 mb-4">
+                              {Array.from({ length: review.rating }).map((_, i) => (
+                                <svg
+                                  key={i}
+                                  className="w-5 h-5 text-[#D8CFC4]"
+                                  fill="currentColor"
+                                  viewBox="0 0 20 20"
+                                >
+                                  <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                                </svg>
+                              ))}
+                            </div>
+                            
+                            {/* Review Text with expand/collapse */}
+                            <div className="flex-grow mb-4">
+                              <p 
+                                className={`text-[#CFC7BC] leading-relaxed italic text-base font-light transition-all duration-250 ${
+                                  isExpanded ? '' : 'line-clamp-5'
+                                }`}
+                                style={isExpanded ? {} : {
+                                  display: '-webkit-box',
+                                  WebkitLineClamp: 5,
+                                  WebkitBoxOrient: 'vertical',
+                                  overflow: 'hidden',
+                                }}
+                              >
+                                "{review.comment}"
+                              </p>
+                              {shouldShowReadMore && (
+                                <button
+                                  onClick={toggleExpand}
+                                  className="mt-2 text-[#D8CFC4] text-sm underline opacity-80 hover:opacity-100 transition-opacity duration-200"
+                                >
+                                  {isExpanded ? 'Daha az göster' : 'Devamını oku'}
+                                </button>
+                              )}
+                            </div>
+                            
+                            {/* Author Section */}
+                            <div className="flex items-center gap-3 pt-4 border-t border-[#D8CFC4]/10">
+                              <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[#D8CFC4] to-[#C4B5A8] flex items-center justify-center text-[#0E0E0E] font-semibold text-base shadow-sm flex-shrink-0">
+                                {review.name.charAt(0)}
+                              </div>
+                              <div className="min-w-0 flex-1">
+                                <p className="text-[#F5F3EF] font-semibold text-base tracking-tight truncate">{review.name}</p>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      );
+                    })
+                  )}
                 </div>
               </div>
 

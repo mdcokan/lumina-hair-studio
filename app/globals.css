@@ -92,3 +92,24 @@ p {
 .scrollbar-hide::-webkit-scrollbar {
   display: none;
 }
+
+/* Shimmer animation for skeleton */
+@keyframes shimmer {
+  0% {
+    background-position: -1000px 0;
+  }
+  100% {
+    background-position: 1000px 0;
+  }
+}
+
+.animate-shimmer {
+  animation: shimmer 2s infinite;
+  background: linear-gradient(
+    90deg,
+    rgba(216, 207, 196, 0.08) 0%,
+    rgba(216, 207, 196, 0.15) 50%,
+    rgba(216, 207, 196, 0.08) 100%
+  );
+  background-size: 1000px 100%;
+}
