@@ -11,6 +11,52 @@ import {
   videosDescription,
 } from '@/src/content/gallery';
 
+interface Review {
+  name: string;
+  rating: number;
+  comment: string;
+}
+
+// Fallback reviews (hardcoded)
+const fallbackReviews: Review[] = [
+  {
+    name: 'Ayşe Yılmaz',
+    rating: 5,
+    comment:
+      'Harika bir deneyim! Ekibiniz çok profesyonel ve sonuç muhteşem. Kesinlikle tekrar geleceğim.',
+  },
+  {
+    name: 'Zeynep Demir',
+    rating: 5,
+    comment:
+      'Balayage yaptırdım ve hayal ettiğimden bile güzel oldu. Çok memnun kaldım, herkese tavsiye ederim.',
+  },
+  {
+    name: 'Elif Kaya',
+    rating: 5,
+    comment:
+      'Keratin bakımı yaptırdım, saçlarım çok yumuşak ve parlak. Salonunuzun atmosferi de çok güzel.',
+  },
+  {
+    name: 'Mehmet Öz',
+    rating: 5,
+    comment:
+      'Eşim için düğün paketi aldık. Hem saç hem makyaj mükemmeldi. Çok teşekkürler!',
+  },
+  {
+    name: 'Selin Arslan',
+    rating: 5,
+    comment:
+      'Fön ve şekillendirme hizmeti aldım. Çok memnun kaldım, özel günlerimde mutlaka geleceğim.',
+  },
+  {
+    name: 'Can Yıldız',
+    rating: 5,
+    comment:
+      'Kesim ve bakım hizmeti aldım. Profesyonel yaklaşım ve kaliteli hizmet. Kesinlikle tavsiye ederim.',
+  },
+];
+
 export default function Home() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -19,7 +65,56 @@ export default function Home() {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [activeSection, setActiveSection] = useState('');
   const [currentReviewIndex, setCurrentReviewIndex] = useState(0);
+  const [reviews, setReviews] = useState<Review[]>([]);
+  const [placeRating, setPlaceRating] = useState<number | undefined>(undefined);
+  const [userRatingCount, setUserRatingCount] = useState<number | undefined>(undefined);
+  const [googleUrl, setGoogleUrl] = useState<string | undefined>(undefined);
+  const [placeId, setPlaceId] = useState<string | undefined>(undefined);
+  const [currentSlide, setCurrentSlide] = useState(0);
+  const carouselRef = useRef<HTMLDivElement>(null);
   const lastNavAt = useRef<number>(0);
+
+  // Fetch Google reviews on mount
+  useEffect(() => {
+    const fetchReviews = async () => {
+      try {
+        const response = await fetch('/api/google-reviews');
+        if (response.ok) {
+          const data = await response.json();
+          if (data.reviews && data.reviews.length > 0) {
+            // Map Google reviews to our format
+            const formattedReviews: Review[] = data.reviews.map((review: any) => ({
+              name: review.authorName || 'Anonim',
+              rating: review.rating || 5,
+              comment: (typeof review.text === "string" ? review.text : review.text?.text) ?? "",
+            }));
+            setReviews(formattedReviews);
+            // Set rating and userRatingCount from API
+            if (typeof data.rating === 'number') {
+              setPlaceRating(data.rating);
+            }
+            if (typeof data.userRatingCount === 'number') {
+              setUserRatingCount(data.userRatingCount);
+            }
+            // Set googleUrl and placeId from API
+            if (typeof data.googleUrl === 'string') {
+              setGoogleUrl(data.googleUrl);
+            }
+            if (typeof data.placeId === 'string') {
+              setPlaceId(data.placeId);
+            }
+            return;
+          }
+        }
+      } catch (error) {
+        console.error('Error fetching Google reviews:', error);
+      }
+      // Fallback to hardcoded reviews if API fails
+      setReviews(fallbackReviews);
+    };
+
+    fetchReviews();
+  }, []);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -128,6 +223,105 @@ export default function Home() {
   const closeMobileMenu = () => {
     setIsMobileMenuOpen(false);
   };
+
+  // Carousel functions
+  const reviewsList = reviews.length > 0 ? reviews : fallbackReviews;
+  
+  const getCardsPerView = () => {
+    if (typeof window === 'undefined') return 3;
+    if (window.innerWidth >= 1024) return 3; // Desktop
+    if (window.innerWidth >= 768) return 2; // Tablet
+    return 1; // Mobile
+  };
+
+  const [cardsPerView, setCardsPerView] = useState(3);
+
+  useEffect(() => {
+    const updateCardsPerView = () => {
+      setCardsPerView(getCardsPerView());
+    };
+    updateCardsPerView();
+    window.addEventListener('resize', updateCardsPerView);
+    return () => window.removeEventListener('resize', updateCardsPerView);
+  }, []);
+
+  const totalSlides = Math.max(1, Math.ceil(reviewsList.length / cardsPerView));
+
+  const goToSlide = (index: number) => {
+    const maxSlide = totalSlides - 1;
+    const newIndex = Math.max(0, Math.min(index, maxSlide));
+    setCurrentSlide(newIndex);
+    
+    if (carouselRef.current) {
+      const containerWidth = carouselRef.current.offsetWidth;
+      const gap = 24; // gap-6 = 24px
+      const cardWidth = (containerWidth - gap * (cardsPerView - 1)) / cardsPerView;
+      const slideWidth = cardWidth * cardsPerView + gap * (cardsPerView - 1);
+      const scrollPosition = newIndex * slideWidth;
+      carouselRef.current.scrollTo({
+        left: scrollPosition,
+        behavior: 'smooth',
+      });
+    }
+  };
+
+  const nextSlide = () => {
+    const maxSlide = totalSlides - 1;
+    if (currentSlide < maxSlide) {
+      goToSlide(currentSlide + 1);
+    } else {
+      goToSlide(0);
+    }
+  };
+
+  const prevSlide = () => {
+    const maxSlide = totalSlides - 1;
+    if (currentSlide > 0) {
+      goToSlide(currentSlide - 1);
+    } else {
+      goToSlide(maxSlide);
+    }
+  };
+
+  // Handle scroll to update current slide
+  useEffect(() => {
+    const handleScroll = () => {
+      if (carouselRef.current) {
+        const containerWidth = carouselRef.current.offsetWidth;
+        const gap = 24;
+        const cardWidth = (containerWidth - gap * (cardsPerView - 1)) / cardsPerView;
+        const scrollLeft = carouselRef.current.scrollLeft;
+        const slideWidth = cardWidth * cardsPerView + gap * (cardsPerView - 1);
+        const slideIndex = Math.round(scrollLeft / slideWidth);
+        setCurrentSlide(Math.max(0, Math.min(slideIndex, totalSlides - 1)));
+      }
+    };
+
+    const carousel = carouselRef.current;
+    if (carousel) {
+      carousel.addEventListener('scroll', handleScroll);
+      return () => carousel.removeEventListener('scroll', handleScroll);
+    }
+  }, [cardsPerView, totalSlides]);
+
+  // Handle mouse wheel for horizontal scrolling
+  useEffect(() => {
+    const carousel = carouselRef.current;
+    if (!carousel) return;
+
+    const handleWheel = (e: WheelEvent) => {
+      if (e.deltaY !== 0) {
+        e.preventDefault();
+        carousel.scrollBy({
+          left: e.deltaY,
+          behavior: 'smooth',
+        });
+      }
+    };
+
+    carousel.addEventListener('wheel', handleWheel, { passive: false });
+    return () => carousel.removeEventListener('wheel', handleWheel);
+  }, []);
 
   return (
     <div className="min-h-screen bg-[#0E0E0E]">
@@ -760,84 +954,220 @@ export default function Home() {
       {/* Reviews Section */}
       <section id="yorumlar" className="py-24 sm:py-28 lg:py-32 px-4 sm:px-6 lg:px-8 bg-[#181818]">
         <div className="container mx-auto max-w-7xl">
-          <div className="text-center mb-20">
-            <h2 className="text-4xl sm:text-5xl font-bold text-[#F5F3EF] mb-6 tracking-tight">
-              Müşteri Yorumları
-            </h2>
-            <p className="text-xl text-[#CFC7BC] max-w-3xl mx-auto leading-relaxed">
-              Memnuniyetimiz en büyük önceliğimiz
-            </p>
+          <div className="mb-20">
+            <div className="flex flex-col sm:flex-row items-center justify-between gap-4 mb-6">
+              <div className="flex-1 text-center sm:text-left">
+                <h2 className="text-4xl sm:text-5xl font-bold text-[#F5F3EF] mb-3 tracking-tight">
+                  Google Yorumları
+                </h2>
+                
+                {/* Doğrulama Badge */}
+                <div className="flex items-center justify-center sm:justify-start gap-1.5 mb-4">
+                  <div className="inline-flex items-center gap-1.5 bg-[#D8CFC4]/10 border border-[#D8CFC4]/20 rounded-full px-2.5 py-1">
+                    <svg
+                      className="w-3.5 h-3.5 text-[#D8CFC4]"
+                      fill="currentColor"
+                      viewBox="0 0 20 20"
+                    >
+                      <path
+                        fillRule="evenodd"
+                        d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                        clipRule="evenodd"
+                      />
+                    </svg>
+                    <span className="text-[#CFC7BC] text-xs font-medium">
+                      Google'da doğrulanmış müşteri yorumları
+                    </span>
+                  </div>
+                </div>
+
+                {(placeRating !== undefined || userRatingCount !== undefined) && (
+                  <div className="flex flex-col sm:flex-row items-center justify-center sm:justify-start gap-3 text-lg text-[#CFC7BC]">
+                    <div className="flex items-center gap-2">
+                      <div className="flex items-center gap-1">
+                        {Array.from({ length: 5 }).map((_, i) => {
+                          const rating = placeRating || 0;
+                          const isFilled = i < Math.floor(rating);
+                          return (
+                            <svg
+                              key={i}
+                              className={`w-5 h-5 ${
+                                isFilled ? 'text-[#D8CFC4]' : 'text-[#CFC7BC] opacity-30'
+                              }`}
+                              fill={isFilled ? 'currentColor' : 'none'}
+                              stroke={isFilled ? 'none' : 'currentColor'}
+                              strokeWidth={isFilled ? 0 : 1}
+                              viewBox="0 0 20 20"
+                            >
+                              <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                            </svg>
+                          );
+                        })}
+                      </div>
+                      {placeRating !== undefined && (
+                        <>
+                          <span className="font-semibold text-[#D8CFC4]">
+                            {placeRating.toFixed(1)}
+                          </span>
+                          {userRatingCount !== undefined && (
+                            <>
+                              <span className="text-[#CFC7BC]">•</span>
+                              <span className="text-[#CFC7BC]">
+                                {userRatingCount} yorum
+                              </span>
+                            </>
+                          )}
+                        </>
+                      )}
+                    </div>
+                    
+                    {/* CTA Link */}
+                    {(googleUrl || placeId) && (
+                      <a
+                        href={googleUrl || `https://www.google.com/maps/place/?q=place_id:${placeId}&hl=tr&gl=TR`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-[#D8CFC4] hover:text-[#C4B5A8] font-medium text-sm transition-colors flex items-center gap-1 group whitespace-nowrap"
+                      >
+                        Tüm Google yorumlarını gör
+                        <svg
+                          className="w-4 h-4 transition-transform group-hover:translate-x-1"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M9 5l7 7-7 7"
+                          />
+                        </svg>
+                      </a>
+                    )}
+                  </div>
+                )}
+              </div>
+              {/* Google Badge */}
+              {(googleUrl || placeId) && (
+                <a
+                  href={googleUrl || `https://www.google.com/maps/place/?q=place_id:${placeId}&hl=tr&gl=TR`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-1.5 bg-white/8 backdrop-blur-sm px-2.5 py-1.5 rounded-lg border border-[#D8CFC4]/15 shrink-0 hover:bg-white/12 hover:border-[#D8CFC4]/25 hover:shadow-[0_0_12px_rgba(216,207,196,0.15)] transition-all duration-300 group"
+                >
+                  <div className="w-5 h-5 rounded-full bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center shadow-sm group-hover:shadow-md transition-shadow">
+                    <span className="text-white font-semibold text-[10px] leading-none">G</span>
+                  </div>
+                  <span className="text-[#D8CFC4] font-medium text-xs tracking-tight">Google</span>
+                </a>
+              )}
+            </div>
           </div>
           
           <div className="relative">
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8">
-              {[
-                {
-                  name: 'Ayşe Yılmaz',
-                  rating: 5,
-                  comment:
-                    'Harika bir deneyim! Ekibiniz çok profesyonel ve sonuç muhteşem. Kesinlikle tekrar geleceğim.',
-                },
-                {
-                  name: 'Zeynep Demir',
-                  rating: 5,
-                  comment:
-                    'Balayage yaptırdım ve hayal ettiğimden bile güzel oldu. Çok memnun kaldım, herkese tavsiye ederim.',
-                },
-                {
-                  name: 'Elif Kaya',
-                  rating: 5,
-                  comment:
-                    'Keratin bakımı yaptırdım, saçlarım çok yumuşak ve parlak. Salonunuzun atmosferi de çok güzel.',
-                },
-                {
-                  name: 'Mehmet Öz',
-                  rating: 5,
-                  comment:
-                    'Eşim için düğün paketi aldık. Hem saç hem makyaj mükemmeldi. Çok teşekkürler!',
-                },
-                {
-                  name: 'Selin Arslan',
-                  rating: 5,
-                  comment:
-                    'Fön ve şekillendirme hizmeti aldım. Çok memnun kaldım, özel günlerimde mutlaka geleceğim.',
-                },
-                {
-                  name: 'Can Yıldız',
-                  rating: 5,
-                  comment:
-                    'Kesim ve bakım hizmeti aldım. Profesyonel yaklaşım ve kaliteli hizmet. Kesinlikle tavsiye ederim.',
-                },
-              ].map((review, index) => (
-                <div
-                  key={index}
-                  className="bg-[#1F1F1F] p-8 lg:p-10 rounded-2xl shadow-xl border border-[#D8CFC4]/20 hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1"
+            {/* Carousel Container */}
+            <div className="relative group">
+              {/* Navigation Buttons */}
+              <button
+                onClick={prevSlide}
+                className="absolute left-2 md:left-4 top-1/2 -translate-y-1/2 z-10 w-12 h-12 md:w-14 md:h-14 flex items-center justify-center bg-[#1F1F1F]/90 hover:bg-[#1F1F1F] text-[#D8CFC4] rounded-full shadow-lg border border-[#D8CFC4]/20 hover:border-[#D8CFC4]/40 transition-all duration-300 opacity-0 group-hover:opacity-100 backdrop-blur-sm hover:scale-110"
+                aria-label="Önceki yorumlar"
+              >
+                <svg
+                  className="w-6 h-6 md:w-7 md:h-7"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
                 >
-                  <div className="flex items-center gap-1 mb-6">
-                    {Array.from({ length: review.rating }).map((_, i) => (
-                      <svg
-                        key={i}
-                        className="w-6 h-6 text-[#D8CFC4]"
-                        fill="currentColor"
-                        viewBox="0 0 20 20"
-                      >
-                        <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                      </svg>
-                    ))}
-                  </div>
-                  <p className="text-[#CFC7BC] mb-6 leading-relaxed italic text-lg">
-                    "{review.comment}"
-                  </p>
-                  <div className="flex items-center gap-3">
-                    <div className="w-12 h-12 rounded-full bg-[#D8CFC4] flex items-center justify-center text-[#0E0E0E] font-bold text-lg">
-                      {review.name.charAt(0)}
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M15 19l-7-7 7-7"
+                  />
+                </svg>
+              </button>
+              <button
+                onClick={nextSlide}
+                className="absolute right-2 md:right-4 top-1/2 -translate-y-1/2 z-10 w-12 h-12 md:w-14 md:h-14 flex items-center justify-center bg-[#1F1F1F]/90 hover:bg-[#1F1F1F] text-[#D8CFC4] rounded-full shadow-lg border border-[#D8CFC4]/20 hover:border-[#D8CFC4]/40 transition-all duration-300 opacity-0 group-hover:opacity-100 backdrop-blur-sm hover:scale-110"
+                aria-label="Sonraki yorumlar"
+              >
+                <svg
+                  className="w-6 h-6 md:w-7 md:h-7"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M9 5l7 7-7 7"
+                  />
+                </svg>
+              </button>
+
+              {/* Carousel */}
+              <div
+                ref={carouselRef}
+                className="overflow-x-auto scrollbar-hide snap-x snap-mandatory scroll-smooth"
+                style={{
+                  scrollbarWidth: 'none',
+                  msOverflowStyle: 'none',
+                }}
+              >
+                <div className="flex gap-6 lg:gap-8">
+                  {(reviews.length > 0 ? reviews : fallbackReviews).map((review, index) => (
+                    <div
+                      key={index}
+                      className="flex-shrink-0 w-full md:w-[calc((100%-24px)/2)] lg:w-[calc((100%-48px)/3)] snap-start"
+                    >
+                      <div className="bg-[#1F1F1F] p-8 lg:p-10 rounded-2xl shadow-lg border border-[#D8CFC4]/10 hover:shadow-2xl hover:shadow-[#D8CFC4]/5 transition-all duration-300 transform hover:-translate-y-2 hover:border-[#D8CFC4]/15">
+                        <div className="flex items-center gap-1 mb-6">
+                          {Array.from({ length: review.rating }).map((_, i) => (
+                            <svg
+                              key={i}
+                              className="w-6 h-6 text-[#D8CFC4]"
+                              fill="currentColor"
+                              viewBox="0 0 20 20"
+                            >
+                              <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                            </svg>
+                          ))}
+                        </div>
+                        <p className="text-[#CFC7BC] mb-6 leading-loose italic text-lg font-light">
+                          "{review.comment}"
+                        </p>
+                        <div className="flex items-center gap-3">
+                          <div className="w-12 h-12 rounded-full bg-gradient-to-br from-[#D8CFC4] to-[#C4B5A8] flex items-center justify-center text-[#0E0E0E] font-semibold text-lg shadow-sm">
+                            {review.name.charAt(0)}
+                          </div>
+                          <div>
+                            <p className="text-[#F5F3EF] font-semibold text-lg tracking-tight">— {review.name}</p>
+                          </div>
+                        </div>
+                      </div>
                     </div>
-                    <div>
-                      <p className="text-[#F5F3EF] font-semibold text-lg">— {review.name}</p>
-                    </div>
-                  </div>
+                  ))}
                 </div>
-              ))}
+              </div>
+
+              {/* Dots Indicator */}
+              <div className="flex items-center justify-center gap-2 mt-8">
+                {Array.from({ length: totalSlides }).map((_, index) => (
+                  <button
+                    key={index}
+                    onClick={() => goToSlide(index)}
+                    className={`transition-all duration-300 rounded-full ${
+                      index === currentSlide
+                        ? 'w-3 h-3 bg-[#D8CFC4]'
+                        : 'w-2 h-2 bg-[#CFC7BC] opacity-40 hover:opacity-60'
+                    }`}
+                    aria-label={`Sayfa ${index + 1}`}
+                  />
+                ))}
+              </div>
             </div>
           </div>
         </div>
