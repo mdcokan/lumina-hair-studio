@@ -937,15 +937,15 @@ export default function Home() {
             <h2 className="text-3xl sm:text-4xl font-bold text-[#F5F3EF] mb-4">
               {videosTitle}
             </h2>
-            <p className="text-lg text-[#CFC7BC] max-w-2xl mx-auto">
-              {videosDescription}
+            <p className="text-sm md:text-base text-white/70 max-w-xl mx-auto leading-relaxed">
+              Salonumuzdan kısa anlar—kesim, bakım ve dönüşümler. Beğendiğin stili randevuda birlikte seçelim.
             </p>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {videoLinks.map((video, index) => (
               <div
                 key={index}
-                className="relative rounded-2xl overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300 bg-[#1F1F1F] border border-[#D8CFC4]/20 w-full md:max-w-[340px] mx-auto"
+                className="group relative overflow-hidden rounded-2xl border border-white/10 bg-white/5 shadow-[0_10px_30px_rgba(0,0,0,0.35)] transition-all duration-300 hover:-translate-y-1 hover:border-white/20 hover:bg-white/8 hover:shadow-[0_18px_50px_rgba(0,0,0,0.55)] w-full md:max-w-[340px] mx-auto"
               >
                 <div className="relative aspect-[9/16] w-full">
                   <iframe
@@ -956,9 +956,17 @@ export default function Home() {
                     allowFullScreen
                     loading="lazy"
                   />
+                  {/* Premium gradient overlay */}
+                  <div className="absolute inset-0 bg-gradient-to-b from-white/5 via-transparent to-black/30 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" />
                 </div>
                 <div className="p-4 bg-[#181818]">
-                  <h3 className="font-semibold text-[#F5F3EF]">{video.title}</h3>
+                  <h3 className="font-semibold text-[#F5F3EF] mb-3">{video.title}</h3>
+                  <a
+                    href="#iletisim"
+                    className="inline-flex items-center gap-2 text-sm font-medium text-white/80 hover:text-white transition-colors"
+                  >
+                    Randevu Al →
+                  </a>
                 </div>
               </div>
             ))}
