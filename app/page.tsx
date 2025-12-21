@@ -77,6 +77,7 @@ export default function Home() {
   const [selectedReview, setSelectedReview] = useState<Review | null>(null);
   const [isReviewModalOpen, setIsReviewModalOpen] = useState(false);
   const carouselRef = useRef<HTMLDivElement>(null);
+  const videoCarouselRef = useRef<HTMLDivElement>(null);
   const lastNavAt = useRef<number>(0);
 
   // Fetch Google reviews on mount
@@ -941,13 +942,84 @@ export default function Home() {
               Salonumuzdan kısa anlar—kesim, bakım ve dönüşümler. Beğendiğin stili randevuda birlikte seçelim.
             </p>
           </div>
-          {/* Horizontal Scroll Container */}
-          <div className="flex flex-nowrap overflow-x-auto snap-x snap-mandatory scroll-smooth gap-6 md:gap-8 px-4 md:px-8 pb-2 py-2 scrollbar-hide touch-pan-x">
-            {videoLinks.map((video, index) => (
-              <div
-                key={index}
-                className="group relative overflow-hidden rounded-2xl border border-white/10 bg-white/5 shadow-[0_10px_30px_rgba(0,0,0,0.35)] transition-all duration-300 hover:-translate-y-1 hover:border-white/20 hover:bg-white/8 hover:shadow-[0_18px_50px_rgba(0,0,0,0.55)] flex-none snap-start w-[78vw] md:w-[380px] lg:w-[340px] xl:w-[360px]"
+          {/* Horizontal Scroll Container with Navigation */}
+          <div className="relative">
+            {/* Left Arrow Button */}
+            <button
+              onClick={() => {
+                if (videoCarouselRef.current) {
+                  const firstCard = videoCarouselRef.current.querySelector('div[class*="flex-none"]') as HTMLElement;
+                  if (firstCard) {
+                    const cardWidth = firstCard.offsetWidth;
+                    const gap = window.innerWidth >= 768 ? 32 : 24;
+                    const scrollAmount = cardWidth + gap;
+                    videoCarouselRef.current.scrollBy({
+                      left: -scrollAmount,
+                      behavior: 'smooth',
+                    });
+                  }
+                }
+              }}
+              className="hidden md:flex absolute left-0 top-1/2 -translate-y-1/2 z-10 w-12 h-12 items-center justify-center bg-black/40 border border-white/10 hover:bg-black/60 rounded-full text-white transition-all duration-200 backdrop-blur-sm"
+              aria-label="Önceki video"
+            >
+              <svg
+                className="w-6 h-6"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
               >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M15 19l-7-7 7-7"
+                />
+              </svg>
+            </button>
+            {/* Right Arrow Button */}
+            <button
+              onClick={() => {
+                if (videoCarouselRef.current) {
+                  const firstCard = videoCarouselRef.current.querySelector('div[class*="flex-none"]') as HTMLElement;
+                  if (firstCard) {
+                    const cardWidth = firstCard.offsetWidth;
+                    const gap = window.innerWidth >= 768 ? 32 : 24;
+                    const scrollAmount = cardWidth + gap;
+                    videoCarouselRef.current.scrollBy({
+                      left: scrollAmount,
+                      behavior: 'smooth',
+                    });
+                  }
+                }
+              }}
+              className="hidden md:flex absolute right-0 top-1/2 -translate-y-1/2 z-10 w-12 h-12 items-center justify-center bg-black/40 border border-white/10 hover:bg-black/60 rounded-full text-white transition-all duration-200 backdrop-blur-sm"
+              aria-label="Sonraki video"
+            >
+              <svg
+                className="w-6 h-6"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M9 5l7 7-7 7"
+                />
+              </svg>
+            </button>
+            {/* Carousel Container */}
+            <div 
+              ref={videoCarouselRef}
+              className="flex flex-nowrap overflow-x-auto snap-x snap-mandatory scroll-smooth gap-6 md:gap-8 px-4 md:px-8 pb-2 py-2 scrollbar-hide touch-pan-x"
+            >
+              {videoLinks.map((video, index) => (
+                <div
+                  key={index}
+                  className="group relative overflow-hidden rounded-2xl border border-white/10 bg-white/5 shadow-[0_10px_30px_rgba(0,0,0,0.35)] transition-all duration-300 hover:-translate-y-1 hover:border-white/20 hover:bg-white/8 hover:shadow-[0_18px_50px_rgba(0,0,0,0.55)] flex-none snap-start w-[78vw] md:w-[380px] lg:w-[340px] xl:w-[360px]"
+                >
                   <div className="relative aspect-[9/16] w-full">
                     <iframe
                       src={`${video.url}?autoplay=0&mute=1`}
@@ -971,6 +1043,7 @@ export default function Home() {
                   </div>
                 </div>
               ))}
+            </div>
           </div>
         </div>
       </section>

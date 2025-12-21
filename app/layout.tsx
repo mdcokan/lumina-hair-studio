@@ -40,7 +40,6 @@ export const metadata: Metadata = {
   creator: "Lumina Hair Studio",
   publisher: "Lumina Hair Studio",
 
-  // ✅ FAVICON + APPLE ICON + MANIFEST
   icons: {
     icon: [
       { url: "/favicon.ico" },
@@ -85,6 +84,8 @@ export const metadata: Metadata = {
       "max-snippet": -1,
     },
   },
+
+  // Search Console doğrulama kodunu alınca burayı güncelleyeceğiz
   verification: {
     google: "your-google-verification-code",
   },
@@ -112,34 +113,29 @@ export default function RootLayout({
 
   return (
     <html lang="tr">
-      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
-        {/* Google Analytics 4 */}
-        <Script
-          src="https://www.googletagmanager.com/gtag/js?id=G-BE965WRSRJ"
-          strategy="afterInteractive"
-        />
-        <Script id="google-analytics" strategy="afterInteractive">
+      <head>
+        {/* Google Tag Manager (GTM) */}
+        <Script id="gtm" strategy="afterInteractive">
           {`
-            window.dataLayer = window.dataLayer || [];
-            function gtag(){dataLayer.push(arguments);}
-            gtag('js', new Date());
-            gtag('config', 'G-BE965WRSRJ');
+            (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+            new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+            j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+            'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+            })(window,document,'script','dataLayer','GTM-TX25HPZ5');
           `}
         </Script>
+      </head>
 
-        {/* Google Ads */}
-        <Script
-          src="https://www.googletagmanager.com/gtag/js?id=AW-17775158966"
-          strategy="afterInteractive"
-        />
-        <Script id="google-ads" strategy="afterInteractive">
-          {`
-            window.dataLayer = window.dataLayer || [];
-            function gtag(){dataLayer.push(arguments);}
-            gtag('js', new Date());
-            gtag('config', 'AW-17775158966');
-          `}
-        </Script>
+      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+        {/* Google Tag Manager (noscript) */}
+        <noscript>
+          <iframe
+            src="https://www.googletagmanager.com/ns.html?id=GTM-TX25HPZ5"
+            height="0"
+            width="0"
+            style={{ display: "none", visibility: "hidden" }}
+          />
+        </noscript>
 
         {/* LocalBusiness JSON-LD */}
         <script
