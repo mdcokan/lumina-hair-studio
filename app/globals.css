@@ -57,6 +57,17 @@ body {
   letter-spacing: 0.01em;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  /* Editorial luxury: subtle vignette effect */
+  position: relative;
+}
+
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background: radial-gradient(ellipse at center, transparent 0%, rgba(0, 0, 0, 0.3) 100%);
+  pointer-events: none;
+  z-index: 0;
 }
 
 /* Smooth scrolling */
@@ -112,4 +123,20 @@ p {
     rgba(216, 207, 196, 0.08) 100%
   );
   background-size: 1000px 100%;
+}
+
+/* Premium transitions */
+button, a, .transition-all {
+  transition-duration: 200ms;
+  transition-timing-function: ease-out;
+}
+
+/* Softer borders */
+.border-soft {
+  border-color: rgba(216, 207, 196, 0.12);
+}
+
+/* Off-white text */
+.text-off-white {
+  color: #F5F3EF;
 }

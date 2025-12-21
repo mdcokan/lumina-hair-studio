@@ -59,6 +59,7 @@ const fallbackReviews: Review[] = [
 
 export default function Home() {
   const [isScrolled, setIsScrolled] = useState(false);
+  const [showBackToTop, setShowBackToTop] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [imageErrors, setImageErrors] = useState<Set<number>>(new Set());
   const [isLightboxOpen, setIsLightboxOpen] = useState(false);
@@ -73,6 +74,8 @@ export default function Home() {
   const [isLoadingReviews, setIsLoadingReviews] = useState(true);
   const [currentSlide, setCurrentSlide] = useState(0);
   const [expandedReviews, setExpandedReviews] = useState<Set<number>>(new Set());
+  const [selectedReview, setSelectedReview] = useState<Review | null>(null);
+  const [isReviewModalOpen, setIsReviewModalOpen] = useState(false);
   const carouselRef = useRef<HTMLDivElement>(null);
   const lastNavAt = useRef<number>(0);
 
@@ -124,6 +127,7 @@ export default function Home() {
   useEffect(() => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 50);
+      setShowBackToTop(window.scrollY > 400);
       
       // Active section tracking
       const sections = ['hizmetler', 'galeri', 'yorumlar', 'iletisim'];
@@ -141,7 +145,7 @@ export default function Home() {
         }
       }
     };
-    window.addEventListener('scroll', handleScroll);
+    window.addEventListener('scroll', handleScroll, { passive: true });
     handleScroll(); // Initial check
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
@@ -332,20 +336,27 @@ export default function Home() {
     <div className="min-h-screen bg-[#0E0E0E]">
       {/* Sticky Header */}
       <header
-        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
+        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-200 ease-out ${
           isScrolled
-            ? 'bg-[#0E0E0E]/98 backdrop-blur-lg shadow-lg border-b border-[#D8CFC4]/20'
+            ? 'bg-[#0E0E0E]/95 backdrop-blur-lg shadow-lg border-b border-[#D8CFC4]/12'
             : 'bg-[#0E0E0E]'
         }`}
       >
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-20">
             {/* Logo */}
-            <div className="flex items-center">
-              <h1 className="text-2xl sm:text-3xl font-bold text-[#D8CFC4]">
+            <a
+              href="#top"
+              onClick={(e) => {
+                e.preventDefault();
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+              }}
+              className="flex items-center cursor-pointer"
+            >
+              <h1 className="text-2xl sm:text-3xl font-bold text-[#D8CFC4] hover:text-[#C4B5A8] transition-colors duration-200">
                 Lumina Hair Studio
-          </h1>
-            </div>
+              </h1>
+            </a>
 
             {/* Desktop Menu */}
             <nav className="hidden md:flex items-center space-x-8">
@@ -527,17 +538,20 @@ export default function Home() {
             className="object-cover object-center"
           />
         </div>
-        <div className="absolute inset-0 z-10 bg-gradient-to-b from-black/45 via-black/35 to-black/60 md:from-black/55 md:via-black/45 md:to-black/70" />
+        {/* Editorial gradient: siyah → antrasit + hafif bej highlight */}
+        <div className="absolute inset-0 z-10 bg-gradient-to-b from-[#0E0E0E] via-[#1a1a1a] to-[#0E0E0E] opacity-85" />
+        <div className="absolute inset-0 z-10 bg-gradient-to-br from-black/50 via-transparent to-black/60" />
+        <div className="absolute inset-0 z-10 bg-gradient-to-t from-[#D8CFC4]/5 via-transparent to-transparent" />
         <div className="relative z-20 container mx-auto max-w-7xl py-36">
-          <div className="text-center flex flex-col gap-4 md:gap-6 max-w-5xl mx-auto bg-black/10 backdrop-blur-sm rounded-2xl px-6 py-6 md:px-10 md:py-8">
-            <h1 className="text-4xl md:text-6xl font-bold text-[#F5F3EF] leading-relaxed tracking-tight">
+          <div className="text-center flex flex-col gap-4 md:gap-6 max-w-5xl mx-auto bg-black/5 backdrop-blur-sm rounded-2xl px-6 py-6 md:px-10 md:py-8">
+            <h1 className="text-4xl md:text-6xl font-bold text-[#F5F3EF] leading-[1.15] tracking-[-0.02em]">
               Saçınıza ışıltı,
               <br />
               <span className="text-[#D8CFC4]">
                 size güven.
               </span>
             </h1>
-            <p className="text-xl sm:text-2xl text-[#CFC7BC] leading-relaxed max-w-md md:max-w-xl mx-auto">
+            <p className="text-lg sm:text-xl text-[#CFC7BC] leading-relaxed max-w-md md:max-w-xl mx-auto font-light">
               Yenişehir/Mersin'de kişiye özel saç kesimi, renklendirme ve bakım uygulamaları ile 
               hayalinizdeki görünüme kavuşun. Profesyonel ekibimiz, modern teknikler ve premium 
               ürünlerle saçlarınıza özenle yaklaşıyor.
@@ -566,26 +580,29 @@ export default function Home() {
             </div>
             
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <a
-                href={whatsappUrlWithMessage}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center justify-center gap-2 md:gap-3 bg-[#D8CFC4] hover:bg-[#C4B5A8] text-[#0E0E0E] px-6 md:px-10 py-4 md:py-5 rounded-full font-semibold text-[15px] md:text-lg leading-none md:leading-normal whitespace-nowrap transition-all duration-300 shadow-xl hover:shadow-2xl transform hover:-translate-y-1 w-full max-w-[340px] md:w-auto md:max-w-none"
-              >
-                <svg
-                  className="w-5 h-5 md:w-6 md:h-6"
-                  fill="currentColor"
-                  viewBox="0 0 24 24"
+              <div className="flex flex-col items-center gap-2">
+                <a
+                  href={whatsappUrlWithMessage}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center justify-center gap-2 md:gap-3 bg-[#D8CFC4] hover:bg-[#C4B5A8] text-[#0E0E0E] px-6 md:px-10 py-4 md:py-5 rounded-full font-semibold text-[15px] md:text-lg leading-none md:leading-normal whitespace-nowrap transition-all duration-200 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 w-full max-w-[340px] md:w-auto md:max-w-none"
                 >
-                  <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z" />
-                </svg>
-                <span className="whitespace-nowrap">WhatsApp ile Randevu Al</span>
-              </a>
+                  <svg
+                    className="w-5 h-5 md:w-6 md:h-6"
+                    fill="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z" />
+                  </svg>
+                  <span className="whitespace-nowrap">WhatsApp ile Randevu Al</span>
+                </a>
+                <p className="text-xs text-[#CFC7BC]/70 font-light">Randevu için WhatsApp'tan hızlı dönüş.</p>
+              </div>
               <a
                 href={locationUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center justify-center gap-3 bg-[#181818] hover:bg-[#1F1F1F] text-[#D8CFC4] px-10 py-5 rounded-full font-semibold text-lg transition-all duration-300 shadow-xl hover:shadow-2xl border-2 border-[#D8CFC4]/20 hover:border-[#D8CFC4]/40"
+                className="inline-flex items-center justify-center gap-3 bg-transparent hover:bg-[#1F1F1F]/30 text-[#D8CFC4] px-10 py-5 rounded-full font-semibold text-lg transition-all duration-200 border border-[#D8CFC4]/15 hover:border-[#D8CFC4]/30 hover:bg-[#D8CFC4]/5"
               >
                 <svg
                   className="w-6 h-6"
@@ -659,7 +676,7 @@ export default function Home() {
             ].map((service, index) => (
               <div
                 key={index}
-                className="bg-[#1F1F1F] rounded-[24px] hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-[2px] border border-[#D8CFC4]/20 group overflow-hidden"
+                className="bg-[#1F1F1F] rounded-[24px] hover:shadow-2xl transition-all duration-200 ease-out transform hover:-translate-y-1 border border-[#D8CFC4]/12 group overflow-hidden"
               >
                 {/* Service Image */}
                 <div className="relative aspect-[16/10] w-full overflow-hidden rounded-t-[24px]">
@@ -668,25 +685,25 @@ export default function Home() {
                     alt={service.title}
                     fill
                     sizes="(max-width: 768px) 100vw, 33vw"
-                    className="object-cover transition-transform duration-300 group-hover:scale-[1.03]"
+                    className="object-cover transition-transform duration-200 ease-out group-hover:scale-[1.02]"
                   />
-                  {/* Gradient Overlay */}
-                  <div className="absolute inset-0 bg-gradient-to-b from-black/10 via-black/0 to-black/20 pointer-events-none" />
+                  {/* Premium Gradient Overlay - altta koyulaşsın */}
+                  <div className="absolute inset-0 bg-gradient-to-b from-black/0 via-black/0 to-black/40 pointer-events-none transition-opacity duration-200 group-hover:opacity-100 opacity-90" />
                 </div>
                 
                 {/* Content */}
                 <div className="p-8 lg:p-10">
-                  <h3 className="text-2xl font-bold text-[#F5F3EF] mb-4">
+                  <h3 className="text-2xl font-bold text-[#F5F3EF] mb-4 tracking-tight">
                     {service.title}
                   </h3>
-                  <p className="text-[#CFC7BC] leading-relaxed mb-6">
+                  <p className="text-[#CFC7BC] leading-relaxed mb-6 font-light">
                     {service.description}
                   </p>
                   <a
                     href={whatsappUrlWithMessage}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center gap-2 text-[#D8CFC4] hover:text-[#C4B5A8] font-semibold text-sm transition-colors group-hover:gap-3"
+                    className="inline-flex items-center gap-2 text-[#D8CFC4] hover:text-[#C4B5A8] font-semibold text-sm transition-all duration-200 group-hover:gap-3"
                   >
                     Detay Al
                     <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -1274,15 +1291,13 @@ export default function Home() {
                               ))}
                             </div>
                             
-                            {/* Review Text with expand/collapse */}
+                            {/* Review Text with line-clamp */}
                             <div className="flex-grow mb-4">
                               <p 
-                                className={`text-[#CFC7BC] leading-relaxed italic text-base font-light transition-all duration-250 ${
-                                  isExpanded ? '' : 'line-clamp-5'
-                                }`}
-                                style={isExpanded ? {} : {
+                                className="text-[#CFC7BC] leading-relaxed italic text-base font-light"
+                                style={{
                                   display: '-webkit-box',
-                                  WebkitLineClamp: 5,
+                                  WebkitLineClamp: 4,
                                   WebkitBoxOrient: 'vertical',
                                   overflow: 'hidden',
                                 }}
@@ -1291,10 +1306,13 @@ export default function Home() {
                               </p>
                               {shouldShowReadMore && (
                                 <button
-                                  onClick={toggleExpand}
+                                  onClick={() => {
+                                    setSelectedReview(review);
+                                    setIsReviewModalOpen(true);
+                                  }}
                                   className="mt-2 text-[#D8CFC4] text-sm underline opacity-80 hover:opacity-100 transition-opacity duration-200"
                                 >
-                                  {isExpanded ? 'Daha az göster' : 'Devamını oku'}
+                                  Devamını oku
                                 </button>
                               )}
                             </div>
@@ -1335,6 +1353,81 @@ export default function Home() {
           </div>
         </div>
       </section>
+
+      {/* Review Modal */}
+      {isReviewModalOpen && selectedReview && (
+        <div
+          className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm transition-opacity duration-200"
+          onClick={() => setIsReviewModalOpen(false)}
+        >
+          <div
+            className="bg-[#1F1F1F] rounded-[24px] max-w-2xl w-full max-h-[90vh] overflow-y-auto border border-[#D8CFC4]/15 shadow-2xl"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="p-8 lg:p-10">
+              {/* Close Button */}
+              <button
+                onClick={() => setIsReviewModalOpen(false)}
+                className="absolute top-6 right-6 w-8 h-8 flex items-center justify-center text-[#D8CFC4] hover:text-[#F5F3EF] transition-colors duration-200"
+                aria-label="Kapat"
+              >
+                <svg
+                  className="w-6 h-6"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M6 18L18 6M6 6l12 12"
+                  />
+                </svg>
+              </button>
+
+              {/* Header */}
+              <div className="flex items-center justify-between mb-6">
+                <div className="flex items-center gap-2">
+                  <div className="w-5 h-5 rounded-full bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center">
+                    <span className="text-white font-semibold text-[8px] leading-none">G</span>
+                  </div>
+                  <span className="text-[#CFC7BC] text-xs font-medium">Doğrulandı</span>
+                </div>
+              </div>
+
+              {/* Stars */}
+              <div className="flex items-center gap-1 mb-6">
+                {Array.from({ length: selectedReview.rating }).map((_, i) => (
+                  <svg
+                    key={i}
+                    className="w-6 h-6 text-[#D8CFC4]"
+                    fill="currentColor"
+                    viewBox="0 0 20 20"
+                  >
+                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                  </svg>
+                ))}
+              </div>
+
+              {/* Full Review Text */}
+              <p className="text-[#CFC7BC] leading-relaxed italic text-lg font-light mb-8">
+                "{selectedReview.comment}"
+              </p>
+
+              {/* Author Section */}
+              <div className="flex items-center gap-4 pt-6 border-t border-[#D8CFC4]/10">
+                <div className="w-12 h-12 rounded-full bg-gradient-to-br from-[#D8CFC4] to-[#C4B5A8] flex items-center justify-center text-[#0E0E0E] font-semibold text-lg shadow-sm">
+                  {selectedReview.name.charAt(0)}
+                </div>
+                <div>
+                  <p className="text-[#F5F3EF] font-semibold text-lg tracking-tight">{selectedReview.name}</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Location & Hours Section */}
       <section id="iletisim" className="py-24 sm:py-28 lg:py-32 px-4 sm:px-6 lg:px-8 bg-[#0E0E0E]">
@@ -1516,7 +1609,7 @@ export default function Home() {
       </section>
 
       {/* Footer */}
-      <footer className="bg-[#0E0E0E] text-[#F5F3EF] py-12 px-4 sm:px-6 lg:px-8 border-t border-[#D8CFC4]/20">
+      <footer className="bg-[#0E0E0E] text-[#F5F3EF] py-12 px-4 sm:px-6 lg:px-8 border-t border-[#D8CFC4]/10">
         <div className="container mx-auto max-w-6xl">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
             <div>
@@ -1595,22 +1688,71 @@ export default function Home() {
         </div>
       </footer>
 
-      {/* Floating WhatsApp Button */}
-      <a
-        href={whatsappUrl}
-        target="_blank"
-        rel="noopener noreferrer"
-        className="fixed bottom-6 right-6 z-50 w-16 h-16 scale-[0.9] sm:scale-100 bg-green-500 hover:bg-green-600 rounded-full flex items-center justify-center shadow-lg hover:shadow-xl transition-all transform hover:scale-110 animate-pulse"
-        aria-label="WhatsApp ile iletişime geç"
+      {/* Floating Buttons Container */}
+      <div 
+        className="fixed bottom-6 right-6 z-50 flex flex-col gap-3 items-end"
+        style={{
+          bottom: 'max(1.5rem, env(safe-area-inset-bottom, 1.5rem))',
+          right: 'max(1.5rem, env(safe-area-inset-right, 1.5rem))',
+        }}
       >
-        <svg
-          className="w-8 h-8 text-white"
-          fill="currentColor"
-          viewBox="0 0 24 24"
+        {/* Back to Top Button */}
+        {showBackToTop && (
+          <button
+            onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+            className="w-12 h-12 bg-[#1F1F1F] hover:bg-[#2a2a2a] text-[#D8CFC4] rounded-full flex items-center justify-center shadow-lg hover:shadow-xl hover:shadow-[#D8CFC4]/20 border border-[#D8CFC4]/15 hover:border-[#D8CFC4]/25 transition-all duration-200 ease-out transform hover:scale-110"
+            aria-label="Yukarı çık"
+          >
+            <svg
+              className="w-5 h-5"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M5 10l7-7m0 0l7 7m-7-7v18"
+              />
+            </svg>
+          </button>
+        )}
+
+        {/* Instagram Button */}
+        <a
+          href="https://www.instagram.com/lumina.hair_studio?igsh=MTJpNWI2YWNoMjZ6Zg=="
+          target="_blank"
+          rel="noopener noreferrer"
+          className="w-14 h-14 bg-gradient-to-br from-purple-600 via-pink-500 to-orange-400 hover:from-purple-700 hover:via-pink-600 hover:to-orange-500 rounded-full flex items-center justify-center shadow-lg hover:shadow-xl transition-all duration-200 transform hover:scale-110"
+          aria-label="Instagram'da takip et"
         >
-          <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z" />
-        </svg>
-      </a>
+          <svg
+            className="w-7 h-7 text-white"
+            fill="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z" />
+          </svg>
+        </a>
+
+        {/* WhatsApp Button */}
+        <a
+          href={whatsappUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="w-16 h-16 scale-[0.9] sm:scale-100 bg-green-500 hover:bg-green-600 rounded-full flex items-center justify-center shadow-lg hover:shadow-xl transition-all duration-200 transform hover:scale-110 animate-pulse"
+          aria-label="WhatsApp ile iletişime geç"
+        >
+          <svg
+            className="w-8 h-8 text-white"
+            fill="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z" />
+          </svg>
+        </a>
+      </div>
     </div>
   );
 }
