@@ -18,34 +18,24 @@ export const galleryDescription = "Müşterilerimizin dönüşüm hikayeleri";
 // Video links for the Videos section
 export const videoLinks = [
   {
-    url: "https://www.youtube.com/embed/EtYnFICdZ-s",
-    title: "Lumina Hair Studio • Kısa Dönüşüm",
+    url: "https://www.youtube.com/embed/A4dcDdzePRE",
+    title: "Lumina Hair Studio – Saç Bakım",
     platform: "youtube",
   },
   {
-    url: "https://www.youtube.com/embed/1RdKppXmstc",
-    title: "Saç Bakım Anı • Parlaklık Dokunuşu",
+    url: "https://www.youtube.com/embed/dfqk5PBuQ2s",
+    title: "Lumina Hair Studio – Salon Atmosferi",
     platform: "youtube",
   },
   {
-    url: "https://www.youtube.com/embed/8DdRYjIDdvQ",
-    title: "Yeni Stil • Öncesi & Sonrası",
+    url: "https://www.youtube.com/embed/vjIWdKxKTBw",
+    title: "Lumina Hair Studio – Öncesi & Sonrası",
     platform: "youtube",
   },
   {
-    url: "https://www.instagram.com/reel/DSXxMcCDHR7/?igsh=cno5ZnhzcTFkZ3px",
-    title: "Instagram Reels • Salon Anı 1",
-    platform: "instagram",
-  },
-  {
-    url: "https://www.instagram.com/reel/DSVN5vFDH4H/?igsh=MWJtd2pheXV0cDNlNg",
-    title: "Instagram Reels • Salon Anı 2",
-    platform: "instagram",
-  },
-  {
-    url: "https://www.instagram.com/reel/DSVJewHjBs6/?igsh=bWF4ZXFwcGExNHQ4",
-    title: "Instagram Reels • Salon Anı 3",
-    platform: "instagram",
+    url: "https://www.youtube.com/embed/Pe-ZJCNwLeQ",
+    title: "Lumina Hair Studio – Saç Tasarım",
+    platform: "youtube",
   },
 ] as const;
 
