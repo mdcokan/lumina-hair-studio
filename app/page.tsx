@@ -527,23 +527,23 @@ export default function Home() {
       </header>
 
       {/* Hero Section */}
-      <section className="relative min-h-[85vh] flex items-center px-4 sm:px-6 lg:px-8 overflow-hidden">
+      <section className="relative min-h-[80vh] flex items-center px-4 sm:px-6 lg:px-8 overflow-hidden">
         <div className="absolute inset-0 z-0">
-          <Image 
-            src="/images/hero.png" 
-            alt="Lumina Hair Studio Hero" 
+          <Image
+            src="/images/hero.webp"
+            alt="Lumina Hair Studio"
             fill
             priority
             quality={75}
             sizes="100vw"
-            className="object-cover object-center md:object-center object-[center_20%]"
+            className="object-cover brightness-[1.08] contrast-[1.08] saturate-[1.05]"
+            style={{ objectFit: "cover" }}
           />
         </div>
-        {/* Reduced overlay: single subtle gradient for editorial luxury feel */}
-        <div className="absolute inset-0 z-10 bg-gradient-to-b from-black/25 via-black/20 to-black/30" />
+        <div className="absolute inset-0 bg-black/18 z-10" />
         <div className="relative z-20 container mx-auto max-w-7xl py-36">
           {/* Premium glass panel container */}
-          <div className="text-center flex flex-col gap-4 md:gap-6 max-w-5xl mx-auto bg-black/25 md:bg-black/25 backdrop-blur-md rounded-3xl border border-white/10 shadow-2xl px-6 py-8 md:px-10 md:py-10">
+          <div className="text-center flex flex-col gap-4 md:gap-6 max-w-5xl mx-auto bg-black/10 md:bg-black/10 backdrop-blur-md rounded-[30px] border border-white/10 shadow-2xl px-6 py-8 md:px-10 md:py-10 opacity-80">
             <h1 className="text-4xl md:text-6xl font-bold text-[#F5F5F5] leading-[1.15] tracking-[-0.02em]">
               Saçınıza ışıltı,
               <br />
@@ -579,7 +579,7 @@ export default function Home() {
               </div>
             </div>
             
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <div className="flex flex-col sm:flex-row gap-4 justify-center mb-10">
               <div className="flex flex-col items-center gap-2">
                 <a
                   href={whatsappUrlWithMessage}
