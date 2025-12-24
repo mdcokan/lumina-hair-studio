@@ -114,9 +114,9 @@ export default function Home() {
               }}
               className="flex items-center cursor-pointer"
             >
-              <h1 className="text-2xl sm:text-3xl font-bold text-[#D8CFC4] hover:text-[#C4B5A8] transition-colors duration-200">
+              <div className="text-2xl sm:text-3xl font-bold text-[#D8CFC4] hover:text-[#C4B5A8] transition-colors duration-200">
                 Lumina Hair Studio
-              </h1>
+              </div>
             </a>
 
             {/* Desktop Menu */}
@@ -305,12 +305,11 @@ export default function Home() {
           {/* Premium glass panel container */}
           <div className="text-center flex flex-col gap-4 md:gap-6 max-w-5xl mx-auto bg-black/10 md:bg-black/10 backdrop-blur-md rounded-[30px] border border-white/10 shadow-2xl px-6 py-8 md:px-10 md:py-10 opacity-80">
             <h1 className="text-4xl md:text-6xl font-bold text-[#F5F5F5] leading-[1.15] tracking-[-0.02em]">
-              Saçınıza ışıltı,
-              <br />
-              <span className="text-[#D8CFC4]">
-                size güven.
-              </span>
+              Mersin Yenişehir'de Profesyonel Kadın Kuaförü
             </h1>
+            <h2 className="text-2xl md:text-3xl font-semibold text-[#D8CFC4] leading-relaxed">
+              Saçınıza ışıltı, size güven.
+            </h2>
             <p className="text-lg sm:text-xl text-[#CFC7BC]/95 leading-relaxed max-w-md md:max-w-xl mx-auto font-light">
               Yenişehir/Mersin'de kişiye özel saç kesimi, renklendirme ve bakım uygulamaları ile 
               hayalinizdeki görünüme kavuşun. Profesyonel ekibimiz, modern teknikler ve premium 

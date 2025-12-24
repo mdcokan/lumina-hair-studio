@@ -17,9 +17,9 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://www.lumina-hairstudio.com"),
-  title: "Lumina Hair Studio | Yenişehir Mersin Kadın Kuaförü",
+  title: "Lumina Hair Studio | Mersin Yenişehir Kadın Kuaförü",
   description:
-    "Yenişehir Mersin'de kadınlara özel saç kesimi, renklendirme ve bakım. Lumina Hair Studio'da profesyonel ve premium kuaför hizmetleri.",
+    "Mersin Yenişehir'de kadın kuaförü. Saç kesimi, renklendirme ve bakımda uzman ekip. WhatsApp ile hızlı randevu alın.",
   keywords: [
     "kuaför mersin",
     "saç kesimi mersin",
@@ -50,9 +50,9 @@ export const metadata: Metadata = {
   manifest: "/site.webmanifest",
 
   openGraph: {
-    title: "Lumina Hair Studio | Yenişehir Mersin Kadın Kuaförü",
+    title: "Lumina Hair Studio | Mersin Yenişehir Kadın Kuaförü",
     description:
-      "Yenişehir Mersin'de kadınlara özel saç kesimi, renklendirme ve bakım. Lumina Hair Studio'da profesyonel ve premium kuaför hizmetleri.",
+      "Mersin Yenişehir'de kadın kuaförü. Saç kesimi, renklendirme ve bakımda uzman ekip. WhatsApp ile hızlı randevu alın.",
     type: "website",
     locale: "tr_TR",
     siteName: "Lumina Hair Studio",
@@ -68,9 +68,9 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Lumina Hair Studio | Yenişehir Mersin Kadın Kuaförü",
+    title: "Lumina Hair Studio | Mersin Yenişehir Kadın Kuaförü",
     description:
-      "Yenişehir Mersin'de kadınlara özel saç kesimi, renklendirme ve bakım. Lumina Hair Studio'da profesyonel ve premium kuaför hizmetleri.",
+      "Mersin Yenişehir'de kadın kuaförü. Saç kesimi, renklendirme ve bakımda uzman ekip. WhatsApp ile hızlı randevu alın.",
     images: ["/og-image.jpg"],
   },
   robots: {
@@ -98,7 +98,7 @@ export default function RootLayout({
 }>) {
   const jsonLd = {
     "@context": "https://schema.org",
-    "@type": "LocalBusiness",
+    "@type": "HairSalon",
     name: "Lumina Hair Studio",
     telephone: "+905523803696",
     address: {
@@ -107,8 +107,13 @@ export default function RootLayout({
       addressRegion: "Mersin",
       addressCountry: "TR",
     },
-    sameAs: [],
+    sameAs: ["https://www.instagram.com/lumina.hair_studio?igsh=MTJpNWI2YWNoMjZ6Zg=="],
     url: "https://www.lumina-hairstudio.com",
+    priceRange: "₺₺",
+    areaServed: {
+      "@type": "City",
+      name: "Mersin",
+    },
   };
 
   return (
