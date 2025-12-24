@@ -1,129 +1,48 @@
 'use client';
 
 import { useState, useEffect, useRef } from 'react';
+import dynamic from 'next/dynamic';
 import Image from 'next/image';
-import {
-  galleryImages,
-  galleryTitle,
-  galleryDescription,
-  videoLinks,
-  videosTitle,
-  videosDescription,
-} from '@/src/content/gallery';
+import heroImage from '@/public/images/hero.webp';
+import { videoLinks, videosTitle, videosDescription } from '@/src/content/gallery';
 
-interface Review {
-  name: string;
-  rating: number;
-  comment: string;
-}
+const SectionFallback = ({ id, title }: { id: string; title: string }) => (
+  <section id={id} className="py-24 sm:py-28 lg:py-32 px-4 sm:px-6 lg:px-8 bg-[#181818]">
+    <div className="container mx-auto max-w-7xl">
+      <div className="text-center space-y-4">
+        <div className="mx-auto h-10 w-40 rounded-full bg-[#D8CFC4]/10 animate-pulse" aria-hidden />
+        <div className="mx-auto h-4 w-64 rounded-full bg-[#D8CFC4]/8 animate-pulse" aria-hidden />
+        <p className="text-[#CFC7BC] text-sm">"{title}" yükleniyor...</p>
+      </div>
+    </div>
+  </section>
+);
 
-// Fallback reviews (hardcoded)
-const fallbackReviews: Review[] = [
-  {
-    name: 'Ayşe Yılmaz',
-    rating: 5,
-    comment:
-      'Harika bir deneyim! Ekibiniz çok profesyonel ve sonuç muhteşem. Kesinlikle tekrar geleceğim.',
-  },
-  {
-    name: 'Zeynep Demir',
-    rating: 5,
-    comment:
-      'Balayage yaptırdım ve hayal ettiğimden bile güzel oldu. Çok memnun kaldım, herkese tavsiye ederim.',
-  },
-  {
-    name: 'Elif Kaya',
-    rating: 5,
-    comment:
-      'Keratin bakımı yaptırdım, saçlarım çok yumuşak ve parlak. Salonunuzun atmosferi de çok güzel.',
-  },
-  {
-    name: 'Mehmet Öz',
-    rating: 5,
-    comment:
-      'Eşim için düğün paketi aldık. Hem saç hem makyaj mükemmeldi. Çok teşekkürler!',
-  },
-  {
-    name: 'Selin Arslan',
-    rating: 5,
-    comment:
-      'Fön ve şekillendirme hizmeti aldım. Çok memnun kaldım, özel günlerimde mutlaka geleceğim.',
-  },
-  {
-    name: 'Can Yıldız',
-    rating: 5,
-    comment:
-      'Kesim ve bakım hizmeti aldım. Profesyonel yaklaşım ve kaliteli hizmet. Kesinlikle tavsiye ederim.',
-  },
-];
+const GallerySection = dynamic(() => import('@/src/components/GallerySection'), {
+  ssr: false,
+  loading: () => <SectionFallback id="galeri" title="Galeri" />,
+});
+
+const ReviewsSection = dynamic(() => import('@/src/components/ReviewsSection'), {
+  ssr: false,
+  loading: () => <SectionFallback id="yorumlar" title="Google Yorumları" />,
+});
+
+const MapEmbed = dynamic(() => import('@/src/components/MapEmbed'), {
+  ssr: false,
+  loading: () => (
+    <div className="w-full rounded-2xl overflow-hidden shadow-2xl aspect-video bg-[#1F1F1F] flex items-center justify-center text-[#CFC7BC]">
+      Harita yükleniyor...
+    </div>
+  ),
+});
 
 export default function Home() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [showBackToTop, setShowBackToTop] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [imageErrors, setImageErrors] = useState<Set<number>>(new Set());
-  const [isLightboxOpen, setIsLightboxOpen] = useState(false);
-  const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [activeSection, setActiveSection] = useState('');
-  const [currentReviewIndex, setCurrentReviewIndex] = useState(0);
-  const [reviews, setReviews] = useState<Review[]>([]);
-  const [placeRating, setPlaceRating] = useState<number | undefined>(undefined);
-  const [userRatingCount, setUserRatingCount] = useState<number | undefined>(undefined);
-  const [googleUrl, setGoogleUrl] = useState<string | undefined>(undefined);
-  const [placeId, setPlaceId] = useState<string | undefined>(undefined);
-  const [isLoadingReviews, setIsLoadingReviews] = useState(true);
-  const [currentSlide, setCurrentSlide] = useState(0);
-  const [expandedReviews, setExpandedReviews] = useState<Set<number>>(new Set());
-  const [selectedReview, setSelectedReview] = useState<Review | null>(null);
-  const [isReviewModalOpen, setIsReviewModalOpen] = useState(false);
-  const carouselRef = useRef<HTMLDivElement>(null);
   const videoCarouselRef = useRef<HTMLDivElement>(null);
-  const lastNavAt = useRef<number>(0);
-
-  // Fetch Google reviews on mount
-  useEffect(() => {
-    const fetchReviews = async () => {
-      setIsLoadingReviews(true);
-      try {
-        const response = await fetch('/api/google-reviews');
-        if (response.ok) {
-          const data = await response.json();
-          if (data.reviews && data.reviews.length > 0) {
-            // Map Google reviews to our format
-            const formattedReviews: Review[] = data.reviews.map((review: any) => ({
-              name: review.authorName || 'Anonim',
-              rating: review.rating || 5,
-              comment: (typeof review.text === "string" ? review.text : review.text?.text) ?? "",
-            }));
-            setReviews(formattedReviews);
-            // Set rating and userRatingCount from API
-            if (typeof data.rating === 'number') {
-              setPlaceRating(data.rating);
-            }
-            if (typeof data.userRatingCount === 'number') {
-              setUserRatingCount(data.userRatingCount);
-            }
-            // Set googleUrl and placeId from API
-            if (typeof data.googleUrl === 'string') {
-              setGoogleUrl(data.googleUrl);
-            }
-            if (typeof data.placeId === 'string') {
-              setPlaceId(data.placeId);
-            }
-            setIsLoadingReviews(false);
-            return;
-          }
-        }
-      } catch (error) {
-        console.error('Error fetching Google reviews:', error);
-      }
-      // Fallback to hardcoded reviews if API fails
-      setReviews(fallbackReviews);
-      setIsLoadingReviews(false);
-    };
-
-    fetchReviews();
-  }, []);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -162,50 +81,6 @@ export default function Home() {
     };
   }, [isMobileMenuOpen]);
 
-  useEffect(() => {
-    if (isLightboxOpen) {
-      document.body.style.overflow = 'hidden';
-      const handleKeyboard = (e: KeyboardEvent) => {
-        if (e.key === 'Escape') {
-          setIsLightboxOpen(false);
-        } else if (e.key === 'ArrowLeft' || e.key === 'ArrowRight') {
-          const now = Date.now();
-          if (now - lastNavAt.current >= 60) {
-            lastNavAt.current = now;
-            if (e.key === 'ArrowLeft') {
-              prevImage();
-            } else if (e.key === 'ArrowRight') {
-              nextImage();
-            }
-          }
-        }
-      };
-      window.addEventListener('keydown', handleKeyboard);
-      return () => {
-        window.removeEventListener('keydown', handleKeyboard);
-        document.body.style.overflow = 'unset';
-      };
-    }
-  }, [isLightboxOpen]);
-
-  // Preload next/prev images when lightbox is open
-  useEffect(() => {
-    if (isLightboxOpen && galleryImages.length > 0) {
-      const current = currentImageIndex;
-      const len = galleryImages.length;
-      const next = (current + 1) % len;
-      const prev = (current - 1 + len) % len;
-
-      // Preload next image
-      const nextImg = new window.Image();
-      nextImg.src = galleryImages[next].src;
-
-      // Preload prev image
-      const prevImg = new window.Image();
-      prevImg.src = galleryImages[prev].src;
-    }
-  }, [isLightboxOpen, currentImageIndex]);
-
   const phoneDisplay = '0 552 380 36 96';
   const phoneLink = 'tel:+905523803696';
   const whatsappUrl = 'https://wa.me/905523803696';
@@ -213,126 +88,11 @@ export default function Home() {
   const whatsappUrlWithMessage = `${whatsappUrl}?text=${whatsappMessage}`;
   const locationUrl = 'https://maps.app.goo.gl/TfNNCKN6BnggyMoJ8';
 
-  const openLightbox = (index: number) => {
-    setCurrentImageIndex(index);
-    setIsLightboxOpen(true);
-  };
-
-  const closeLightbox = () => {
-    setIsLightboxOpen(false);
-  };
-
-  const nextImage = () => {
-    setCurrentImageIndex((prev) => (prev + 1) % galleryImages.length);
-  };
-
-  const prevImage = () => {
-    setCurrentImageIndex((prev) => (prev - 1 + galleryImages.length) % galleryImages.length);
-  };
-
   const closeMobileMenu = () => {
     setIsMobileMenuOpen(false);
   };
 
   // Carousel functions
-  const reviewsList = reviews.length > 0 ? reviews : fallbackReviews;
-  
-  const getCardsPerView = () => {
-    if (typeof window === 'undefined') return 3;
-    if (window.innerWidth >= 1024) return 3; // Desktop
-    if (window.innerWidth >= 768) return 2; // Tablet
-    return 1; // Mobile
-  };
-
-  const [cardsPerView, setCardsPerView] = useState(3);
-
-  useEffect(() => {
-    const updateCardsPerView = () => {
-      setCardsPerView(getCardsPerView());
-    };
-    updateCardsPerView();
-    window.addEventListener('resize', updateCardsPerView);
-    return () => window.removeEventListener('resize', updateCardsPerView);
-  }, []);
-
-  const totalSlides = Math.max(1, Math.ceil(reviewsList.length / cardsPerView));
-
-  const goToSlide = (index: number) => {
-    const maxSlide = totalSlides - 1;
-    const newIndex = Math.max(0, Math.min(index, maxSlide));
-    setCurrentSlide(newIndex);
-    
-    if (carouselRef.current) {
-      const containerWidth = carouselRef.current.offsetWidth;
-      const gap = 24; // gap-6 = 24px
-      const cardWidth = (containerWidth - gap * (cardsPerView - 1)) / cardsPerView;
-      const slideWidth = cardWidth * cardsPerView + gap * (cardsPerView - 1);
-      const scrollPosition = newIndex * slideWidth;
-      carouselRef.current.scrollTo({
-        left: scrollPosition,
-        behavior: 'smooth',
-      });
-    }
-  };
-
-  const nextSlide = () => {
-    const maxSlide = totalSlides - 1;
-    if (currentSlide < maxSlide) {
-      goToSlide(currentSlide + 1);
-    } else {
-      goToSlide(0);
-    }
-  };
-
-  const prevSlide = () => {
-    const maxSlide = totalSlides - 1;
-    if (currentSlide > 0) {
-      goToSlide(currentSlide - 1);
-    } else {
-      goToSlide(maxSlide);
-    }
-  };
-
-  // Handle scroll to update current slide
-  useEffect(() => {
-    const handleScroll = () => {
-      if (carouselRef.current) {
-        const containerWidth = carouselRef.current.offsetWidth;
-        const gap = 24;
-        const cardWidth = (containerWidth - gap * (cardsPerView - 1)) / cardsPerView;
-        const scrollLeft = carouselRef.current.scrollLeft;
-        const slideWidth = cardWidth * cardsPerView + gap * (cardsPerView - 1);
-        const slideIndex = Math.round(scrollLeft / slideWidth);
-        setCurrentSlide(Math.max(0, Math.min(slideIndex, totalSlides - 1)));
-      }
-    };
-
-    const carousel = carouselRef.current;
-    if (carousel) {
-      carousel.addEventListener('scroll', handleScroll);
-      return () => carousel.removeEventListener('scroll', handleScroll);
-    }
-  }, [cardsPerView, totalSlides]);
-
-  // Handle mouse wheel for horizontal scrolling
-  useEffect(() => {
-    const carousel = carouselRef.current;
-    if (!carousel) return;
-
-    const handleWheel = (e: WheelEvent) => {
-      if (e.deltaY !== 0) {
-        e.preventDefault();
-        carousel.scrollBy({
-          left: e.deltaY,
-          behavior: 'smooth',
-        });
-      }
-    };
-
-    carousel.addEventListener('wheel', handleWheel, { passive: false });
-    return () => carousel.removeEventListener('wheel', handleWheel);
-  }, []);
-
   return (
     <div className="min-h-screen bg-[#0E0E0E]">
       {/* Sticky Header */}
@@ -527,15 +287,16 @@ export default function Home() {
       </header>
 
       {/* Hero Section */}
-      <section className="relative min-h-[80vh] flex items-center px-4 sm:px-6 lg:px-8 overflow-hidden">
+      <section className="relative min-h-[70vh] w-full flex items-center px-4 sm:px-6 lg:px-8 overflow-hidden">
         <div className="absolute inset-0 z-0">
           <Image
-            src="/images/hero.webp"
+            src={heroImage}
             alt="Lumina Hair Studio"
             fill
             priority
             quality={75}
-            sizes="100vw"
+            sizes="(max-width: 768px) 100vw, 50vw"
+            placeholder="blur"
             className="object-cover brightness-[1.08] contrast-[1.08] saturate-[1.05]"
             style={{ objectFit: "cover" }}
           />
@@ -746,190 +507,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Before/After Gallery */}
-      <section id="galeri" className="py-24 sm:py-28 lg:py-32 px-4 sm:px-6 lg:px-8 bg-[#181818]">
-        <div className="container mx-auto max-w-7xl">
-          <div className="text-center mb-20">
-            <h2 className="text-4xl sm:text-5xl font-bold text-[#F5F3EF] mb-6 tracking-tight">
-              {galleryTitle}
-            </h2>
-            <p className="text-xl text-[#CFC7BC] max-w-3xl mx-auto leading-relaxed">
-              {galleryDescription}
-            </p>
-          </div>
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6 lg:gap-8">
-            {galleryImages.map((image, index) => {
-              const hasError = imageErrors.has(index);
-              
-              return (
-                <div
-                  key={index}
-                  className="relative rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:scale-105 group cursor-pointer aspect-[3/4]"
-                  onClick={() => !hasError && openLightbox(index)}
-                >
-                  {hasError ? (
-                    <div className="w-full h-full bg-[#1F1F1F] flex items-center justify-center border border-[#D8CFC4]/20">
-                      <div className="text-center p-4">
-                        <svg
-                          className="w-12 h-12 mx-auto text-[#D8CFC4] opacity-50"
-                          fill="none"
-                          stroke="currentColor"
-                          viewBox="0 0 24 24"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth={2}
-                            d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
-                          />
-                        </svg>
-                        <p className="mt-2 text-xs text-[#D8CFC4] font-medium">
-                          Fotoğraf {index + 1}
-                        </p>
-                      </div>
-                    </div>
-                  ) : (
-                    <Image
-                      src={image.src}
-                      alt={image.alt}
-                      width={400}
-                      height={500}
-                      sizes="(max-width: 768px) 50vw, (max-width: 1200px) 33vw, 25vw"
-                      className="w-full h-full object-cover"
-                      loading="lazy"
-                      quality={75}
-                    />
-                  )}
-                  <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors pointer-events-none" />
-                </div>
-              );
-            })}
-          </div>
-        </div>
-      </section>
-
-      {/* Lightbox Modal */}
-      {isLightboxOpen && (
-        <div
-          className="fixed inset-0 z-[100] flex items-center justify-center bg-black/90 backdrop-blur-sm p-4 transition-opacity duration-150 ease-out"
-          onClick={closeLightbox}
-        >
-          {/* Close Button */}
-          <button
-            onClick={closeLightbox}
-            className="absolute top-4 right-4 z-10 w-10 h-10 flex items-center justify-center bg-[#D8CFC4]/10 hover:bg-[#D8CFC4]/20 rounded-full text-[#D8CFC4] transition-opacity duration-150 ease-out backdrop-blur-sm"
-            aria-label="Kapat"
-          >
-            <svg
-              className="w-6 h-6"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M6 18L18 6M6 6l12 12"
-              />
-            </svg>
-          </button>
-
-          {/* Previous Button */}
-          <button
-            onClick={(e) => {
-              e.stopPropagation();
-              prevImage();
-            }}
-            className="absolute left-4 top-1/2 -translate-y-1/2 z-10 w-12 h-12 md:w-14 md:h-14 flex items-center justify-center bg-[#D8CFC4]/10 hover:bg-[#D8CFC4]/20 rounded-full text-[#D8CFC4] transition-opacity duration-150 ease-out backdrop-blur-sm"
-            aria-label="Önceki"
-          >
-            <svg
-              className="w-6 h-6 md:w-7 md:h-7"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M15 19l-7-7 7-7"
-              />
-            </svg>
-          </button>
-
-          {/* Next Button */}
-          <button
-            onClick={(e) => {
-              e.stopPropagation();
-              nextImage();
-            }}
-            className="absolute right-4 top-1/2 -translate-y-1/2 z-10 w-12 h-12 md:w-14 md:h-14 flex items-center justify-center bg-[#D8CFC4]/10 hover:bg-[#D8CFC4]/20 rounded-full text-[#D8CFC4] transition-opacity duration-150 ease-out backdrop-blur-sm"
-            aria-label="Sonraki"
-          >
-            <svg
-              className="w-6 h-6 md:w-7 md:h-7"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M9 5l7 7-7 7"
-              />
-            </svg>
-          </button>
-
-          {/* Image Container */}
-          <div
-            className="relative w-full h-full max-w-6xl max-h-[90vh] flex items-center justify-center"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <div className="relative w-full h-full rounded-2xl overflow-hidden shadow-2xl flex items-center justify-center transition-opacity duration-150 ease-out">
-              {!imageErrors.has(currentImageIndex) ? (
-                <Image
-                  src={galleryImages[currentImageIndex].src}
-                  alt={galleryImages[currentImageIndex].alt}
-                  width={1600}
-                  height={1200}
-                  className="w-full h-full object-contain"
-                  quality={75}
-                  priority={true}
-                />
-              ) : (
-                <div className="w-full h-full bg-[#1F1F1F] flex items-center justify-center border border-[#D8CFC4]/20">
-                  <div className="text-center p-8">
-                    <svg
-                      className="w-24 h-24 mx-auto text-[#D8CFC4] opacity-50"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
-                      />
-                    </svg>
-                    <p className="mt-4 text-lg text-[#D8CFC4] font-medium">
-                      Fotoğraf {currentImageIndex + 1}
-                    </p>
-                  </div>
-                </div>
-              )}
-            </div>
-
-            {/* Image Counter */}
-            <div className="absolute bottom-4 left-1/2 -translate-x-1/2 bg-[#0E0E0E]/80 backdrop-blur-sm text-[#D8CFC4] px-4 py-2 rounded-full text-sm border border-[#D8CFC4]/20">
-              {currentImageIndex + 1} / {galleryImages.length}
-            </div>
-          </div>
-        </div>
-      )}
+      <GallerySection />
 
       {/* Videos Section */}
       <section id="videolar" className="py-20 bg-[#0E0E0E]">
@@ -1048,446 +626,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Reviews Section */}
-      <section id="yorumlar" className="py-24 sm:py-28 lg:py-32 px-4 sm:px-6 lg:px-8 bg-[#181818]">
-        <div className="container mx-auto max-w-7xl">
-          <div className="mb-20">
-            <h2 className="text-4xl sm:text-5xl font-bold text-[#F5F3EF] mb-8 tracking-tight text-center sm:text-left">
-              Google Yorumları
-            </h2>
-            
-            {/* Premium Rating Summary Panel */}
-            {(placeRating !== undefined || userRatingCount !== undefined) && (
-              <div className="bg-gradient-to-br from-[#1F1F1F] to-[#181818] rounded-3xl p-6 lg:p-8 border border-[#D8CFC4]/10 shadow-lg mb-12">
-                <div className="flex flex-col lg:flex-row items-center justify-between gap-6">
-                  {/* Left: Rating Info */}
-                  <div className="flex-1 text-center lg:text-left">
-                    <div className="flex items-center justify-center lg:justify-start gap-3 mb-4">
-                      <div className="flex items-center gap-1.5">
-                        {Array.from({ length: 5 }).map((_, i) => {
-                          const rating = placeRating || 0;
-                          const isFilled = i < Math.floor(rating);
-                          return (
-                            <svg
-                              key={i}
-                              className={`w-6 h-6 ${
-                                isFilled ? 'text-[#D8CFC4]' : 'text-[#CFC7BC] opacity-30'
-                              }`}
-                              fill={isFilled ? 'currentColor' : 'none'}
-                              stroke={isFilled ? 'none' : 'currentColor'}
-                              strokeWidth={isFilled ? 0 : 1}
-                              viewBox="0 0 20 20"
-                            >
-                              <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                            </svg>
-                          );
-                        })}
-                      </div>
-                      {placeRating !== undefined && (
-                        <>
-                          <span className="text-3xl font-bold text-[#F5F3EF]">
-                            {placeRating.toFixed(1)}
-                          </span>
-                          {userRatingCount !== undefined && (
-                            <span className="text-lg text-[#CFC7BC]">
-                              {userRatingCount} yorum
-                            </span>
-                          )}
-                        </>
-                      )}
-                    </div>
-                    {/* Verification Badge */}
-                    <div className="inline-flex items-center gap-1.5 bg-[#D8CFC4]/10 border border-[#D8CFC4]/20 rounded-full px-3 py-1.5">
-                      <svg
-                        className="w-3.5 h-3.5 text-[#D8CFC4]"
-                        fill="currentColor"
-                        viewBox="0 0 20 20"
-                      >
-                        <path
-                          fillRule="evenodd"
-                          d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-                          clipRule="evenodd"
-                        />
-                      </svg>
-                      <span className="text-[#CFC7BC] text-xs font-medium">
-                        Google'da doğrulanmış müşteri yorumları
-                      </span>
-                    </div>
-                  </div>
-                  
-                  {/* Right: CTA Button */}
-                  {(googleUrl || placeId) && (
-                    <a
-                      href={googleUrl || `https://www.google.com/maps/place/?q=place_id:${placeId}&hl=tr&gl=TR`}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="flex items-center gap-2 bg-white/8 backdrop-blur-sm px-4 py-3 rounded-xl border border-[#D8CFC4]/15 hover:bg-white/12 hover:border-[#D8CFC4]/25 hover:shadow-[0_0_12px_rgba(216,207,196,0.15)] transition-all duration-250 ease-out group shrink-0"
-                    >
-                      <div className="w-5 h-5 rounded-full bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center shadow-sm">
-                        <span className="text-white font-semibold text-[10px] leading-none">G</span>
-                      </div>
-                      <span className="text-[#D8CFC4] font-medium text-sm tracking-tight">Tüm Google yorumlarını gör</span>
-                      <svg
-                        className="w-4 h-4 text-[#D8CFC4] transition-transform group-hover:translate-x-1"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M9 5l7 7-7 7"
-                        />
-                      </svg>
-                    </a>
-                  )}
-                </div>
-              </div>
-            )}
-          </div>
-          
-          <div className="relative">
-            {/* Carousel Container */}
-            <div className="relative group">
-              {/* Navigation Buttons */}
-              <button
-                onClick={prevSlide}
-                className="absolute left-2 md:left-4 top-1/2 -translate-y-1/2 z-10 w-12 h-12 md:w-14 md:h-14 flex items-center justify-center bg-[#1F1F1F]/90 hover:bg-[#1F1F1F] text-[#D8CFC4] rounded-full shadow-lg border border-[#D8CFC4]/20 hover:border-[#D8CFC4]/40 transition-all duration-300 opacity-0 group-hover:opacity-100 backdrop-blur-sm hover:scale-110"
-                aria-label="Önceki yorumlar"
-              >
-                <svg
-                  className="w-6 h-6 md:w-7 md:h-7"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M15 19l-7-7 7-7"
-                  />
-                </svg>
-              </button>
-              <button
-                onClick={nextSlide}
-                className="absolute right-2 md:right-4 top-1/2 -translate-y-1/2 z-10 w-12 h-12 md:w-14 md:h-14 flex items-center justify-center bg-[#1F1F1F]/90 hover:bg-[#1F1F1F] text-[#D8CFC4] rounded-full shadow-lg border border-[#D8CFC4]/20 hover:border-[#D8CFC4]/40 transition-all duration-300 opacity-0 group-hover:opacity-100 backdrop-blur-sm hover:scale-110"
-                aria-label="Sonraki yorumlar"
-              >
-                <svg
-                  className="w-6 h-6 md:w-7 md:h-7"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M9 5l7 7-7 7"
-                  />
-                </svg>
-              </button>
-
-              {/* Carousel */}
-              <div
-                ref={carouselRef}
-                className="overflow-x-auto scrollbar-hide snap-x snap-mandatory scroll-smooth"
-                style={{
-                  scrollbarWidth: 'none',
-                  msOverflowStyle: 'none',
-                }}
-              >
-                <div className="flex gap-6 lg:gap-8">
-                  {isLoadingReviews ? (
-                    // Skeleton Cards (responsive: mobile 1, tablet 2, desktop 3)
-                    <>
-                      <div
-                        key="skeleton-0"
-                        className="flex-shrink-0 w-full md:w-[calc((100%-24px)/2)] lg:w-[calc((100%-48px)/3)] snap-start"
-                      >
-                        <div className="bg-[#1F1F1F] p-8 lg:p-10 rounded-2xl shadow-lg border border-[#D8CFC4]/10">
-                          {/* Stars Skeleton */}
-                          <div className="flex items-center gap-1 mb-6">
-                            {Array.from({ length: 5 }).map((_, i) => (
-                              <div
-                                key={i}
-                                className="w-6 h-6 rounded bg-[#D8CFC4]/10 animate-shimmer"
-                              />
-                            ))}
-                          </div>
-                          {/* Text Skeleton */}
-                          <div className="mb-6 space-y-2">
-                            <div className="h-4 bg-[#D8CFC4]/10 rounded animate-shimmer" />
-                            <div className="h-4 bg-[#D8CFC4]/10 rounded animate-shimmer w-5/6" />
-                            <div className="h-4 bg-[#D8CFC4]/10 rounded animate-shimmer w-4/6" />
-                            <div className="h-4 bg-[#D8CFC4]/10 rounded animate-shimmer w-3/6" />
-                          </div>
-                          {/* Author Skeleton */}
-                          <div className="flex items-center gap-3">
-                            <div className="w-12 h-12 rounded-full bg-[#D8CFC4]/10 animate-shimmer" />
-                            <div className="flex-1">
-                              <div className="h-5 bg-[#D8CFC4]/10 rounded animate-shimmer w-24" />
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                      <div
-                        key="skeleton-1"
-                        className="hidden md:flex flex-shrink-0 w-[calc((100%-24px)/2)] lg:w-[calc((100%-48px)/3)] snap-start"
-                      >
-                        <div className="bg-[#1F1F1F] p-8 lg:p-10 rounded-2xl shadow-lg border border-[#D8CFC4]/10 w-full">
-                          {/* Stars Skeleton */}
-                          <div className="flex items-center gap-1 mb-6">
-                            {Array.from({ length: 5 }).map((_, i) => (
-                              <div
-                                key={i}
-                                className="w-6 h-6 rounded bg-[#D8CFC4]/10 animate-shimmer"
-                              />
-                            ))}
-                          </div>
-                          {/* Text Skeleton */}
-                          <div className="mb-6 space-y-2">
-                            <div className="h-4 bg-[#D8CFC4]/10 rounded animate-shimmer" />
-                            <div className="h-4 bg-[#D8CFC4]/10 rounded animate-shimmer w-5/6" />
-                            <div className="h-4 bg-[#D8CFC4]/10 rounded animate-shimmer w-4/6" />
-                            <div className="h-4 bg-[#D8CFC4]/10 rounded animate-shimmer w-3/6" />
-                          </div>
-                          {/* Author Skeleton */}
-                          <div className="flex items-center gap-3">
-                            <div className="w-12 h-12 rounded-full bg-[#D8CFC4]/10 animate-shimmer" />
-                            <div className="flex-1">
-                              <div className="h-5 bg-[#D8CFC4]/10 rounded animate-shimmer w-24" />
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                      <div
-                        key="skeleton-2"
-                        className="hidden lg:flex flex-shrink-0 w-[calc((100%-48px)/3)] snap-start"
-                      >
-                        <div className="bg-[#1F1F1F] p-8 lg:p-10 rounded-2xl shadow-lg border border-[#D8CFC4]/10 w-full">
-                          {/* Stars Skeleton */}
-                          <div className="flex items-center gap-1 mb-6">
-                            {Array.from({ length: 5 }).map((_, i) => (
-                              <div
-                                key={i}
-                                className="w-6 h-6 rounded bg-[#D8CFC4]/10 animate-shimmer"
-                              />
-                            ))}
-                          </div>
-                          {/* Text Skeleton */}
-                          <div className="mb-6 space-y-2">
-                            <div className="h-4 bg-[#D8CFC4]/10 rounded animate-shimmer" />
-                            <div className="h-4 bg-[#D8CFC4]/10 rounded animate-shimmer w-5/6" />
-                            <div className="h-4 bg-[#D8CFC4]/10 rounded animate-shimmer w-4/6" />
-                            <div className="h-4 bg-[#D8CFC4]/10 rounded animate-shimmer w-3/6" />
-                          </div>
-                          {/* Author Skeleton */}
-                          <div className="flex items-center gap-3">
-                            <div className="w-12 h-12 rounded-full bg-[#D8CFC4]/10 animate-shimmer" />
-                            <div className="flex-1">
-                              <div className="h-5 bg-[#D8CFC4]/10 rounded animate-shimmer w-24" />
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </>
-                  ) : (
-                    // Real Reviews
-                    (reviews.length > 0 ? reviews : fallbackReviews).map((review, index) => {
-                      const isExpanded = expandedReviews.has(index);
-                      const commentLength = review.comment.length;
-                      const shouldShowReadMore = commentLength > 220;
-                      
-                      const toggleExpand = () => {
-                        setExpandedReviews(prev => {
-                          const newSet = new Set(prev);
-                          if (newSet.has(index)) {
-                            newSet.delete(index);
-                          } else {
-                            newSet.add(index);
-                          }
-                          return newSet;
-                        });
-                      };
-                      
-                      return (
-                        <div
-                          key={index}
-                          className="flex-shrink-0 w-full md:w-[calc((100%-24px)/2)] lg:w-[calc((100%-48px)/3)] snap-start"
-                        >
-                          <div className="bg-[#1F1F1F] p-6 lg:p-8 rounded-[24px] shadow-lg border border-[#D8CFC4]/10 hover:shadow-2xl hover:shadow-[#D8CFC4]/5 transition-all duration-250 ease-out transform hover:-translate-y-[2px] hover:border-[#D8CFC4]/15 flex flex-col h-full">
-                            {/* Header: Google Logo + Verified Chip */}
-                            <div className="flex items-center justify-between mb-4">
-                              <div className="flex items-center gap-2">
-                                <div className="w-5 h-5 rounded-full bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center">
-                                  <span className="text-white font-semibold text-[8px] leading-none">G</span>
-                                </div>
-                                <span className="text-[#CFC7BC] text-xs font-medium">Doğrulandı</span>
-                              </div>
-                              {/* Quote Icon */}
-                              <svg
-                                className="w-5 h-5 text-[#D8CFC4]/30"
-                                fill="currentColor"
-                                viewBox="0 0 24 24"
-                              >
-                                <path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l1 2.016c-2.053.783-3.946 2.9-4.946 5.609h4.946v10h-10zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l1 2.016c-2.053.783-3.946 2.9-4.946 5.609h4.946v10h-10z" />
-                              </svg>
-                            </div>
-                            
-                            {/* Stars */}
-                            <div className="flex items-center gap-1 mb-4">
-                              {Array.from({ length: review.rating }).map((_, i) => (
-                                <svg
-                                  key={i}
-                                  className="w-5 h-5 text-[#D8CFC4]"
-                                  fill="currentColor"
-                                  viewBox="0 0 20 20"
-                                >
-                                  <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                                </svg>
-                              ))}
-                            </div>
-                            
-                            {/* Review Text with line-clamp */}
-                            <div className="flex-grow mb-4">
-                              <p 
-                                className="text-[#CFC7BC] leading-relaxed italic text-base font-light"
-                                style={{
-                                  display: '-webkit-box',
-                                  WebkitLineClamp: 4,
-                                  WebkitBoxOrient: 'vertical',
-                                  overflow: 'hidden',
-                                }}
-                              >
-                                "{review.comment}"
-                              </p>
-                              {shouldShowReadMore && (
-                                <button
-                                  onClick={() => {
-                                    setSelectedReview(review);
-                                    setIsReviewModalOpen(true);
-                                  }}
-                                  className="mt-2 text-[#D8CFC4] text-sm underline opacity-80 hover:opacity-100 transition-opacity duration-200"
-                                >
-                                  Devamını oku
-                                </button>
-                              )}
-                            </div>
-                            
-                            {/* Author Section */}
-                            <div className="flex items-center gap-3 pt-4 border-t border-[#D8CFC4]/10">
-                              <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[#D8CFC4] to-[#C4B5A8] flex items-center justify-center text-[#0E0E0E] font-semibold text-base shadow-sm flex-shrink-0">
-                                {review.name.charAt(0)}
-                              </div>
-                              <div className="min-w-0 flex-1">
-                                <p className="text-[#F5F3EF] font-semibold text-base tracking-tight truncate">{review.name}</p>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      );
-                    })
-                  )}
-                </div>
-              </div>
-
-              {/* Dots Indicator */}
-              <div className="flex items-center justify-center gap-2 mt-8">
-                {Array.from({ length: totalSlides }).map((_, index) => (
-                  <button
-                    key={index}
-                    onClick={() => goToSlide(index)}
-                    className={`transition-all duration-300 rounded-full ${
-                      index === currentSlide
-                        ? 'w-3 h-3 bg-[#D8CFC4]'
-                        : 'w-2 h-2 bg-[#CFC7BC] opacity-40 hover:opacity-60'
-                    }`}
-                    aria-label={`Sayfa ${index + 1}`}
-                  />
-                ))}
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Review Modal */}
-      {isReviewModalOpen && selectedReview && (
-        <div
-          className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm transition-opacity duration-200"
-          onClick={() => setIsReviewModalOpen(false)}
-        >
-          <div
-            className="bg-[#1F1F1F] rounded-[24px] max-w-2xl w-full max-h-[90vh] overflow-y-auto border border-[#D8CFC4]/15 shadow-2xl"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <div className="p-8 lg:p-10">
-              {/* Close Button */}
-              <button
-                onClick={() => setIsReviewModalOpen(false)}
-                className="absolute top-6 right-6 w-8 h-8 flex items-center justify-center text-[#D8CFC4] hover:text-[#F5F3EF] transition-colors duration-200"
-                aria-label="Kapat"
-              >
-                <svg
-                  className="w-6 h-6"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M6 18L18 6M6 6l12 12"
-                  />
-                </svg>
-              </button>
-
-              {/* Header */}
-              <div className="flex items-center justify-between mb-6">
-                <div className="flex items-center gap-2">
-                  <div className="w-5 h-5 rounded-full bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center">
-                    <span className="text-white font-semibold text-[8px] leading-none">G</span>
-                  </div>
-                  <span className="text-[#CFC7BC] text-xs font-medium">Doğrulandı</span>
-                </div>
-              </div>
-
-              {/* Stars */}
-              <div className="flex items-center gap-1 mb-6">
-                {Array.from({ length: selectedReview.rating }).map((_, i) => (
-                  <svg
-                    key={i}
-                    className="w-6 h-6 text-[#D8CFC4]"
-                    fill="currentColor"
-                    viewBox="0 0 20 20"
-                  >
-                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                  </svg>
-                ))}
-              </div>
-
-              {/* Full Review Text */}
-              <p className="text-[#CFC7BC] leading-relaxed italic text-lg font-light mb-8">
-                "{selectedReview.comment}"
-              </p>
-
-              {/* Author Section */}
-              <div className="flex items-center gap-4 pt-6 border-t border-[#D8CFC4]/10">
-                <div className="w-12 h-12 rounded-full bg-gradient-to-br from-[#D8CFC4] to-[#C4B5A8] flex items-center justify-center text-[#0E0E0E] font-semibold text-lg shadow-sm">
-                  {selectedReview.name.charAt(0)}
-                </div>
-                <div>
-                  <p className="text-[#F5F3EF] font-semibold text-lg tracking-tight">{selectedReview.name}</p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
+      <ReviewsSection />
 
       {/* Location & Hours Section */}
       <section id="iletisim" className="py-24 sm:py-28 lg:py-32 px-4 sm:px-6 lg:px-8 bg-[#0E0E0E]">
@@ -1652,18 +791,7 @@ export default function Home() {
               </div>
             </div>
 
-            {/* Google Maps Embed */}
-            <div className="w-full rounded-2xl overflow-hidden shadow-2xl aspect-video">
-              <iframe
-                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3196.0128495744057!2d34.5422867!3d36.7702592!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x15278bd3e5c40317%3A0xc0044e2791161d7f!2sLumina%20Hair%20Studio!5e0!3m2!1str!2str!4v1765976133270!5m2!1str!2str"
-                className="w-full h-full"
-                style={{ border: 0 }}
-                allowFullScreen
-                loading="lazy"
-                referrerPolicy="no-referrer-when-downgrade"
-                title="Lumina Hair Studio Harita"
-              />
-            </div>
+            <MapEmbed />
           </div>
         </div>
       </section>
