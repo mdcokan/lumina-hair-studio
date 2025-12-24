@@ -84,11 +84,6 @@ export const metadata: Metadata = {
       "max-snippet": -1,
     },
   },
-
-  // Search Console doğrulama kodunu alınca burayı güncelleyeceğiz
-  verification: {
-    google: "your-google-verification-code",
-  },
 };
 
 export default function RootLayout({
