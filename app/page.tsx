@@ -878,9 +878,9 @@ export default function Home() {
 
       {/* Floating Buttons Container */}
       <div 
-        className="fixed bottom-6 right-6 z-50 flex flex-col gap-3 items-end"
+        className="fixed bottom-24 right-6 z-50 flex flex-col gap-3 items-end"
         style={{
-          bottom: 'max(1.5rem, env(safe-area-inset-bottom, 1.5rem))',
+          bottom: 'max(6rem, calc(6rem + env(safe-area-inset-bottom, 0rem)))',
           right: 'max(1.5rem, env(safe-area-inset-right, 1.5rem))',
         }}
       >
@@ -926,10 +926,10 @@ export default function Home() {
 
         {/* WhatsApp Button */}
         <a
-          href={whatsappUrl}
+          href={whatsappUrlWithMessage}
           target="_blank"
           rel="noopener noreferrer"
-          className="w-16 h-16 scale-[0.9] sm:scale-100 bg-green-500 hover:bg-green-600 rounded-full flex items-center justify-center shadow-lg hover:shadow-xl transition-all duration-200 transform hover:scale-110 animate-pulse"
+          className="w-16 h-16 scale-[0.9] sm:scale-100 bg-green-500 hover:bg-green-600 rounded-full flex items-center justify-center shadow-lg hover:shadow-xl transition-all duration-200 transform hover:scale-110"
           aria-label="WhatsApp ile iletişime geç"
         >
           <svg
