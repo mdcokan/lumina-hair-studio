@@ -3,7 +3,6 @@
 import { useState, useEffect, useRef } from 'react';
 import dynamic from 'next/dynamic';
 import Image from 'next/image';
-import heroImage from '@/public/images/hero.webp';
 import { videoLinks, videosTitle, videosDescription } from '@/src/content/gallery';
 
 const SectionFallback = ({ id, title }: { id: string; title: string }) => (
@@ -38,6 +37,7 @@ const MapEmbed = dynamic(() => import('@/src/components/MapEmbed'), {
 });
 
 export default function Home() {
+  const heroSrc = "/images/hero.webp";
   const [isScrolled, setIsScrolled] = useState(false);
   const [showBackToTop, setShowBackToTop] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -290,13 +290,12 @@ export default function Home() {
       <section className="relative min-h-[70vh] w-full flex items-center px-4 sm:px-6 lg:px-8 overflow-hidden">
         <div className="absolute inset-0 z-0">
           <Image
-            src={heroImage}
+            src={heroSrc}
             alt="Lumina Hair Studio"
             fill
             priority
-            quality={75}
-            sizes="(max-width: 768px) 100vw, 50vw"
-            placeholder="blur"
+            quality={65}
+            sizes="100vw"
             className="object-cover brightness-[1.08] contrast-[1.08] saturate-[1.05]"
             style={{ objectFit: "cover" }}
           />
