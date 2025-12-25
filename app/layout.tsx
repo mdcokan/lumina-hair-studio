@@ -17,14 +17,20 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://www.lumina-hairstudio.com"),
-  title: "Lumina Hair Studio | Mersin Yenişehir Kadın Kuaförü",
+  title: "Lumina Hair Studio | Mersin Kadın Kuaför - Yenişehir Çiftlikköy",
   description:
-    "Mersin Yenişehir'de kadın kuaförü. Saç kesimi, renklendirme ve bakımda uzman ekip. WhatsApp ile hızlı randevu alın.",
+    "Mersin Yenişehir ve Çiftlikköy bölgesinde kadın kuaför hizmetleri. Saç kesimi, ombre, balyaj ve saç boyama. Profesyonel kadın kuaför salonu. WhatsApp ile randevu alın.",
   keywords: [
+    "mersin kadın kuaför",
+    "yenişehir kadın kuaför",
+    "çiftlikköy kuaför",
+    "mersin çiftlikköy kuaför",
+    "ombre saç mersin",
     "kuaför mersin",
     "saç kesimi mersin",
     "saç boyama mersin",
     "balayage mersin",
+    "balyaj mersin",
     "keratin bakımı mersin",
     "yenişehir kuaför",
     "premium kuaför mersin",
@@ -50,9 +56,9 @@ export const metadata: Metadata = {
   manifest: "/site.webmanifest",
 
   openGraph: {
-    title: "Lumina Hair Studio | Mersin Yenişehir Kadın Kuaförü",
+    title: "Lumina Hair Studio | Mersin Kadın Kuaför - Yenişehir Çiftlikköy",
     description:
-      "Mersin Yenişehir'de kadın kuaförü. Saç kesimi, renklendirme ve bakımda uzman ekip. WhatsApp ile hızlı randevu alın.",
+      "Mersin Yenişehir ve Çiftlikköy bölgesinde kadın kuaför hizmetleri. Saç kesimi, ombre, balyaj ve saç boyama. Profesyonel kadın kuaför salonu. WhatsApp ile randevu alın.",
     type: "website",
     locale: "tr_TR",
     siteName: "Lumina Hair Studio",
@@ -68,9 +74,9 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Lumina Hair Studio | Mersin Yenişehir Kadın Kuaförü",
+    title: "Lumina Hair Studio | Mersin Kadın Kuaför - Yenişehir Çiftlikköy",
     description:
-      "Mersin Yenişehir'de kadın kuaförü. Saç kesimi, renklendirme ve bakımda uzman ekip. WhatsApp ile hızlı randevu alın.",
+      "Mersin Yenişehir ve Çiftlikköy bölgesinde kadın kuaför hizmetleri. Saç kesimi, ombre, balyaj ve saç boyama. Profesyonel kadın kuaför salonu. WhatsApp ile randevu alın.",
     images: ["/og-image.jpg"],
   },
   robots: {

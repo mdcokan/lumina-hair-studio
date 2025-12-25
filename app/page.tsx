@@ -311,9 +311,9 @@ export default function Home() {
               Saçınıza ışıltı, size güven.
             </h2>
             <p className="text-lg sm:text-xl text-[#CFC7BC]/95 leading-relaxed max-w-md md:max-w-xl mx-auto font-light">
-              Yenişehir/Mersin'de kişiye özel saç kesimi, renklendirme ve bakım uygulamaları ile 
-              hayalinizdeki görünüme kavuşun. Profesyonel ekibimiz, modern teknikler ve premium 
-              ürünlerle saçlarınıza özenle yaklaşıyor.
+              Mersin Yenişehir ve Çiftlikköy bölgesinde kadın kuaför hizmetleri sunuyoruz. Kişiye özel saç kesimi, 
+              ombre, balyaj, renklendirme ve bakım uygulamaları ile hayalinizdeki görünüme kavuşun. Profesyonel 
+              ekibimiz, modern teknikler ve premium ürünlerle saçlarınıza özenle yaklaşıyor.
             </p>
             
             {/* Trust Badges */}
@@ -389,6 +389,20 @@ export default function Home() {
         </div>
       </section>
 
+      {/* Location & SEO Section */}
+      <section className="py-16 sm:py-20 px-4 sm:px-6 lg:px-8 bg-[#0E0E0E]">
+        <div className="container mx-auto max-w-4xl">
+          <div className="text-center">
+            <p className="text-lg sm:text-xl text-[#CFC7BC] leading-relaxed max-w-3xl mx-auto">
+              <strong className="text-[#D8CFC4]">Lumina Hair Studio</strong>, Mersin Yenişehir ve Çiftlikköy bölgesinde 
+              kadın saç kesimi, ombre, balyaj ve saç boyama hizmetleri sunan profesyonel bir kadın kuaför salonudur. 
+              Mersin kadın kuaför arayışınızda, Yenişehir ve Çiftlikköy'deki müşterilerimize modern teknikler ve 
+              premium ürünlerle hizmet veriyoruz.
+            </p>
+          </div>
+        </div>
+      </section>
+
       {/* Services Section */}
       <section id="hizmetler" className="py-24 sm:py-28 lg:py-32 px-4 sm:px-6 lg:px-8 bg-[#181818]">
         <div className="container mx-auto max-w-7xl">
@@ -397,39 +411,40 @@ export default function Home() {
               Hizmetlerimiz
             </h2>
             <p className="text-xl text-[#CFC7BC] max-w-3xl mx-auto leading-relaxed">
-              Profesyonel ekibimizle sunduğumuz kapsamlı saç bakım ve stil hizmetleri
+              Mersin Yenişehir ve Çiftlikköy bölgesinde profesyonel ekibimizle sunduğumuz kapsamlı kadın kuaför 
+              hizmetleri: saç kesimi, ombre, balyaj, renklendirme ve bakım
             </p>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
             {[
               {
                 title: 'Kesim & Stil',
-                description: 'Yüz hatlarınıza uygun, kişiye özel kesim teknikleri ile modern ve klasik stilleri harmanlayarak hayalinizdeki görünüme ulaşın. Her kesim, saç tipiniz ve yaşam tarzınıza göre özenle tasarlanır.',
+                description: 'Yüz hatlarınıza uygun, kişiye özel kesim teknikleri ile modern ve klasik stilleri harmanlayarak hayalinizdeki görünüme ulaşın. Her kesim, saç tipiniz ve yaşam tarzınıza göre özenle tasarlanır. Mersin Yenişehir ve Çiftlikköy bölgesinde kadın kuaför hizmetlerimizle saçlarınıza profesyonel dokunuş.',
                 icon: '✂️',
               },
               {
                 title: 'Boyama & Balayage',
-                description: 'Profesyonel renklendirme teknikleri ve premium boyalar ile saçlarınıza doğal ışıltı kazandırın. Balayage, ombre ve full color uygulamalarında uzman ekibimiz size eşlik eder.',
+                description: 'Profesyonel renklendirme teknikleri ve premium boyalar ile saçlarınıza doğal ışıltı kazandırın. Ombre saç Mersinde en çok tercih edilen uygulamalarımızdan biri. Balayage, ombre ve full color uygulamalarında uzman ekibimiz size eşlik eder. Mersin kadın kuaför salonumuzda modern renklendirme teknikleri ile hayalinizdeki görünüme kavuşun.',
                 icon: '🎨',
               },
               {
                 title: 'Saç Bakımı',
-                description: 'Derinlemesine bakım tedavileri ile saçlarınızı güçlendirin, nemlendirin ve parlaklık kazandırın. Saç tipinize özel seçilen profesyonel bakım ürünleri ile sağlıklı saçlara kavuşun.',
+                description: 'Derinlemesine bakım tedavileri ile saçlarınızı güçlendirin, nemlendirin ve parlaklık kazandırın. Saç tipinize özel seçilen profesyonel bakım ürünleri ile sağlıklı saçlara kavuşun. Yenişehir Mersinde saç bakımı konusunda uzman kadın kuaför ekibimizle hizmetinizdeyiz.',
                 icon: '💆',
               },
               {
                 title: 'Fön & Şekillendirme',
-                description: 'Özel günleriniz ve günlük yaşamınız için profesyonel fön ve şekillendirme hizmetleri. Modern teknikler ile istediğiniz stile kavuşun ve gün boyu koruyun.',
+                description: 'Özel günleriniz ve günlük yaşamınız için profesyonel fön ve şekillendirme hizmetleri. Modern teknikler ile istediğiniz stile kavuşun ve gün boyu koruyun. Mersin Yenişehir kadın kuaför salonumuzda her stile uygun şekillendirme çözümleri sunuyoruz.',
                 icon: '✨',
               },
               {
                 title: 'Keratin Bakımı',
-                description: 'Premium keratin tedavileri ile saçlarınızı düzleştirin, yumuşatın ve yönetilebilir hale getirin. Friz kontrolü ve uzun süreli parlaklık için ideal çözüm.',
+                description: 'Premium keratin tedavileri ile saçlarınızı düzleştirin, yumuşatın ve yönetilebilir hale getirin. Friz kontrolü ve uzun süreli parlaklık için ideal çözüm. Çiftlikköy ve Yenişehir Mersin bölgesinde keratin bakımı için profesyonel kadın kuaför hizmeti.',
                 icon: '🌟',
               },
               {
                 title: 'Özel Paketler',
-                description: 'Düğün, nişan ve özel günleriniz için kapsamlı paket hizmetlerimiz. Saç tasarımından makyaja kadar tüm ihtiyaçlarınızı tek çatı altında karşılıyoruz.',
+                description: 'Düğün, nişan ve özel günleriniz için kapsamlı paket hizmetlerimiz. Saç tasarımından makyaja kadar tüm ihtiyaçlarınızı tek çatı altında karşılıyoruz. Mersin kadın kuaför salonumuzda özel günleriniz için unutulmaz bir deneyim.',
                 icon: '💐',
               },
             ].map((service, index) => (
@@ -485,20 +500,26 @@ export default function Home() {
             </h2>
             <div className="max-w-4xl mx-auto">
               <p className="text-xl text-[#CFC7BC] leading-relaxed mb-6">
-                <strong>Lumina Hair Studio</strong>, Yenişehir Mersin'de kadın kuaförü olarak saç kesimi, renklendirme ve bakım hizmetleri sunan modern bir salondur. Bayan kuaför ve saç tasarım uygulamalarında uzman ekibimizle kişiye özel çözümler sunuyoruz.
+                <strong>Lumina Hair Studio</strong>, Mersin Yenişehir ve Çiftlikköy bölgesinde kadın kuaförü olarak 
+                saç kesimi, ombre, balyaj, renklendirme ve bakım hizmetleri sunan modern bir salondur. Mersin kadın 
+                kuaför arayışınızda, Yenişehir ve Çiftlikköy'deki müşterilerimize saç tasarım uygulamalarında uzman 
+                ekibimizle kişiye özel çözümler sunuyoruz.
               </p>
               <p className="text-xl text-[#CFC7BC] leading-relaxed mb-6">
-                Lumina Hair Studio olarak, Yenişehir/Mersin'de saç bakım ve stil alanında 
-                müşterilerimize en yüksek kalitede hizmet sunmayı hedefliyoruz. 
+                Lumina Hair Studio olarak, Mersin Yenişehir ve Çiftlikköy bölgesinde saç bakım ve stil alanında 
+                müşterilerimize en yüksek kalitede kadın kuaför hizmeti sunmayı hedefliyoruz. Ombre saç Mersin'de 
+                en çok tercih edilen uygulamalarımızdan biri olup, profesyonel ekibimizle modern teknikler kullanıyoruz.
               </p>
               <p className="text-xl text-[#CFC7BC] leading-relaxed mb-6">
                 Uzman ekibimiz, modern teknikler ve premium ürünler kullanarak her müşterimize 
                 kişiye özel çözümler sunar. Hijyen standartlarımız ve müşteri memnuniyeti 
-                odaklı yaklaşımımız ile saçlarınıza ışıltı, size güven veriyoruz.
+                odaklı yaklaşımımız ile saçlarınıza ışıltı, size güven veriyoruz. Yenişehir kadın kuaför 
+                ve Çiftlikköy kuaför hizmetlerimizle bölgenin en güvenilir salonu olmayı sürdürüyoruz.
               </p>
               <p className="text-xl text-[#CFC7BC] leading-relaxed">
                 Google 5.0 puanımız ve 15+ müşteri yorumumuz, kalite anlayışımızın en güzel 
-                göstergesidir. Sizleri de Lumina Hair Studio ailesine katılmaya davet ediyoruz.
+                göstergesidir. Mersin çiftlikköy kuaför ve Yenişehir kadın kuaför hizmetlerimiz için 
+                sizleri de Lumina Hair Studio ailesine katılmaya davet ediyoruz.
               </p>
             </div>
           </div>
@@ -634,7 +655,7 @@ export default function Home() {
               Bize Ulaşın
             </h2>
             <p className="text-xl text-[#CFC7BC] max-w-3xl mx-auto leading-relaxed">
-              Yenişehir/Mersin'de sizleri bekliyoruz
+              Mersin Yenişehir ve Çiftlikköy bölgesinde kadın kuaför hizmetlerimizle sizleri bekliyoruz
             </p>
           </div>
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
@@ -803,8 +824,8 @@ export default function Home() {
                 Lumina Hair Studio
               </h3>
               <p className="text-[#CFC7BC] leading-relaxed">
-                Yenişehir/Mersin'de premium saç bakım ve stil hizmetleri sunan
-                profesyonel kuaför salonu.
+                Mersin Yenişehir ve Çiftlikköy bölgesinde kadın kuaför hizmetleri sunan
+                profesyonel kuaför salonu. Saç kesimi, ombre, balyaj ve saç boyama.
               </p>
             </div>
             <div>
