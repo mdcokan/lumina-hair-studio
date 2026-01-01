@@ -146,7 +146,7 @@ export default function RootLayout({
         </Script>
       </head>
 
-      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+      <body className={`${geistSans.variable} ${geistMono.variable} antialiased min-h-screen flex flex-col`}>
         {/* Google Tag Manager (noscript) */}
         <noscript>
           <iframe
@@ -163,7 +163,18 @@ export default function RootLayout({
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
 
-        {children}
+        <main className="flex-1">
+          {children}
+        </main>
+
+        {/* Global Footer - Meta İşletme Doğrulaması */}
+        <footer className="bg-[#0E0E0E] border-t border-[#D8CFC4]/10">
+          <div className="container mx-auto max-w-7xl px-4 py-3">
+            <p className="text-xs opacity-70 text-[#CFC7BC] text-center">
+              İşletme Sahibi: Toprak Efe Çokan
+            </p>
+          </div>
+        </footer>
       </body>
     </html>
   );
