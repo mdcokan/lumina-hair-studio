@@ -760,6 +760,9 @@ export default function Home() {
                   </svg>
                   İletişim
                 </h3>
+                <p className="text-xs opacity-70 leading-tight mb-1 break-words text-[#CFC7BC]">
+                  İletişim: Toprak Efe ÇOKAN
+                </p>
                 <p className="text-[#CFC7BC] text-lg mb-4">
                   <a
                     href={phoneLink}
