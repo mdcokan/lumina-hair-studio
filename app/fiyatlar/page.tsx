@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef } from 'react';
 import Image from 'next/image';
+import Script from 'next/script';
 
 type PriceItem = {
   kategori: string;
@@ -352,8 +353,47 @@ export default function FiyatlarPage() {
 
   const categories = Object.keys(data.categories || {}).sort();
 
+  const jsonLdSchema = {
+    "@context": "https://schema.org",
+    "@type": "HairSalon",
+    "name": "Lumina Hair Studio",
+    "url": "https://www.lumina-hairstudio.com/fiyatlar",
+    "image": "https://www.lumina-hairstudio.com/images/hero.jpg",
+    "priceRange": "₺₺₺",
+    "address": {
+      "@type": "PostalAddress",
+      "addressLocality": "Yenişehir",
+      "addressRegion": "Mersin",
+      "addressCountry": "TR"
+    },
+    "areaServed": {
+      "@type": "AdministrativeArea",
+      "name": "Mersin"
+    },
+    "makesOffer": [
+      {
+        "@type": "Offer",
+        "name": "Ombre",
+        "price": "7000",
+        "priceCurrency": "TRY"
+      },
+      {
+        "@type": "Offer",
+        "name": "Saç Kesimi",
+        "price": "1000",
+        "priceCurrency": "TRY"
+      }
+    ]
+  };
+
   return (
-    <div className="min-h-screen bg-[#0E0E0E] pt-20 pb-[calc(72px+env(safe-area-inset-bottom,0px))] md:pb-0">
+    <>
+      <Script
+        id="hair-salon-schema"
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLdSchema) }}
+      />
+      <div className="min-h-screen bg-[#0E0E0E] pt-20 pb-[calc(72px+env(safe-area-inset-bottom,0px))] md:pb-0">
       {/* Sticky Header */}
       <header
         className={`fixed top-0 left-0 right-0 z-[60] transition-all duration-200 ease-out ${
@@ -738,5 +778,6 @@ export default function FiyatlarPage() {
         </div>
       </section>
     </div>
+    </>
   );
 }
