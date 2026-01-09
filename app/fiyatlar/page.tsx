@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect, useRef } from 'react';
+import Image from 'next/image';
 
 type PriceItem = {
   kategori: string;
@@ -537,28 +538,44 @@ export default function FiyatlarPage() {
         </div>
       </header>
 
-      {/* Header Section */}
-      <section className="py-16 sm:py-20 px-4 sm:px-6 lg:px-8 bg-[#181818]">
-        <div className="container mx-auto max-w-3xl">
-          <h1 className="text-4xl sm:text-5xl font-bold text-[#F5F3EF] mb-6 text-center tracking-tight">
-            Fiyatlarımız
-          </h1>
-          <p className="text-lg sm:text-xl text-[#CFC7BC] text-center leading-relaxed mb-4 max-w-3xl mx-auto">
-            Profesyonel kadın kuaför hizmetlerimizin fiyat listesi. Saç tipinize ve ihtiyacınıza
-            göre kişiye özel çözümler sunuyoruz.
-          </p>
-          <div className="bg-[#1F1F1F]/50 backdrop-blur-sm rounded-xl p-4 border border-[#D8CFC4]/10 max-w-3xl mx-auto">
-            <p className="text-sm text-[#CFC7BC] leading-relaxed">
-              <strong className="text-[#D8CFC4]">Not:</strong> Fiyatlar bilgilendirme amaçlıdır.
-              Saç uzunluğu/yoğunluğu ve uygulanacak tekniğe göre değişiklik gösterebilir. Kesin
-              fiyat için ücretsiz danışmanlık alabilirsiniz.
-            </p>
+      {/* Header Section - Flex container for reordering */}
+      <div className="flex flex-col bg-[#181818]">
+        {/* Mini Hero - Always first */}
+        <section className="relative py-10 md:py-12 px-4 sm:px-6 lg:px-8 order-1 overflow-hidden">
+          <div className="container mx-auto max-w-5xl">
+            <div className="relative rounded-3xl overflow-hidden h-[140px] sm:h-[160px] md:h-[200px]">
+              {/* Background Image */}
+              <div className="absolute inset-0 z-0">
+                <Image
+                  src="/images/hero.webp"
+                  alt="Lumina Hair Studio"
+                  fill
+                  priority={false}
+                  quality={65}
+                  sizes="(max-width: 768px) 100vw, 1200px"
+                  className="object-cover object-center brightness-[1.08] contrast-[1.08] saturate-[1.05]"
+                  style={{ objectFit: "cover" }}
+                />
+              </div>
+              
+              {/* Overlay */}
+              <div className="absolute inset-0 bg-black/55 backdrop-blur-[1px] z-10" />
+              
+              {/* Content */}
+              <div className="relative z-20 text-center h-full flex flex-col items-center justify-center px-6 md:px-8">
+                <h1 className="text-4xl md:text-5xl font-semibold text-white tracking-tight">
+                  Fiyatlarımız
+                </h1>
+                <p className="mt-3 text-sm md:text-base text-white/80">
+                  Güncel hizmet ve fiyat listemiz
+                </p>
+              </div>
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
 
-      {/* Prices List */}
-      <section className="py-12 sm:py-16 px-4 sm:px-6 lg:px-8">
+        {/* Prices List - Second (after hero) */}
+        <section className="mt-6 md:mt-8 py-8 md:py-10 px-4 sm:px-6 lg:px-8 order-2">
         <div className="container mx-auto max-w-5xl">
           <div className="space-y-3">
             {categories.map((category) => {
@@ -660,7 +677,25 @@ export default function FiyatlarPage() {
             })}
           </div>
         </div>
-      </section>
+        </section>
+
+        {/* Description & Note Block - Third (after accordions) */}
+        <section className="mt-10 md:mt-12 px-4 sm:px-6 lg:px-8 pb-8 md:pb-10 order-3">
+          <div className="container mx-auto max-w-3xl text-center">
+            <p className="text-white/70 text-sm md:text-base leading-relaxed">
+              Profesyonel kadın kuaför hizmetlerimizin fiyat listesi. Saç tipinize ve ihtiyacınıza
+              göre kişiye özel çözümler sunuyoruz.
+            </p>
+            <div className="rounded-2xl border border-white/10 bg-white/5 p-4 md:p-5 mt-4 text-left">
+              <p className="text-sm text-[#CFC7BC] leading-relaxed">
+                <strong className="text-[#D8CFC4]">Not:</strong> Fiyatlar bilgilendirme amaçlıdır.
+                Saç uzunluğu/yoğunluğu ve uygulanacak tekniğe göre değişiklik gösterebilir. Kesin
+                fiyat için ücretsiz danışmanlık alabilirsiniz.
+              </p>
+            </div>
+          </div>
+        </section>
+      </div>
 
       {/* CTA Section */}
       <section className="py-12 sm:py-16 px-4 sm:px-6 lg:px-8 bg-[#181818]">
