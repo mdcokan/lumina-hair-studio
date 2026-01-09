@@ -152,6 +152,12 @@ export default function Home() {
                 Yorumlar
               </a>
               <a
+                href="/fiyatlar"
+                className="transition-colors font-medium text-[#CFC7BC] hover:text-[#D8CFC4]"
+              >
+                Fiyatlarımız
+              </a>
+              <a
                 href="#iletisim"
                 className={`transition-colors font-medium ${
                   activeSection === 'iletisim'
@@ -256,6 +262,13 @@ export default function Home() {
                   className="text-[#CFC7BC] hover:text-[#D8CFC4] transition-colors font-medium text-lg py-2 px-4 rounded-lg hover:bg-[#1F1F1F]"
                 >
                   Yorumlar
+                </a>
+                <a
+                  href="/fiyatlar"
+                  onClick={closeMobileMenu}
+                  className="text-[#CFC7BC] hover:text-[#D8CFC4] transition-colors font-medium text-lg py-2 px-4 rounded-lg hover:bg-[#1F1F1F]"
+                >
+                  Fiyatlarımız
                 </a>
                 <a
                   href="#iletisim"

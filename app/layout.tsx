@@ -177,6 +177,9 @@ export default function RootLayout({
           </div>
         </footer>
 
+        {/* Mobile Bottom Navigation Spacer */}
+        <div className="h-[calc(72px+env(safe-area-inset-bottom,0px))] md:hidden" aria-hidden="true" />
+
         {/* Mobile Bottom Navigation */}
         <BottomNav />
       </body>

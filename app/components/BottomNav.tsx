@@ -81,7 +81,7 @@ export default function BottomNav() {
   ];
 
   return (
-    <nav className="md:hidden fixed bottom-0 left-0 right-0 z-50 bg-black/70 backdrop-blur-md border-t border-white/10">
+    <nav className="md:hidden fixed bottom-0 left-0 right-0 z-[50] bg-black/70 backdrop-blur-md border-t border-white/10">
       <div className="max-w-7xl mx-auto px-3 py-2">
         <div className="grid grid-cols-5 gap-1">
           {navItems.map((item) => (
