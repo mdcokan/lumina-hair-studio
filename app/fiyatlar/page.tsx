@@ -636,35 +636,35 @@ export default function FiyatlarPage() {
                               <h3 className="text-lg font-semibold text-[#F5F3EF] mb-1">
                                 {item.hizmet}
                               </h3>
-                              <div className="flex flex-wrap gap-3 text-sm text-[#CFC7BC]">
-                                {item.sure && (
-                                  <span className="flex items-center gap-1">
-                                    <svg
-                                      className="w-4 h-4"
-                                      fill="none"
-                                      stroke="currentColor"
-                                      viewBox="0 0 24 24"
-                                    >
-                                      <path
-                                        strokeLinecap="round"
-                                        strokeLinejoin="round"
-                                        strokeWidth={2}
-                                        d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
-                                      />
-                                    </svg>
-                                    {item.sure}
-                                  </span>
-                                )}
-                                {item.not && (
-                                  <span className="text-[#D8CFC4]/70 italic">{item.not}</span>
-                                )}
-                              </div>
+                              {item.sure && (
+                                <div className="flex items-center gap-1 text-sm text-[#CFC7BC]">
+                                  <svg
+                                    className="w-4 h-4"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    viewBox="0 0 24 24"
+                                  >
+                                    <path
+                                      strokeLinecap="round"
+                                      strokeLinejoin="round"
+                                      strokeWidth={2}
+                                      d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
+                                    />
+                                  </svg>
+                                  {item.sure}
+                                </div>
+                              )}
                             </div>
                             {item.fiyat && (
                               <div className="text-right">
                                 <div className="text-2xl font-bold text-[#D8CFC4] tabular-nums">
                                   {item.fiyat}
                                 </div>
+                                {item.not && (
+                                  <div className="text-xs text-[#CFC7BC]/60 mt-1 italic">
+                                    {item.not}
+                                  </div>
+                                )}
                               </div>
                             )}
                           </div>
