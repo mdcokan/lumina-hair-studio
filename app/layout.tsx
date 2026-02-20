@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import Script from "next/script";
 import "./globals.css";
 import BottomNav from "./components/BottomNav";
+import { BookingModalProvider } from "./components/BookingModalProvider";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -164,24 +165,26 @@ export default function RootLayout({
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
 
-        <main className="flex-1 pb-16 md:pb-0">
-          {children}
-        </main>
+        <BookingModalProvider>
+          <main className="flex-1 pb-16 md:pb-0">
+            {children}
+          </main>
 
-        {/* Global Footer - Meta İşletme Doğrulaması */}
-        <footer className="bg-[#0E0E0E] border-t border-[#D8CFC4]/10">
-          <div className="container mx-auto max-w-7xl px-4 py-3">
-            <p className="text-xs opacity-70 text-[#CFC7BC] text-center">
-              İşletme Sahibi: Toprak Efe Çokan
-            </p>
-          </div>
-        </footer>
+          {/* Global Footer - Meta İşletme Doğrulaması */}
+          <footer className="bg-[#0E0E0E] border-t border-[#D8CFC4]/10">
+            <div className="container mx-auto max-w-7xl px-4 py-3">
+              <p className="text-xs opacity-70 text-[#CFC7BC] text-center">
+                İşletme Sahibi: Toprak Efe Çokan
+              </p>
+            </div>
+          </footer>
 
-        {/* Mobile Bottom Navigation Spacer */}
-        <div className="h-[calc(72px+env(safe-area-inset-bottom,0px))] md:hidden" aria-hidden="true" />
+          {/* Mobile Bottom Navigation Spacer */}
+          <div className="h-[calc(72px+env(safe-area-inset-bottom,0px))] md:hidden" aria-hidden="true" />
 
-        {/* Mobile Bottom Navigation */}
-        <BottomNav />
+          {/* Mobile Bottom Navigation */}
+          <BottomNav />
+        </BookingModalProvider>
       </body>
     </html>
   );
