@@ -17,17 +17,9 @@ type PriceItem = {
 type PricesData = {
   categories: { [category: string]: PriceItem[] };
   items: PriceItem[];
+  /** Sıra API'den (sort_order); yoksa Object.keys(categories) kullanılır */
+  categoryOrder?: string[];
 };
-
-/** Kategori sırası: önce bu liste, sonra API'den gelen diğer kategoriler */
-const CATEGORY_ORDER = [
-  'Açma & Işıltı',
-  'Boyama',
-  'Bakım',
-  'Kesim & Fön',
-  'Tırnak',
-  'Ek Hizmetler',
-];
 
 export default function FiyatlarPage() {
   const { openBookingModal } = useBookingModal();
@@ -75,21 +67,25 @@ export default function FiyatlarPage() {
   useEffect(() => {
     const fetchPrices = async () => {
       try {
-        const response = await fetch('/api/prices');
+        const response = await fetch('/api/prices', { cache: 'no-store' });
         if (!response.ok) {
           throw new Error('Failed to fetch prices');
         }
         const result = await response.json();
+        if (process.env.NODE_ENV === 'development') {
+          console.log('[fiyatlar] categoryOrder from API:', result.categoryOrder);
+        }
         setData(result);
         if (typeof window !== 'undefined') {
           const isMobile = window.innerWidth < 768;
-          const categoryKeys = Object.keys(result.categories || {});
+          const ordered = Array.isArray(result.categoryOrder)
+            ? result.categoryOrder
+            : Object.keys(result.categories || {});
           if (isMobile) {
-            const firstCategory =
-              CATEGORY_ORDER.find((c) => categoryKeys.includes(c)) ?? categoryKeys[0];
+            const firstCategory = ordered[0];
             setOpenCategories(firstCategory ? new Set([firstCategory]) : new Set());
           } else {
-            setOpenCategories(new Set(categoryKeys));
+            setOpenCategories(new Set(ordered));
           }
         }
       } catch (err) {
@@ -377,11 +373,12 @@ export default function FiyatlarPage() {
     );
   }
 
-  const categoryKeys = Object.keys(data.categories || {});
-  const categories = [
-    ...CATEGORY_ORDER.filter((c) => categoryKeys.includes(c)),
-    ...categoryKeys.filter((c) => !CATEGORY_ORDER.includes(c)),
-  ];
+  const categories = Array.isArray(data.categoryOrder)
+    ? data.categoryOrder
+    : Object.keys(data.categories || {});
+  if (process.env.NODE_ENV === 'development') {
+    console.log('[fiyatlar] render categories order:', categories);
+  }
 
   const jsonLdSchema = {
     "@context": "https://schema.org",

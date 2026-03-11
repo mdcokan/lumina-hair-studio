@@ -33,6 +33,25 @@ const PRODUCTION_CATALOG_URL =
   "https://app.lumina-hairstudio.com/api/public/services/catalog";
 const FALLBACK_CATEGORY = "Hizmetler";
 
+const PRODUCTION_BASE = "https://app.lumina-hairstudio.com";
+
+/** Salon app base URL (no path) for public API calls */
+function getSalonAppBaseUrl(): string {
+  const base = process.env.SALON_APP_BASE_URL?.trim();
+  if (base) return base.replace(/\/$/, "");
+  const full = process.env.SALON_APP_CATALOG_URL?.trim();
+  if (full) {
+    try {
+      const u = new URL(full);
+      return u.origin;
+    } catch {
+      return PRODUCTION_BASE;
+    }
+  }
+  if (process.env.NODE_ENV !== "production") return "http://localhost:3000";
+  return PRODUCTION_BASE;
+}
+
 /** Environment-based salon app catalog URL (local dev → localhost:3000, prod → canlı) */
 function getSalonAppCatalogUrl(): string {
   const full = process.env.SALON_APP_CATALOG_URL?.trim();
@@ -43,6 +62,46 @@ function getSalonAppCatalogUrl(): string {
     return "http://localhost:3000/api/public/services/catalog";
   }
   return PRODUCTION_CATALOG_URL;
+}
+
+type ActiveCategoriesResult = {
+  activeSet: Set<string>;
+  orderedNames: string[];
+};
+
+/** Fetch active categories from salon app (name, sort_order, is_active). Returns null on failure = treat all as active. */
+async function fetchActiveCategories(baseUrl: string): Promise<ActiveCategoriesResult | null> {
+  const url = `${baseUrl}/api/public/categories`;
+  try {
+    const res = await fetch(url, { cache: "no-store", headers: { Accept: "application/json" } });
+    if (!res.ok) return null;
+    const data = await res.json();
+    const raw = Array.isArray(data) ? data : (data as Record<string, unknown>)?.data ?? (data as Record<string, unknown>)?.categories;
+    const arr = Array.isArray(raw) ? raw : null;
+    if (!arr || arr.length === 0) return null;
+    const entries: { name: string; sort_order: number }[] = [];
+    for (const x of arr) {
+      if (typeof x === "string" && x.trim()) {
+        entries.push({ name: x.trim(), sort_order: 9999 });
+        continue;
+      }
+      if (x && typeof x === "object" && "name" in x) {
+        const obj = x as Record<string, unknown>;
+        if (obj.is_active === false || obj.isActive === false) continue;
+        const n = obj.name;
+        if (typeof n !== "string" || !n.trim()) continue;
+        const so = obj.sort_order ?? obj.sortOrder;
+        const sortOrder = typeof so === "number" && !isNaN(so) ? so : 9999;
+        entries.push({ name: String(n).trim(), sort_order: sortOrder });
+      }
+    }
+    if (entries.length === 0) return null;
+    entries.sort((a, b) => a.sort_order - b.sort_order);
+    const orderedNames = entries.map((e) => e.name);
+    return { activeSet: new Set(orderedNames), orderedNames };
+  } catch {
+    return null;
+  }
 }
 
 function formatPriceTRY(price: number): string {
@@ -292,7 +351,40 @@ export async function GET(request: NextRequest) {
     }
 
     const services = rawArray.map(normalizeCatalogService);
-    const { categories, items } = transformCatalogToPrices(services);
+    const baseUrl = getSalonAppBaseUrl();
+    const activeCategories = await fetchActiveCategories(baseUrl);
+    const servicesToTransform =
+      activeCategories === null
+        ? services
+        : services.filter((s) => {
+            const categoryName =
+              s.category != null && String(s.category).trim()
+                ? String(s.category).trim()
+                : FALLBACK_CATEGORY;
+            return activeCategories.activeSet.has(categoryName);
+          });
+    const { categories: categoriesMap, items } = transformCatalogToPrices(servicesToTransform);
+    const categories =
+      activeCategories === null
+        ? categoriesMap
+        : (() => {
+            const ordered: PricesByCategory = {};
+            for (const name of activeCategories.orderedNames) {
+              if (categoriesMap[name]) ordered[name] = categoriesMap[name];
+            }
+            for (const name of Object.keys(categoriesMap)) {
+              if (!(name in ordered)) ordered[name] = categoriesMap[name];
+            }
+            return ordered;
+          })();
+
+    const categoryOrder =
+      activeCategories === null
+        ? Object.keys(categories)
+        : activeCategories.orderedNames.filter((name) => categories[name]);
+    if (process.env.NODE_ENV !== "production") {
+      console.log("[prices] categoryOrder:", categoryOrder);
+    }
 
     const denemeTransformedItem = items.find((i) =>
       i.hizmet.toLowerCase().includes(DENEME_NAME)
@@ -305,7 +397,7 @@ export async function GET(request: NextRequest) {
       });
     }
 
-    const body: Record<string, unknown> = { categories, items };
+    const body: Record<string, unknown> = { categories, items, categoryOrder };
     if (debugQuery) {
       const denemeCatalogItem = services.find((s) =>
         String(s.name ?? "").toLowerCase().includes(DENEME_NAME)
