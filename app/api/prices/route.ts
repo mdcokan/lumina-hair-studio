@@ -275,12 +275,13 @@ export async function GET(request: NextRequest) {
     }
 
     const raw = await response.json();
-    const rawArray = Array.isArray(raw)
+    const rawObj = raw as Record<string, unknown>;
+    const rawArray: unknown[] | null = Array.isArray(raw)
       ? raw
-      : Array.isArray((raw as Record<string, unknown>)?.data)
-        ? (raw as Record<string, unknown>).data
-        : Array.isArray((raw as Record<string, unknown>)?.services)
-          ? (raw as Record<string, unknown>).services
+      : Array.isArray(rawObj?.data)
+        ? (rawObj.data as unknown[])
+        : Array.isArray(rawObj?.services)
+          ? (rawObj.services as unknown[])
           : null;
 
     if (!rawArray || rawArray.length === 0) {
