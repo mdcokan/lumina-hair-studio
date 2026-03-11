@@ -19,6 +19,16 @@ type PricesData = {
   items: PriceItem[];
 };
 
+/** Kategori sırası: önce bu liste, sonra API'den gelen diğer kategoriler */
+const CATEGORY_ORDER = [
+  'Açma & Işıltı',
+  'Boyama',
+  'Bakım',
+  'Kesim & Fön',
+  'Tırnak',
+  'Ek Hizmetler',
+];
+
 export default function FiyatlarPage() {
   const { openBookingModal } = useBookingModal();
   const [data, setData] = useState<PricesData | null>(null);
@@ -347,7 +357,11 @@ export default function FiyatlarPage() {
     );
   }
 
-  const categories = Object.keys(data.categories || {}).sort();
+  const categoryKeys = Object.keys(data.categories || {});
+  const categories = [
+    ...CATEGORY_ORDER.filter((c) => categoryKeys.includes(c)),
+    ...categoryKeys.filter((c) => !CATEGORY_ORDER.includes(c)),
+  ];
 
   const jsonLdSchema = {
     "@context": "https://schema.org",
@@ -560,9 +574,9 @@ export default function FiyatlarPage() {
       {/* Header Section - Flex container for reordering */}
       <div className="flex flex-col bg-[#181818]">
         {/* Mini Hero - Always first */}
-        <section className="relative py-10 md:py-12 px-4 sm:px-6 lg:px-8 order-1 overflow-hidden">
+        <section className="relative py-12 md:py-14 px-4 sm:px-6 lg:px-8 order-1 overflow-hidden border-b border-[#D8CFC4]/8">
           <div className="container mx-auto max-w-5xl">
-            <div className="relative rounded-3xl overflow-hidden h-[140px] sm:h-[160px] md:h-[200px]">
+            <div className="relative rounded-3xl overflow-hidden h-[160px] sm:h-[180px] md:h-[220px] shadow-xl">
               {/* Background Image */}
               <div className="absolute inset-0 z-0">
                 <Image
@@ -576,16 +590,14 @@ export default function FiyatlarPage() {
                   style={{ objectFit: "cover" }}
                 />
               </div>
-              
               {/* Overlay */}
               <div className="absolute inset-0 bg-black/55 backdrop-blur-[1px] z-10" />
-              
               {/* Content */}
               <div className="relative z-20 text-center h-full flex flex-col items-center justify-center px-6 md:px-8">
-                <h1 className="text-4xl md:text-5xl font-semibold text-white tracking-tight">
+                <h1 className="text-4xl md:text-5xl font-bold text-white tracking-tight drop-shadow-sm">
                   Fiyatlarımız
                 </h1>
-                <p className="mt-3 text-sm md:text-base text-white/80">
+                <p className="mt-3 text-sm md:text-base text-white/90 font-medium">
                   Güncel hizmet ve fiyat listemiz
                 </p>
               </div>
@@ -593,109 +605,90 @@ export default function FiyatlarPage() {
           </div>
         </section>
 
-        {/* Prices List - Second (after hero) */}
-        <section className="mt-6 md:mt-8 py-8 md:py-10 px-4 sm:px-6 lg:px-8 order-2">
-        <div className="container mx-auto max-w-5xl">
-          <div className="space-y-3">
-            {categories.map((category) => {
-              const items = data.categories[category] || [];
-              const isOpen = openCategories.has(category);
+        {/* Prices catalog - category sections */}
+        <section className="mt-8 md:mt-10 py-6 md:py-8 px-4 sm:px-6 lg:px-8 order-2" aria-label="Fiyat listesi">
+          <div className="container mx-auto max-w-4xl">
+            <div className="space-y-10 md:space-y-12">
+              {categories.map((category) => {
+                const items = data.categories[category] || [];
+                const isOpen = openCategories.has(category);
 
-              return (
-                <div
-                  key={category}
-                  ref={(el) => {
-                    categoryRefs.current[category] = el;
-                  }}
-                  className="bg-[#181818] rounded-2xl border border-[#D8CFC4]/12 overflow-hidden scroll-mt-24"
-                >
-                  {/* Category Header - Clickable on mobile */}
-                  <button
-                    onPointerDown={(e) => {
-                      // Prevent focus scroll on mobile
-                      if (typeof window !== 'undefined' && window.innerWidth < 768) {
-                        e.preventDefault();
-                      }
-                    }}
-                    onClick={() => toggleCategory(category)}
-                    className="w-full md:pointer-events-none flex items-center justify-between p-4 md:p-6 bg-[#1F1F1F]/30 hover:bg-[#1F1F1F]/50 transition-colors"
-                  >
-                    <h2 className="text-2xl font-bold text-[#F5F3EF]">{category}</h2>
-                    <svg
-                      className={`w-6 h-6 text-[#D8CFC4] transition-transform md:hidden ${
-                        isOpen ? 'rotate-180' : ''
-                      }`}
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M19 9l-7 7-7-7"
-                      />
-                    </svg>
-                  </button>
-
-                  {/* Category Items */}
+                return (
                   <div
-                    className={`transition-all duration-300 ${
-                      isOpen ? 'max-h-[5000px] opacity-100' : 'max-h-0 opacity-0 overflow-hidden'
-                    } md:max-h-[5000px] md:opacity-100`}
+                    key={category}
+                    ref={(el) => {
+                      categoryRefs.current[category] = el;
+                    }}
+                    className="scroll-mt-24"
                   >
-                    <div className="p-4 md:p-6 space-y-3">
-                      {items.map((item, index) => (
-                        <div
-                          key={index}
-                          className="bg-[#1F1F1F] rounded-xl p-4 hover:bg-[#2a2a2a] transition-colors border border-[#D8CFC4]/5"
-                        >
-                          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
-                            <div className="flex-1">
-                              <h3 className="text-lg font-semibold text-[#F5F3EF] mb-1">
-                                {item.hizmet}
-                              </h3>
-                              {item.sure && (
-                                <div className="flex items-center gap-1 text-sm text-[#CFC7BC]">
-                                  <svg
-                                    className="w-4 h-4"
-                                    fill="none"
-                                    stroke="currentColor"
-                                    viewBox="0 0 24 24"
-                                  >
-                                    <path
-                                      strokeLinecap="round"
-                                      strokeLinejoin="round"
-                                      strokeWidth={2}
-                                      d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
-                                    />
-                                  </svg>
-                                  {item.sure}
+                    {/* Category section header - tıklanabilir sadece mobilde */}
+                    <button
+                      type="button"
+                      onPointerDown={(e) => {
+                        if (typeof window !== 'undefined' && window.innerWidth < 768) e.preventDefault();
+                      }}
+                      onClick={() => toggleCategory(category)}
+                      className="w-full md:pointer-events-none flex items-center justify-between py-3 md:py-4 px-0 md:px-0 border-b border-[#D8CFC4]/20 mb-4 md:mb-5"
+                    >
+                      <h2 className="text-xl md:text-2xl font-bold text-[#F5F3EF] tracking-tight">
+                        {category}
+                      </h2>
+                      <svg
+                        className={`w-5 h-5 text-[#D8CFC4]/80 shrink-0 ml-2 transition-transform md:hidden ${isOpen ? 'rotate-180' : ''}`}
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                        aria-hidden
+                      >
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                      </svg>
+                    </button>
+
+                    <div
+                      className={`transition-all duration-300 ${isOpen ? 'max-h-[5000px] opacity-100' : 'max-h-0 opacity-0 overflow-hidden'} md:max-h-none md:opacity-100`}
+                    >
+                      <ul className="space-y-2 md:space-y-2.5" role="list">
+                        {items.map((item, index) => (
+                          <li
+                            key={`${category}-${index}`}
+                            className="bg-[#1F1F1F] rounded-xl px-4 py-3.5 md:px-5 md:py-4 border border-[#D8CFC4]/8 hover:border-[#D8CFC4]/15 hover:bg-[#252525] transition-colors"
+                          >
+                            <div className="flex flex-col gap-1 sm:flex-row sm:items-center sm:justify-between sm:gap-4">
+                              <div className="flex-1 min-w-0">
+                                <h3 className="text-base md:text-lg font-semibold text-[#F5F3EF]">
+                                  {item.hizmet}
+                                </h3>
+                                {item.sure && (
+                                  <p className="flex items-center gap-1.5 mt-0.5 text-sm text-[#CFC7BC]">
+                                    <svg className="w-4 h-4 shrink-0 text-[#D8CFC4]/70" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                    </svg>
+                                    {item.sure}
+                                  </p>
+                                )}
+                                {item.not && (
+                                  <p className="mt-2 text-sm text-[#CFC7BC]/80 leading-snug max-w-2xl">
+                                    {item.not}
+                                  </p>
+                                )}
+                              </div>
+                              {item.fiyat && (
+                                <div className="mt-2 sm:mt-0 sm:text-right shrink-0">
+                                  <span className="text-lg md:text-xl font-bold text-[#D8CFC4] tabular-nums whitespace-nowrap">
+                                    {item.fiyat}
+                                  </span>
                                 </div>
                               )}
                             </div>
-                            {item.fiyat && (
-                              <div className="text-right">
-                                <div className="text-2xl font-bold text-[#D8CFC4] tabular-nums">
-                                  {item.fiyat}
-                                </div>
-                                {item.not && (
-                                  <div className="text-xs text-[#CFC7BC]/60 mt-1 italic">
-                                    {item.not}
-                                  </div>
-                                )}
-                              </div>
-                            )}
-                          </div>
-                        </div>
-                      ))}
+                          </li>
+                        ))}
+                      </ul>
                     </div>
                   </div>
-                </div>
-              );
-            })}
+                );
+              })}
+            </div>
           </div>
-        </div>
         </section>
 
         {/* Description & Note Block - Third (after accordions) */}
