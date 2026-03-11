@@ -81,11 +81,15 @@ export default function FiyatlarPage() {
         }
         const result = await response.json();
         setData(result);
-        // Open all categories by default on desktop, closed on mobile
         if (typeof window !== 'undefined') {
           const isMobile = window.innerWidth < 768;
-          if (!isMobile) {
-            setOpenCategories(new Set(Object.keys(result.categories || {})));
+          const categoryKeys = Object.keys(result.categories || {});
+          if (isMobile) {
+            const firstCategory =
+              CATEGORY_ORDER.find((c) => categoryKeys.includes(c)) ?? categoryKeys[0];
+            setOpenCategories(firstCategory ? new Set([firstCategory]) : new Set());
+          } else {
+            setOpenCategories(new Set(categoryKeys));
           }
         }
       } catch (err) {
@@ -102,9 +106,11 @@ export default function FiyatlarPage() {
   const toggleCategory = (category: string) => {
     setOpenCategories((prev) => {
       const next = new Set(prev);
+      const isMobile = typeof window !== 'undefined' && window.innerWidth < 768;
       if (next.has(category)) {
         next.delete(category);
       } else {
+        if (isMobile) return new Set([category]);
         next.add(category);
       }
       return next;
@@ -112,7 +118,8 @@ export default function FiyatlarPage() {
   };
 
   const scrollToCategory = (category: string) => {
-    setOpenCategories((prev) => new Set(prev).add(category));
+    const isMobile = typeof window !== 'undefined' && window.innerWidth < 768;
+    setOpenCategories(isMobile ? new Set([category]) : (prev) => new Set(prev).add(category));
     requestAnimationFrame(() => {
       const el = categoryRefs.current[category];
       if (el) {
