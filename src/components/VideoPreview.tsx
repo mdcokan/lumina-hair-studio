@@ -18,7 +18,7 @@ export default function VideoPreview({ url, title }: { url: string; title: strin
   }
   return (
     <button type="button" onClick={() => setPlaying(true)}
-      aria-label={title + ' — videoyu oynat'}
+      aria-label={'Videoyu izle: ' + title}
       className="absolute inset-0 h-full w-full overflow-hidden rounded-2xl bg-[#181818] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#D8CFC4]">
       {/* YouTube's public poster loads without starting its video player. */}
       {/* eslint-disable-next-line @next/next/no-img-element */}
