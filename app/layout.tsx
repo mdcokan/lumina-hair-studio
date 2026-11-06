@@ -130,19 +130,7 @@ export default function RootLayout({
           `}
         </Script>
 
-        {/* Google Ads (gtag.js) */}
-        <Script
-          src="https://www.googletagmanager.com/gtag/js?id=AW-17775158966"
-          strategy="lazyOnload"
-        />
-        <Script id="google-ads" strategy="lazyOnload">
-          {`
-            window.dataLayer = window.dataLayer || [];
-            function gtag(){dataLayer.push(arguments);}
-            gtag('js', new Date());
-            gtag('config', 'AW-17775158966');
-          `}
-        </Script>
+        {/* Google Ads AW-17775158966 and Analytics are managed by GTM-TX25HPZ5. */}
       </head>
 
       <body className="antialiased min-h-screen flex flex-col">
