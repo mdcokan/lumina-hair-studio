@@ -156,11 +156,11 @@ export default function RootLayout({
 
           {/* Global Footer - Meta İşletme Doğrulaması */}
           <footer className="bg-[#0E0E0E] border-t border-[#D8CFC4]/10">
-            <div className="container mx-auto max-w-7xl px-4 py-3">
+            <div className="container mx-auto max-w-7xl px-4 pt-3 pb-2">
               <p className="text-xs opacity-70 text-[#CFC7BC] text-center">
                 İşletme Sahibi: Toprak Efe Çokan
               </p>
-              <div className="mt-3 flex flex-col items-center gap-1 border-t border-[#D8CFC4]/10 pt-4">
+              <div className="mt-2 flex flex-col items-center gap-0 border-t border-[#D8CFC4]/10 pt-2">
                 <p className="text-[10px] uppercase tracking-[0.18em] text-slate-400">Web tasarım &amp; yazılım</p>
                 <a href="https://mcwebportal.com/tr/" target="_blank" rel="noopener noreferrer" className="group inline-flex min-h-11 items-center gap-2 rounded-md px-3 text-xs text-sky-300 transition-colors hover:text-sky-200 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-sky-300" aria-label="MC Web Portal Yazılım Hizmetleri — yeni sekmede açılır">
                   <span><span className="font-semibold text-sky-300 transition-colors group-hover:text-sky-200">MC Web Portal</span> Yazılım Hizmetleri</span>
