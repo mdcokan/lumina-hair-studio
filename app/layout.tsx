@@ -179,9 +179,10 @@ export default function RootLayout({
               <p className="text-xs opacity-70 text-[#CFC7BC] text-center">
                 İşletme Sahibi: Toprak Efe Çokan
               </p>
-              <div className="mt-3 flex justify-center border-t border-[#D8CFC4]/10 pt-3">
-                <a href="https://mcwebportal.com/tr/" target="_blank" rel="noopener noreferrer" className="inline-flex min-h-11 items-center gap-2 rounded-md px-3 text-xs text-[#CFC7BC] transition-colors hover:text-[#EFE9E2]" aria-label="MC Web Portal Yazılım Hizmetleri — yeni sekmede açılır">
-                  <span><span className="font-semibold text-[#D8CFC4]">MC Web Portal</span> Yazılım Hizmetleri</span>
+              <div className="mt-3 flex flex-col items-center gap-1 border-t border-[#D8CFC4]/10 pt-4">
+                <p className="text-[10px] uppercase tracking-[0.18em] text-slate-400">Web tasarım &amp; yazılım</p>
+                <a href="https://mcwebportal.com/tr/" target="_blank" rel="noopener noreferrer" className="group inline-flex min-h-11 items-center gap-2 rounded-md px-3 text-xs text-sky-300 transition-colors hover:text-sky-200 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-sky-300" aria-label="MC Web Portal Yazılım Hizmetleri — yeni sekmede açılır">
+                  <span><span className="font-semibold text-sky-300 transition-colors group-hover:text-sky-200">MC Web Portal</span> Yazılım Hizmetleri</span>
                   <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" aria-hidden="true"><path d="M7 17 17 7M7 7h10v10" /></svg>
                 </a>
               </div>
