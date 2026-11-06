@@ -149,3 +149,7 @@ section[id] { scroll-margin-top: 6rem; }
 #iletisim .space-y-8 > div { padding: 1.5rem; border: 1px solid rgba(216,207,196,.16); border-radius: 1.5rem; background: rgba(24,24,24,.8); }
 @media (max-width: 767px) { header .text-2xl { font-size: 1.2rem; } #iletisim .space-y-8 > div { padding: 1.25rem; } }
 @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } *, *::before, *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; } }
+
+/* Keep hero photography visible while lifting text off the image. */
+.hero-copy h1, .hero-copy h2 { text-shadow: 0 2px 14px rgba(0,0,0,.65); }
+.hero-copy > p { text-shadow: 0 1px 5px rgba(0,0,0,.9); }

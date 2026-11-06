@@ -288,14 +288,14 @@ export default function Home() {
             priority
             quality={65}
             sizes="100vw"
-            className="object-cover brightness-[1.08] contrast-[1.08] saturate-[1.05]"
+            className="object-cover brightness-[1.15] contrast-[1.02] saturate-[1.05]"
             style={{ objectFit: "cover" }}
           />
         </div>
-        <div className="absolute inset-0 bg-gradient-to-b from-black/20 via-black/20 to-[#0E0E0E] z-10" />
+        <div className="absolute inset-0 bg-gradient-to-b from-black/5 via-transparent to-black/45 z-10" />
         <div className="relative z-20 container mx-auto max-w-7xl py-36">
           {/* Premium glass panel container */}
-          <div className="text-center flex flex-col gap-4 md:gap-6 max-w-5xl mx-auto bg-[#171411]/80 backdrop-blur-md rounded-[30px] border border-white/10 shadow-2xl px-6 py-8 md:px-10 md:py-10">
+          <div className="hero-copy text-center flex flex-col gap-4 md:gap-6 max-w-5xl mx-auto bg-[#171411]/35 backdrop-blur-[2px] rounded-[30px] border border-white/20 shadow-xl px-6 py-8 md:px-10 md:py-10">
             <a href={locationUrl} target="_blank" rel="noopener noreferrer" className="mx-auto inline-flex rounded-full border border-[#D8CFC4]/30 bg-[#D8CFC4]/10 px-4 py-2 text-xs sm:text-sm text-[#EFE9E2]">Yeni adresimiz: İnönü Mahallesi · Yenişehir / Mersin ↗</a>
             <h1 className="text-4xl md:text-6xl font-bold text-[#F5F5F5] leading-[1.15] tracking-[-0.02em]">
               Mersin Yenişehir'de Profesyonel Kadın Kuaförü
@@ -303,7 +303,7 @@ export default function Home() {
             <h2 className="text-2xl md:text-3xl font-semibold text-[#D8CFC4] leading-relaxed">
               Saçınıza ışıltı, size güven.
             </h2>
-            <p className="text-lg sm:text-xl text-[#CFC7BC]/95 leading-relaxed max-w-md md:max-w-xl mx-auto font-light">
+            <p className="text-lg sm:text-xl text-[#F5F3EF] leading-relaxed max-w-md md:max-w-xl mx-auto font-normal">
               Mersin Yenişehir ve İnönü bölgesinde kadın kuaför hizmetleri sunuyoruz. Kişiye özel saç kesimi,
               ombre, balyaj, renklendirme ve bakım uygulamaları ile hayalinizdeki görünüme kavuşun. Profesyonel
               ekibimiz, modern teknikler ve premium ürünlerle saçlarınıza özenle yaklaşıyor.

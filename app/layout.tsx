@@ -178,6 +178,12 @@ export default function RootLayout({
               <p className="text-xs opacity-70 text-[#CFC7BC] text-center">
                 İşletme Sahibi: Toprak Efe Çokan
               </p>
+              <div className="mt-3 flex justify-center border-t border-[#D8CFC4]/10 pt-3">
+                <a href="https://mcwebportal.com/tr/" target="_blank" rel="noopener noreferrer" className="inline-flex min-h-11 items-center gap-2 rounded-md px-3 text-xs text-[#CFC7BC] transition-colors hover:text-[#EFE9E2]" aria-label="MC Web Portal Yazılım Hizmetleri — yeni sekmede açılır">
+                  <span><span className="font-semibold text-[#D8CFC4]">MC Web Portal</span> Yazılım Hizmetleri</span>
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" aria-hidden="true"><path d="M7 17 17 7M7 7h10v10" /></svg>
+                </a>
+              </div>
             </div>
           </footer>
 
