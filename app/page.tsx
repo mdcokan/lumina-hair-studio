@@ -4,6 +4,7 @@ import { useState, useEffect, useRef } from 'react';
 import dynamic from 'next/dynamic';
 import Image from 'next/image';
 import Link from 'next/link';
+import ReviewsSection from '@/src/components/ReviewsSection';
 import { salonPhoto } from '@/src/content/site';
 import { videoLinks, videosTitle, videosDescription } from '@/src/content/gallery';
 import { bookingUrl, phoneDisplay, phoneLink, whatsappUrl, locationUrl, streetAddress } from '@/src/content/contact';
@@ -25,10 +26,6 @@ const GallerySection = dynamic(() => import('@/src/components/GallerySection'), 
   loading: () => <SectionFallback id="galeri" title="Galeri" />,
 });
 
-const ReviewsSection = dynamic(() => import('@/src/components/ReviewsSection'), {
-  ssr: false,
-  loading: () => <SectionFallback id="yorumlar" title="Google Yorumları" />,
-});
 
 const MapEmbed = dynamic(() => import('@/src/components/MapEmbed'), {
   ssr: false,
@@ -287,6 +284,7 @@ export default function Home() {
             alt="Lumina Hair Studio"
             fill
             priority
+            fetchPriority="high"
             quality={65}
             sizes="100vw"
             className="object-cover brightness-[1.15] contrast-[1.02] saturate-[1.05]"
@@ -410,7 +408,7 @@ export default function Home() {
                 <Link
                   href="/fiyatlar"
                   className="inline-flex items-center justify-center gap-2 bg-[#D8CFC4] hover:bg-[#C4B5A8] text-[#0E0E0E] px-8 py-4 rounded-full font-semibold text-base md:text-lg transition-all duration-200 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 w-full max-w-sm md:w-auto"
-                  aria-label="Fiyatlarımız sayfasına git"
+                  aria-label="Hizmetleri ve Fiyat Bilgisini Gör"
                 >
                   <span>Hizmetleri ve Fiyat Bilgisini Gör</span>
                   <svg
@@ -824,7 +822,7 @@ export default function Home() {
                     href={whatsappUrlWithMessage}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center justify-center gap-2 bg-green-500 hover:bg-green-600 text-white px-6 py-3 rounded-full font-medium transition-all shadow-lg hover:shadow-xl"
+                    className="inline-flex items-center justify-center gap-2 bg-green-700 hover:bg-green-800 text-white px-6 py-3 rounded-full font-medium transition-all shadow-lg hover:shadow-xl"
                   >
                     <svg
                       className="w-5 h-5"

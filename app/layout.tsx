@@ -1,22 +1,10 @@
 import type { Metadata } from "next";
 import { siteUrl, siteTitle, siteDescription, shareImage, salonPhoto } from "@/src/content/site";
-import { Geist, Geist_Mono } from "next/font/google";
 import Script from "next/script";
 import "./globals.css";
 import BottomNav from "./components/BottomNav";
 import { phoneLink, streetAddress, locationUrl } from "@/src/content/contact";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-  display: "swap",
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-  display: "swap",
-});
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
@@ -132,7 +120,7 @@ export default function RootLayout({
     <html lang="tr">
       <head>
         {/* Google Tag Manager (GTM) */}
-        <Script id="gtm" strategy="afterInteractive">
+        <Script id="gtm" strategy="lazyOnload">
           {`
             (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
             new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
@@ -145,9 +133,9 @@ export default function RootLayout({
         {/* Google Ads (gtag.js) */}
         <Script
           src="https://www.googletagmanager.com/gtag/js?id=AW-17775158966"
-          strategy="afterInteractive"
+          strategy="lazyOnload"
         />
-        <Script id="google-ads" strategy="afterInteractive">
+        <Script id="google-ads" strategy="lazyOnload">
           {`
             window.dataLayer = window.dataLayer || [];
             function gtag(){dataLayer.push(arguments);}
@@ -157,7 +145,7 @@ export default function RootLayout({
         </Script>
       </head>
 
-      <body className={`${geistSans.variable} ${geistMono.variable} antialiased min-h-screen flex flex-col`}>
+      <body className="antialiased min-h-screen flex flex-col">
         {/* Google Tag Manager (noscript) */}
         <noscript>
           <iframe
