@@ -4,6 +4,7 @@ import { useState, useEffect, useRef } from 'react';
 import dynamic from 'next/dynamic';
 import Image from 'next/image';
 import Link from 'next/link';
+import VideoPreview from '@/src/components/VideoPreview';
 import ReviewsSection from '@/src/components/ReviewsSection';
 import { salonPhoto } from '@/src/content/site';
 import { videoLinks, videosTitle, videosDescription } from '@/src/content/gallery';
@@ -654,14 +655,7 @@ export default function Home() {
                   className="group relative overflow-hidden rounded-2xl border border-white/10 bg-white/5 shadow-[0_10px_30px_rgba(0,0,0,0.35)] transition-all duration-300 hover:-translate-y-1 hover:border-white/20 hover:bg-white/8 hover:shadow-[0_18px_50px_rgba(0,0,0,0.55)] flex-none snap-start w-[78vw] md:w-[380px] lg:w-[340px] xl:w-[360px]"
                 >
                   <div className="relative aspect-[9/16] w-full">
-                    <iframe
-                      src={`${video.url}?autoplay=0&mute=1`}
-                      title={video.title}
-                      className="absolute inset-0 w-full h-full rounded-2xl"
-                      allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                      allowFullScreen
-                      loading="lazy"
-                    />
+                    <VideoPreview url={video.url} title={video.title} />
                     {/* Premium gradient overlay */}
                     <div className="absolute inset-0 bg-gradient-to-b from-white/5 via-transparent to-black/30 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" />
                   </div>
