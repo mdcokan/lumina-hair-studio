@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { siteUrl, siteTitle, siteDescription, shareImage, salonPhoto } from "@/src/content/site";
 import { Geist, Geist_Mono } from "next/font/google";
 import Script from "next/script";
 import "./globals.css";
@@ -18,14 +19,17 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://www.lumina-hairstudio.com"),
-  title: "Lumina Hair Studio | Mersin Kadın Kuaför - Yenişehir İnönü",
-  description:
-    "Mersin Yenişehir ve İnönü bölgesinde kadın kuaför hizmetleri. Saç kesimi, ombre, balyaj ve saç boyama. Profesyonel kadın kuaför salonu. WhatsApp ile randevu alın.",
+  metadataBase: new URL(siteUrl),
+  alternates: { canonical: "/" },
+  title: siteTitle,
+  description: siteDescription,
   keywords: [
     "mersin kadın kuaför",
     "yenişehir kadın kuaför",
     "inönü kuaför",
+    "pozcu kadın kuaförü",
+    "göçmen kadın kuaförü",
+    "mersin bayan kuaförü",
     "mersin inönü kuaför",
     "ombre saç mersin",
     "kuaför mersin",
@@ -58,28 +62,19 @@ export const metadata: Metadata = {
   manifest: "/site.webmanifest",
 
   openGraph: {
-    title: "Lumina Hair Studio | Mersin Kadın Kuaför - Yenişehir İnönü",
-    description:
-      "Mersin Yenişehir ve İnönü bölgesinde kadın kuaför hizmetleri. Saç kesimi, ombre, balyaj ve saç boyama. Profesyonel kadın kuaför salonu. WhatsApp ile randevu alın.",
+    title: siteTitle,
+    description: siteDescription,
     type: "website",
     locale: "tr_TR",
     siteName: "Lumina Hair Studio",
     url: "https://www.lumina-hairstudio.com",
-    images: [
-      {
-        url: "/og-image.jpg",
-        width: 1200,
-        height: 630,
-        alt: "Lumina Hair Studio",
-      },
-    ],
+    images: [shareImage],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Lumina Hair Studio | Mersin Kadın Kuaför - Yenişehir İnönü",
-    description:
-      "Mersin Yenişehir ve İnönü bölgesinde kadın kuaför hizmetleri. Saç kesimi, ombre, balyaj ve saç boyama. Profesyonel kadın kuaför salonu. WhatsApp ile randevu alın.",
-    images: ["/og-image.jpg"],
+    title: siteTitle,
+    description: siteDescription,
+    images: [shareImage],
   },
   robots: {
     index: true,
@@ -102,7 +97,11 @@ export default function RootLayout({
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "HairSalon",
+    "@id": siteUrl + "/#salon",
     name: "Lumina Hair Studio",
+    description: siteDescription,
+    image: [siteUrl + salonPhoto, siteUrl + shareImage.url],
+    geo: { "@type": "GeoCoordinates", latitude: 36.7807429, longitude: 34.5968293 },
     telephone: phoneLink.slice(4),
     hasMap: locationUrl,
     address: {
@@ -116,10 +115,12 @@ export default function RootLayout({
     sameAs: ["https://www.instagram.com/lumina.hair_studio?igsh=MTJpNWI2YWNoMjZ6Zg=="],
     url: "https://www.lumina-hairstudio.com",
     priceRange: "₺₺",
-    areaServed: {
-      "@type": "City",
-      name: "Mersin",
-    },
+    areaServed: [
+      { "@type": "City", name: "Mersin" },
+      { "@type": "AdministrativeArea", name: "Yenişehir" },
+      { "@type": "Place", name: "Pozcu" },
+      { "@type": "Place", name: "Göçmen" },
+    ],
   };
 
   return (

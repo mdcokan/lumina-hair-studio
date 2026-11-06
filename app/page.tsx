@@ -4,6 +4,7 @@ import { useState, useEffect, useRef } from 'react';
 import dynamic from 'next/dynamic';
 import Image from 'next/image';
 import Link from 'next/link';
+import { salonPhoto } from '@/src/content/site';
 import { videoLinks, videosTitle, videosDescription } from '@/src/content/gallery';
 import { bookingUrl, phoneDisplay, phoneLink, whatsappUrl, locationUrl, streetAddress } from '@/src/content/contact';
 
@@ -304,9 +305,8 @@ export default function Home() {
               Saçınıza ışıltı, size güven.
             </h2>
             <p className="text-lg sm:text-xl text-[#F5F3EF] leading-relaxed max-w-md md:max-w-xl mx-auto font-normal">
-              Mersin Yenişehir ve İnönü bölgesinde kadın kuaför hizmetleri sunuyoruz. Kişiye özel saç kesimi,
-              ombre, balyaj, renklendirme ve bakım uygulamaları ile hayalinizdeki görünüme kavuşun. Profesyonel
-              ekibimiz, modern teknikler ve premium ürünlerle saçlarınıza özenle yaklaşıyor.
+              İnönü Mahallesi’ndeki yeni salonumuzda kişiye özel saç kesimi, ombre, balyaj ve bakım.
+              Pozcu ve Göçmen’den gelen misafirlerimizi, saçlarına uygun bir görünümü birlikte planlamaya davet ediyoruz.
             </p>
 
             {/* Trust Badges */}
@@ -372,16 +372,25 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Location & SEO Section */}
-      <section className="py-16 sm:py-20 px-4 sm:px-6 lg:px-8 bg-[#0E0E0E]">
-        <div className="container mx-auto max-w-4xl">
-          <div className="text-center">
-            <p className="text-lg sm:text-xl text-[#CFC7BC] leading-relaxed max-w-3xl mx-auto">
-              <strong className="text-[#D8CFC4]">Lumina Hair Studio</strong>, Mersin Yenişehir ve İnönü bölgesinde
-              kadın saç kesimi, ombre, balyaj ve saç boyama hizmetleri sunan profesyonel bir kadın kuaför salonudur.
-              Mersin kadın kuaför arayışınızda, Yenişehir ve İnönü'deki müşterilerimize modern teknikler ve
-              premium ürünlerle hizmet veriyoruz.
-            </p>
+      {/* New location and storefront */}
+      <section id="salonumuz" className="py-16 sm:py-24 px-4 sm:px-6 lg:px-8 bg-[#0E0E0E]">
+        <div className="mx-auto grid max-w-7xl items-center gap-8 lg:grid-cols-2 lg:gap-14">
+          <figure className="overflow-hidden rounded-3xl border border-[#D8CFC4]/20 bg-[#181818]">
+            <Image src={salonPhoto} width={1280} height={853} sizes="(max-width: 1024px) 100vw, 50vw" alt="Lumina Hair Studio salon girişi ve ışıklı tabelası, İnönü Mahallesi Yenişehir Mersin" className="h-auto w-full" />
+            <figcaption className="px-5 py-3 text-sm text-[#CFC7BC]">Yeni adresimizde sizi bekliyoruz · İnönü / Yenişehir</figcaption>
+          </figure>
+          <div className="space-y-5">
+            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[#D8CFC4]">Lumina Hair Studio · Yeni adresimiz</p>
+            <h2 className="text-3xl sm:text-4xl font-semibold leading-tight text-[#F5F3EF]">Pozcu ve Göçmen’den<br className="hidden sm:block" /> yeni salonumuza hoş geldiniz.</h2>
+            <p className="text-lg leading-relaxed text-[#CFC7BC]">Mersin Yenişehir’de kadın kuaförü arayan misafirlerimizi İnönü Mahallesi’ndeki salonumuzda ağırlıyoruz. Pozcu ve Göçmen’den saç kesimi, ombre, balyaj, renklendirme veya bakım için bize ulaşabilirsiniz.</p>
+            <div className="border-l-2 border-[#D8CFC4]/50 pl-4">
+              <p className="font-medium text-[#EFE9E2]">{streetAddress}</p>
+              <p className="text-sm text-[#CFC7BC]">33130 Yenişehir / Mersin</p>
+            </div>
+            <div className="flex flex-col gap-3 sm:flex-row">
+              <a href={locationUrl} target="_blank" rel="noopener noreferrer" className="inline-flex min-h-12 items-center justify-center rounded-full bg-[#D8CFC4] px-6 py-3 font-medium text-[#171411] hover:bg-[#EFE9E2]">Yeni salonumuza yol tarifi</a>
+              <a href={bookingUrl} target="_blank" rel="noopener noreferrer" className="inline-flex min-h-12 items-center justify-center rounded-full border border-[#D8CFC4]/30 px-6 py-3 text-[#EFE9E2] hover:bg-white/5">WhatsApp ile randevu</a>
+            </div>
           </div>
         </div>
       </section>
