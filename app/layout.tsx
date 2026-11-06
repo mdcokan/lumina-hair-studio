@@ -104,6 +104,11 @@ export default function RootLayout({
     geo: { "@type": "GeoCoordinates", latitude: 36.7807429, longitude: 34.5968293 },
     telephone: phoneLink.slice(4),
     hasMap: locationUrl,
+    openingHoursSpecification: [
+      { "@type": "OpeningHoursSpecification", dayOfWeek: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"], opens: "09:00", closes: "19:00" },
+      { "@type": "OpeningHoursSpecification", dayOfWeek: "Saturday", opens: "09:00", closes: "18:00" },
+      { "@type": "OpeningHoursSpecification", dayOfWeek: "Sunday", opens: "00:00", closes: "00:00" },
+    ],
     address: {
       "@type": "PostalAddress",
       streetAddress,
