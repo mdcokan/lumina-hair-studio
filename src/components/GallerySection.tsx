@@ -97,7 +97,10 @@ export default function GallerySection() {
               const hasError = erroredImages.has(index);
 
               return (
-                <div
+                <button
+                  type="button"
+                  aria-label={image.alt + " — büyüt"}
+                  disabled={hasError}
                   key={index}
                   className="relative rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:scale-105 group cursor-pointer aspect-[3/4]"
                   onClick={() => !hasError && openLightbox(index)}
@@ -137,7 +140,7 @@ export default function GallerySection() {
                     />
                   )}
                   <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors pointer-events-none" />
-                </div>
+                </button>
               );
             })}
           </div>

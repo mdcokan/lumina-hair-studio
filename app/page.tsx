@@ -22,13 +22,13 @@ const SectionFallback = ({ id, title }: { id: string; title: string }) => (
 );
 
 const GallerySection = dynamic(() => import('@/src/components/GallerySection'), {
-  ssr: false,
+  ssr: true,
   loading: () => <SectionFallback id="galeri" title="Galeri" />,
 });
 
 
 const MapEmbed = dynamic(() => import('@/src/components/MapEmbed'), {
-  ssr: false,
+  ssr: true,
   loading: () => (
     <div className="w-full rounded-2xl overflow-hidden shadow-2xl aspect-video bg-[#1F1F1F] flex items-center justify-center text-[#CFC7BC]">
       Harita yükleniyor...
@@ -45,7 +45,9 @@ export default function Home() {
   const videoCarouselRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const handleScroll = () => {
+    let scrollFrame = 0;
+    const updateScrollState = () => {
+      scrollFrame = 0;
       setIsScrolled(window.scrollY > 50);
       setShowBackToTop(window.scrollY > 400);
 
@@ -65,9 +67,15 @@ export default function Home() {
         }
       }
     };
+    const handleScroll = () => {
+      if (!scrollFrame) scrollFrame = requestAnimationFrame(updateScrollState);
+    };
     window.addEventListener('scroll', handleScroll, { passive: true });
-    handleScroll(); // Initial check
-    return () => window.removeEventListener('scroll', handleScroll);
+    updateScrollState();
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+      cancelAnimationFrame(scrollFrame);
+    };
   }, []);
 
   useEffect(() => {
