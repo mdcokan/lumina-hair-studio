@@ -140,3 +140,12 @@ button, a, .transition-all {
 .text-off-white {
   color: #F5F3EF;
 }
+
+/* Contact refresh: warm accents, readable focus and mobile spacing. */
+::selection { background: #D8CFC4; color: #171411; }
+a:focus-visible, button:focus-visible { outline: 2px solid #D8CFC4; outline-offset: 5px; }
+section[id] { scroll-margin-top: 6rem; }
+#iletisim { background: radial-gradient(ellipse at top right, #30251d 0%, #0E0E0E 65%); }
+#iletisim .space-y-8 > div { padding: 1.5rem; border: 1px solid rgba(216,207,196,.16); border-radius: 1.5rem; background: rgba(24,24,24,.8); }
+@media (max-width: 767px) { header .text-2xl { font-size: 1.2rem; } #iletisim .space-y-8 > div { padding: 1.25rem; } }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } *, *::before, *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; } }

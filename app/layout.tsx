@@ -3,7 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import Script from "next/script";
 import "./globals.css";
 import BottomNav from "./components/BottomNav";
-import { BookingModalProvider } from "./components/BookingModalProvider";
+import { phoneLink, streetAddress, locationUrl } from "@/src/content/contact";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -19,14 +19,14 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://www.lumina-hairstudio.com"),
-  title: "Lumina Hair Studio | Mersin Kadın Kuaför - Yenişehir Çiftlikköy",
+  title: "Lumina Hair Studio | Mersin Kadın Kuaför - Yenişehir İnönü",
   description:
-    "Mersin Yenişehir ve Çiftlikköy bölgesinde kadın kuaför hizmetleri. Saç kesimi, ombre, balyaj ve saç boyama. Profesyonel kadın kuaför salonu. WhatsApp ile randevu alın.",
+    "Mersin Yenişehir ve İnönü bölgesinde kadın kuaför hizmetleri. Saç kesimi, ombre, balyaj ve saç boyama. Profesyonel kadın kuaför salonu. WhatsApp ile randevu alın.",
   keywords: [
     "mersin kadın kuaför",
     "yenişehir kadın kuaför",
-    "çiftlikköy kuaför",
-    "mersin çiftlikköy kuaför",
+    "inönü kuaför",
+    "mersin inönü kuaför",
     "ombre saç mersin",
     "kuaför mersin",
     "saç kesimi mersin",
@@ -58,9 +58,9 @@ export const metadata: Metadata = {
   manifest: "/site.webmanifest",
 
   openGraph: {
-    title: "Lumina Hair Studio | Mersin Kadın Kuaför - Yenişehir Çiftlikköy",
+    title: "Lumina Hair Studio | Mersin Kadın Kuaför - Yenişehir İnönü",
     description:
-      "Mersin Yenişehir ve Çiftlikköy bölgesinde kadın kuaför hizmetleri. Saç kesimi, ombre, balyaj ve saç boyama. Profesyonel kadın kuaför salonu. WhatsApp ile randevu alın.",
+      "Mersin Yenişehir ve İnönü bölgesinde kadın kuaför hizmetleri. Saç kesimi, ombre, balyaj ve saç boyama. Profesyonel kadın kuaför salonu. WhatsApp ile randevu alın.",
     type: "website",
     locale: "tr_TR",
     siteName: "Lumina Hair Studio",
@@ -76,9 +76,9 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Lumina Hair Studio | Mersin Kadın Kuaför - Yenişehir Çiftlikköy",
+    title: "Lumina Hair Studio | Mersin Kadın Kuaför - Yenişehir İnönü",
     description:
-      "Mersin Yenişehir ve Çiftlikköy bölgesinde kadın kuaför hizmetleri. Saç kesimi, ombre, balyaj ve saç boyama. Profesyonel kadın kuaför salonu. WhatsApp ile randevu alın.",
+      "Mersin Yenişehir ve İnönü bölgesinde kadın kuaför hizmetleri. Saç kesimi, ombre, balyaj ve saç boyama. Profesyonel kadın kuaför salonu. WhatsApp ile randevu alın.",
     images: ["/og-image.jpg"],
   },
   robots: {
@@ -103,9 +103,12 @@ export default function RootLayout({
     "@context": "https://schema.org",
     "@type": "HairSalon",
     name: "Lumina Hair Studio",
-    telephone: "+905523803696",
+    telephone: phoneLink.slice(4),
+    hasMap: locationUrl,
     address: {
       "@type": "PostalAddress",
+      streetAddress,
+      postalCode: "33130",
       addressLocality: "Yenişehir",
       addressRegion: "Mersin",
       addressCountry: "TR",
@@ -165,8 +168,7 @@ export default function RootLayout({
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
 
-        <BookingModalProvider>
-          <main className="flex-1 pb-16 md:pb-0">
+          <main className="flex-1">
             {children}
           </main>
 
@@ -184,7 +186,6 @@ export default function RootLayout({
 
           {/* Mobile Bottom Navigation */}
           <BottomNav />
-        </BookingModalProvider>
       </body>
     </html>
   );

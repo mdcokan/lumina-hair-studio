@@ -5,7 +5,7 @@ import dynamic from 'next/dynamic';
 import Image from 'next/image';
 import Link from 'next/link';
 import { videoLinks, videosTitle, videosDescription } from '@/src/content/gallery';
-import { useBookingModal } from '@/app/components/BookingModalProvider';
+import { bookingUrl, phoneDisplay, phoneLink, whatsappUrl, locationUrl, streetAddress } from '@/src/content/contact';
 
 const SectionFallback = ({ id, title }: { id: string; title: string }) => (
   <section id={id} className="py-24 sm:py-28 lg:py-32 px-4 sm:px-6 lg:px-8 bg-[#181818]">
@@ -39,7 +39,6 @@ const MapEmbed = dynamic(() => import('@/src/components/MapEmbed'), {
 });
 
 export default function Home() {
-  const { openBookingModal } = useBookingModal();
   const heroSrc = "/images/hero.webp";
   const [isScrolled, setIsScrolled] = useState(false);
   const [showBackToTop, setShowBackToTop] = useState(false);
@@ -51,11 +50,11 @@ export default function Home() {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 50);
       setShowBackToTop(window.scrollY > 400);
-      
+
       // Active section tracking
       const sections = ['hizmetler', 'galeri', 'yorumlar', 'iletisim'];
       const scrollPosition = window.scrollY + 100;
-      
+
       for (const section of sections) {
         const element = document.getElementById(section);
         if (element) {
@@ -84,12 +83,8 @@ export default function Home() {
     };
   }, [isMobileMenuOpen]);
 
-  const phoneDisplay = '0 552 380 36 96';
-  const phoneLink = 'tel:+905523803696';
-  const whatsappUrl = 'https://wa.me/905523803696';
   const whatsappMessage = encodeURIComponent('Merhaba, randevu almak istiyorum.');
   const whatsappUrlWithMessage = `${whatsappUrl}?text=${whatsappMessage}`;
-  const locationUrl = 'https://maps.app.goo.gl/TfNNCKN6BnggyMoJ8';
 
   const closeMobileMenu = () => {
     setIsMobileMenuOpen(false);
@@ -173,13 +168,12 @@ export default function Home() {
             </nav>
 
             {/* Booking CTA Button */}
-            <button
-              type="button"
-              onClick={() => { closeMobileMenu(); openBookingModal(); }}
+            <a href={bookingUrl} target="_blank" rel="noopener noreferrer"
+              onClick={closeMobileMenu}
               className="hidden sm:flex items-center gap-2 bg-[#D8CFC4] hover:bg-[#0E0E0E] hover:text-[#D8CFC4] hover:border border-[rgba(216,207,196,0.45)] text-[#0E0E0E] px-4 py-2.5 rounded-full font-medium transition-all shadow-lg hover:shadow-xl"
             >
               Randevu Al
-            </button>
+            </a>
 
             {/* Mobile Menu Button */}
             <button
@@ -226,7 +220,7 @@ export default function Home() {
               onClick={closeMobileMenu}
             />
           )}
-          
+
           {/* Mobile Menu Dropdown */}
           <div
             className={`md:hidden fixed top-20 left-0 right-0 bg-[#181818] shadow-2xl z-50 overflow-hidden transition-all duration-300 ease-in-out ${
@@ -272,13 +266,12 @@ export default function Home() {
                 >
                   İletişim
                 </a>
-                <button
-                  type="button"
-                  onClick={() => { closeMobileMenu(); openBookingModal(); }}
+                <a href={bookingUrl} target="_blank" rel="noopener noreferrer"
+                  onClick={closeMobileMenu}
                   className="flex items-center justify-center gap-2 bg-[#D8CFC4] hover:bg-[#0E0E0E] hover:text-[#D8CFC4] hover:border border-[rgba(216,207,196,0.45)] text-[#0E0E0E] px-6 py-3 rounded-full font-medium transition-all shadow-lg hover:shadow-xl mt-2"
                 >
                   Randevu Al
-                </button>
+                </a>
               </div>
             </nav>
           </div>
@@ -299,10 +292,11 @@ export default function Home() {
             style={{ objectFit: "cover" }}
           />
         </div>
-        <div className="absolute inset-0 bg-black/18 z-10" />
+        <div className="absolute inset-0 bg-gradient-to-b from-black/20 via-black/20 to-[#0E0E0E] z-10" />
         <div className="relative z-20 container mx-auto max-w-7xl py-36">
           {/* Premium glass panel container */}
-          <div className="text-center flex flex-col gap-4 md:gap-6 max-w-5xl mx-auto bg-black/10 md:bg-black/10 backdrop-blur-md rounded-[30px] border border-white/10 shadow-2xl px-6 py-8 md:px-10 md:py-10 opacity-80">
+          <div className="text-center flex flex-col gap-4 md:gap-6 max-w-5xl mx-auto bg-[#171411]/80 backdrop-blur-md rounded-[30px] border border-white/10 shadow-2xl px-6 py-8 md:px-10 md:py-10">
+            <a href={locationUrl} target="_blank" rel="noopener noreferrer" className="mx-auto inline-flex rounded-full border border-[#D8CFC4]/30 bg-[#D8CFC4]/10 px-4 py-2 text-xs sm:text-sm text-[#EFE9E2]">Yeni adresimiz: İnönü Mahallesi · Yenişehir / Mersin ↗</a>
             <h1 className="text-4xl md:text-6xl font-bold text-[#F5F5F5] leading-[1.15] tracking-[-0.02em]">
               Mersin Yenişehir'de Profesyonel Kadın Kuaförü
             </h1>
@@ -310,11 +304,11 @@ export default function Home() {
               Saçınıza ışıltı, size güven.
             </h2>
             <p className="text-lg sm:text-xl text-[#CFC7BC]/95 leading-relaxed max-w-md md:max-w-xl mx-auto font-light">
-              Mersin Yenişehir ve Çiftlikköy bölgesinde kadın kuaför hizmetleri sunuyoruz. Kişiye özel saç kesimi, 
-              ombre, balyaj, renklendirme ve bakım uygulamaları ile hayalinizdeki görünüme kavuşun. Profesyonel 
+              Mersin Yenişehir ve İnönü bölgesinde kadın kuaför hizmetleri sunuyoruz. Kişiye özel saç kesimi,
+              ombre, balyaj, renklendirme ve bakım uygulamaları ile hayalinizdeki görünüme kavuşun. Profesyonel
               ekibimiz, modern teknikler ve premium ürünlerle saçlarınıza özenle yaklaşıyor.
             </p>
-            
+
             {/* Trust Badges */}
             <div className="flex flex-wrap justify-center gap-6">
               <div className="flex items-center gap-2 bg-[#181818] backdrop-blur-sm px-4 py-2 rounded-full shadow-md border border-[#D8CFC4]/20">
@@ -336,17 +330,15 @@ export default function Home() {
                 <span className="text-sm font-semibold text-[#D8CFC4]">Kişiye Özel Danışmanlık</span>
               </div>
             </div>
-            
+
             <div className="flex flex-col sm:flex-row gap-4 justify-center mb-10">
               <div className="flex flex-col items-center gap-2">
-                <button
-                  type="button"
-                  onClick={openBookingModal}
+                <a href={bookingUrl} target="_blank" rel="noopener noreferrer"
                   className="inline-flex items-center justify-center gap-2 md:gap-3 bg-[#D8CFC4] hover:bg-[#C4B5A8] text-[#0E0E0E] px-6 md:px-10 py-4 md:py-5 rounded-full font-semibold text-[15px] md:text-lg leading-none md:leading-normal whitespace-nowrap transition-all duration-200 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 w-full max-w-[340px] md:w-auto md:max-w-none"
                 >
                   <span className="whitespace-nowrap">Randevu Al</span>
-                </button>
-                <p className="text-xs text-[#CFC7BC]/70 font-light">Hızlı ve kolay randevu.</p>
+                </a>
+                <p className="text-xs text-[#CFC7BC]/70 font-light">WhatsApp üzerinden birlikte planlayalım.</p>
               </div>
               <a
                 href={locationUrl}
@@ -385,9 +377,9 @@ export default function Home() {
         <div className="container mx-auto max-w-4xl">
           <div className="text-center">
             <p className="text-lg sm:text-xl text-[#CFC7BC] leading-relaxed max-w-3xl mx-auto">
-              <strong className="text-[#D8CFC4]">Lumina Hair Studio</strong>, Mersin Yenişehir ve Çiftlikköy bölgesinde 
-              kadın saç kesimi, ombre, balyaj ve saç boyama hizmetleri sunan profesyonel bir kadın kuaför salonudur. 
-              Mersin kadın kuaför arayışınızda, Yenişehir ve Çiftlikköy'deki müşterilerimize modern teknikler ve 
+              <strong className="text-[#D8CFC4]">Lumina Hair Studio</strong>, Mersin Yenişehir ve İnönü bölgesinde
+              kadın saç kesimi, ombre, balyaj ve saç boyama hizmetleri sunan profesyonel bir kadın kuaför salonudur.
+              Mersin kadın kuaför arayışınızda, Yenişehir ve İnönü'deki müşterilerimize modern teknikler ve
               premium ürünlerle hizmet veriyoruz.
             </p>
           </div>
@@ -403,7 +395,7 @@ export default function Home() {
                 Fiyatlarımız
               </h2>
               <p className="text-lg sm:text-xl text-[#CFC7BC] leading-relaxed max-w-2xl mx-auto">
-                Güncel hizmet ve fiyat listemizi inceleyin.
+                Hizmetlerimizi inceleyin, güncel fiyat bilgisini WhatsApp üzerinden alın.
               </p>
               <div className="pt-2">
                 <Link
@@ -411,7 +403,7 @@ export default function Home() {
                   className="inline-flex items-center justify-center gap-2 bg-[#D8CFC4] hover:bg-[#C4B5A8] text-[#0E0E0E] px-8 py-4 rounded-full font-semibold text-base md:text-lg transition-all duration-200 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 w-full max-w-sm md:w-auto"
                   aria-label="Fiyatlarımız sayfasına git"
                 >
-                  <span>Fiyat Listesini Gör</span>
+                  <span>Hizmetleri ve Fiyat Bilgisini Gör</span>
                   <svg
                     className="w-5 h-5"
                     fill="none"
@@ -440,7 +432,7 @@ export default function Home() {
               Hizmetlerimiz
             </h2>
             <p className="text-xl text-[#CFC7BC] max-w-3xl mx-auto leading-relaxed">
-              Mersin Yenişehir ve Çiftlikköy bölgesinde profesyonel ekibimizle sunduğumuz kapsamlı kadın kuaför 
+              Mersin Yenişehir ve İnönü bölgesinde profesyonel ekibimizle sunduğumuz kapsamlı kadın kuaför
               hizmetleri: saç kesimi, ombre, balyaj, renklendirme ve bakım
             </p>
           </div>
@@ -448,7 +440,7 @@ export default function Home() {
             {[
               {
                 title: 'Kesim & Stil',
-                description: 'Yüz hatlarınıza uygun, kişiye özel kesim teknikleri ile modern ve klasik stilleri harmanlayarak hayalinizdeki görünüme ulaşın. Her kesim, saç tipiniz ve yaşam tarzınıza göre özenle tasarlanır. Mersin Yenişehir ve Çiftlikköy bölgesinde kadın kuaför hizmetlerimizle saçlarınıza profesyonel dokunuş.',
+                description: 'Yüz hatlarınıza uygun, kişiye özel kesim teknikleri ile modern ve klasik stilleri harmanlayarak hayalinizdeki görünüme ulaşın. Her kesim, saç tipiniz ve yaşam tarzınıza göre özenle tasarlanır. Mersin Yenişehir ve İnönü bölgesinde kadın kuaför hizmetlerimizle saçlarınıza profesyonel dokunuş.',
                 icon: '✂️',
               },
               {
@@ -468,7 +460,7 @@ export default function Home() {
               },
               {
                 title: 'Keratin Bakımı',
-                description: 'Premium keratin tedavileri ile saçlarınızı düzleştirin, yumuşatın ve yönetilebilir hale getirin. Friz kontrolü ve uzun süreli parlaklık için ideal çözüm. Çiftlikköy ve Yenişehir Mersin bölgesinde keratin bakımı için profesyonel kadın kuaför hizmeti.',
+                description: 'Premium keratin tedavileri ile saçlarınızı düzleştirin, yumuşatın ve yönetilebilir hale getirin. Friz kontrolü ve uzun süreli parlaklık için ideal çözüm. İnönü ve Yenişehir Mersin bölgesinde keratin bakımı için profesyonel kadın kuaför hizmeti.',
                 icon: '🌟',
               },
               {
@@ -493,7 +485,7 @@ export default function Home() {
                   {/* Premium Gradient Overlay - altta koyulaşsın */}
                   <div className="absolute inset-0 bg-gradient-to-b from-black/0 via-black/0 to-black/40 pointer-events-none transition-opacity duration-200 group-hover:opacity-100 opacity-90" />
                 </div>
-                
+
                 {/* Content */}
                 <div className="p-8 lg:p-10">
                   <h3 className="text-2xl font-bold text-[#F5F3EF] mb-4 tracking-tight">
@@ -529,25 +521,25 @@ export default function Home() {
             </h2>
             <div className="max-w-4xl mx-auto">
               <p className="text-xl text-[#CFC7BC] leading-relaxed mb-6">
-                <strong>Lumina Hair Studio</strong>, Mersin Yenişehir ve Çiftlikköy bölgesinde kadın kuaförü olarak 
-                saç kesimi, ombre, balyaj, renklendirme ve bakım hizmetleri sunan modern bir salondur. Mersin kadın 
-                kuaför arayışınızda, Yenişehir ve Çiftlikköy'deki müşterilerimize saç tasarım uygulamalarında uzman 
+                <strong>Lumina Hair Studio</strong>, Mersin Yenişehir ve İnönü bölgesinde kadın kuaförü olarak
+                saç kesimi, ombre, balyaj, renklendirme ve bakım hizmetleri sunan modern bir salondur. Mersin kadın
+                kuaför arayışınızda, Yenişehir ve İnönü'deki müşterilerimize saç tasarım uygulamalarında uzman
                 ekibimizle kişiye özel çözümler sunuyoruz.
               </p>
               <p className="text-xl text-[#CFC7BC] leading-relaxed mb-6">
-                Lumina Hair Studio olarak, Mersin Yenişehir ve Çiftlikköy bölgesinde saç bakım ve stil alanında 
-                müşterilerimize en yüksek kalitede kadın kuaför hizmeti sunmayı hedefliyoruz. Ombre saç Mersin'de 
+                Lumina Hair Studio olarak, Mersin Yenişehir ve İnönü bölgesinde saç bakım ve stil alanında
+                müşterilerimize en yüksek kalitede kadın kuaför hizmeti sunmayı hedefliyoruz. Ombre saç Mersin'de
                 en çok tercih edilen uygulamalarımızdan biri olup, profesyonel ekibimizle modern teknikler kullanıyoruz.
               </p>
               <p className="text-xl text-[#CFC7BC] leading-relaxed mb-6">
-                Uzman ekibimiz, modern teknikler ve premium ürünler kullanarak her müşterimize 
-                kişiye özel çözümler sunar. Hijyen standartlarımız ve müşteri memnuniyeti 
-                odaklı yaklaşımımız ile saçlarınıza ışıltı, size güven veriyoruz. Yenişehir kadın kuaför 
-                ve Çiftlikköy kuaför hizmetlerimizle bölgenin en güvenilir salonu olmayı sürdürüyoruz.
+                Uzman ekibimiz, modern teknikler ve premium ürünler kullanarak her müşterimize
+                kişiye özel çözümler sunar. Hijyen standartlarımız ve müşteri memnuniyeti
+                odaklı yaklaşımımız ile saçlarınıza ışıltı, size güven veriyoruz. Yenişehir kadın kuaför
+                ve İnönü kuaför hizmetlerimizle bölgenin en güvenilir salonu olmayı sürdürüyoruz.
               </p>
               <p className="text-xl text-[#CFC7BC] leading-relaxed">
-                Google 5.0 puanımız ve 15+ müşteri yorumumuz, kalite anlayışımızın en güzel 
-                göstergesidir. Mersin çiftlikköy kuaför ve Yenişehir kadın kuaför hizmetlerimiz için 
+                Google 5.0 puanımız ve 15+ müşteri yorumumuz, kalite anlayışımızın en güzel
+                göstergesidir. Mersin İnönü kuaför ve Yenişehir kadın kuaför hizmetlerimiz için
                 sizleri de Lumina Hair Studio ailesine katılmaya davet ediyoruz.
               </p>
             </div>
@@ -637,7 +629,7 @@ export default function Home() {
               </svg>
             </button>
             {/* Carousel Container */}
-            <div 
+            <div
               ref={videoCarouselRef}
               className="flex flex-nowrap overflow-x-auto snap-x snap-mandatory scroll-smooth gap-6 md:gap-8 px-4 md:px-8 pb-2 py-2 scrollbar-hide touch-pan-x"
             >
@@ -660,13 +652,11 @@ export default function Home() {
                   </div>
                   <div className="p-4 bg-[#181818]">
                     <h3 className="font-semibold text-[#F5F3EF] mb-3">{video.title}</h3>
-                    <button
-                      type="button"
-                      onClick={openBookingModal}
+                    <a href={bookingUrl} target="_blank" rel="noopener noreferrer"
                       className="inline-flex items-center gap-2 text-sm font-medium text-white/80 hover:text-white transition-colors"
                     >
                       Randevu Al →
-                    </button>
+                    </a>
                   </div>
                 </div>
               ))}
@@ -685,7 +675,7 @@ export default function Home() {
               Bize Ulaşın
             </h2>
             <p className="text-xl text-[#CFC7BC] max-w-3xl mx-auto leading-relaxed">
-              Mersin Yenişehir ve Çiftlikköy bölgesinde kadın kuaför hizmetlerimizle sizleri bekliyoruz
+              Mersin Yenişehir ve İnönü bölgesinde kadın kuaför hizmetlerimizle sizleri bekliyoruz
             </p>
           </div>
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
@@ -715,9 +705,9 @@ export default function Home() {
                   Adres
                 </h3>
                 <p className="text-[#CFC7BC] text-lg leading-relaxed">
-                  Çiftlikköy Sokak 3215 Kapı No: 1 | L.K.V Royal
+                  {streetAddress}
                   <br />
-                  33110 Yenişehir/Mersin
+                  33130 Yenişehir/Mersin
                 </p>
                 <a
                   href={locationUrl}
@@ -857,7 +847,7 @@ export default function Home() {
                 Lumina Hair Studio
               </h3>
               <p className="text-[#CFC7BC] leading-relaxed">
-                Mersin Yenişehir ve Çiftlikköy bölgesinde kadın kuaför hizmetleri sunan
+                Mersin Yenişehir ve İnönü bölgesinde kadın kuaför hizmetleri sunan
                 profesyonel kuaför salonu. Saç kesimi, ombre, balyaj ve saç boyama.
               </p>
             </div>
@@ -929,7 +919,7 @@ export default function Home() {
       </footer>
 
       {/* Floating Buttons Container - Hidden on mobile */}
-      <div 
+      <div
         className="hidden md:flex fixed right-4 bottom-6 z-50 flex-col gap-3"
         style={{
           bottom: 'max(1.5rem, calc(1.5rem + env(safe-area-inset-bottom, 0rem)))',
@@ -976,7 +966,7 @@ export default function Home() {
           },
           {
             type: 'phone',
-            href: 'tel:+905523803696',
+            href: phoneLink,
             ariaLabel: 'Telefon ile ara',
             bgClass: 'bg-blue-500 hover:bg-blue-600',
             icon: (
@@ -992,7 +982,9 @@ export default function Home() {
           },
           {
             type: 'booking',
-            onClick: openBookingModal,
+            href: bookingUrl,
+            target: '_blank',
+            rel: 'noopener noreferrer',
             ariaLabel: 'Randevu al',
             bgClass: 'bg-[#D8CFC4] hover:bg-[#0E0E0E] hover:text-[#D8CFC4] hover:border-[rgba(216,207,196,0.45)] text-[#0E0E0E] border border-transparent hover:border-[rgba(216,207,196,0.45)]',
             icon: (
@@ -1002,17 +994,7 @@ export default function Home() {
             ),
           },
         ].map((button) =>
-          'onClick' in button ? (
-            <button
-              key={button.type}
-              type="button"
-              onClick={button.onClick}
-              className={`w-14 h-14 ${button.bgClass} rounded-full flex items-center justify-center shadow-lg hover:shadow-xl transition-all duration-200 transform hover:scale-110`}
-              aria-label={button.ariaLabel}
-            >
-              {button.icon}
-            </button>
-          ) : (
+          (
             <a
               key={button.type}
               href={button.href}

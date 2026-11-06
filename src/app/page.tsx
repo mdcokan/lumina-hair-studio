@@ -13,9 +13,9 @@ export default function Home() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  const phoneDisplay = '0 552 380 36 96';
-  const phoneLink = 'tel:+905523803696';
-  const whatsappUrl = 'https://wa.me/905523803696';
+  const phoneDisplay = '0542 557 40 82';
+  const phoneLink = 'tel:+905425574082';
+  const whatsappUrl = 'https://wa.me/905425574082';
   const whatsappMessage = encodeURIComponent('Merhaba, randevu almak istiyorum.');
   const whatsappUrlWithMessage = `${whatsappUrl}?text=${whatsappMessage}`;
   const locationUrl = 'https://www.google.com/maps/place/Yenişehir,+Mersin';
