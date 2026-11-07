@@ -296,14 +296,14 @@ export default function Home() {
             fetchPriority="high"
             quality={65}
             sizes="100vw"
-            className="object-cover brightness-[1.15] contrast-[1.02] saturate-[1.05]"
+            className="object-cover"
             style={{ objectFit: "cover" }}
           />
         </div>
         <div className="absolute inset-0 bg-gradient-to-b from-black/5 via-transparent to-black/45 z-10" />
         <div className="relative z-20 container mx-auto max-w-7xl py-36">
           {/* Premium glass panel container */}
-          <div className="hero-copy text-center flex flex-col gap-4 md:gap-6 max-w-5xl mx-auto bg-[#171411]/35 backdrop-blur-[2px] rounded-[30px] border border-white/20 shadow-xl px-6 py-8 md:px-10 md:py-10">
+          <div className="hero-copy text-center flex flex-col gap-4 md:gap-6 max-w-5xl mx-auto bg-[#171411]/45 rounded-[30px] border border-white/20 shadow-xl px-6 py-8 md:px-10 md:py-10">
             <a href={locationUrl} target="_blank" rel="noopener noreferrer" className="mx-auto inline-flex rounded-full border border-[#D8CFC4]/30 bg-[#D8CFC4]/10 px-4 py-2 text-xs sm:text-sm text-[#EFE9E2]">Yeni adresimiz: İnönü Mahallesi · Yenişehir / Mersin ↗</a>
             <h1 className="text-4xl md:text-6xl font-bold text-[#F5F5F5] leading-[1.15] tracking-[-0.02em]">
               Mersin Yenişehir'de Profesyonel Kadın Kuaförü
