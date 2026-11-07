@@ -1,7 +1,8 @@
 'use client';
 
 import { useState, useEffect, useRef } from 'react';
-import dynamic from 'next/dynamic';
+import GallerySection from '@/src/components/GallerySection';
+import MapEmbed from '@/src/components/MapEmbed';
 import Image from 'next/image';
 import Link from 'next/link';
 import VideoPreview from '@/src/components/VideoPreview';
@@ -9,33 +10,6 @@ import ReviewsSection from '@/src/components/ReviewsSection';
 import { salonPhoto } from '@/src/content/site';
 import { videoLinks, videosTitle, videosDescription } from '@/src/content/gallery';
 import { bookingUrl, phoneDisplay, phoneLink, whatsappUrl, locationUrl, streetAddress } from '@/src/content/contact';
-
-const SectionFallback = ({ id, title }: { id: string; title: string }) => (
-  <section id={id} className="py-24 sm:py-28 lg:py-32 px-4 sm:px-6 lg:px-8 bg-[#181818]">
-    <div className="container mx-auto max-w-7xl">
-      <div className="text-center space-y-4">
-        <div className="mx-auto h-10 w-40 rounded-full bg-[#D8CFC4]/10 animate-pulse" aria-hidden />
-        <div className="mx-auto h-4 w-64 rounded-full bg-[#D8CFC4]/8 animate-pulse" aria-hidden />
-        <p className="text-[#CFC7BC] text-sm">"{title}" yükleniyor...</p>
-      </div>
-    </div>
-  </section>
-);
-
-const GallerySection = dynamic(() => import('@/src/components/GallerySection'), {
-  ssr: true,
-  loading: () => <SectionFallback id="galeri" title="Galeri" />,
-});
-
-
-const MapEmbed = dynamic(() => import('@/src/components/MapEmbed'), {
-  ssr: true,
-  loading: () => (
-    <div className="w-full rounded-2xl overflow-hidden shadow-2xl aspect-video bg-[#1F1F1F] flex items-center justify-center text-[#CFC7BC]">
-      Harita yükleniyor...
-    </div>
-  ),
-});
 
 export default function Home() {
   const heroSrc = "/images/hero.webp";
@@ -296,14 +270,14 @@ export default function Home() {
             fetchPriority="high"
             quality={65}
             sizes="100vw"
-            className="object-cover"
+            className="object-cover brightness-[1.15] contrast-[1.02] saturate-[1.05]"
             style={{ objectFit: "cover" }}
           />
         </div>
         <div className="absolute inset-0 bg-gradient-to-b from-black/5 via-transparent to-black/45 z-10" />
         <div className="relative z-20 container mx-auto max-w-7xl py-36">
           {/* Premium glass panel container */}
-          <div className="hero-copy text-center flex flex-col gap-4 md:gap-6 max-w-5xl mx-auto bg-[#171411]/45 rounded-[30px] border border-white/20 shadow-xl px-6 py-8 md:px-10 md:py-10">
+          <div className="hero-copy text-center flex flex-col gap-4 md:gap-6 max-w-5xl mx-auto bg-[#171411]/35 backdrop-blur-[2px] rounded-[30px] border border-white/20 shadow-xl px-6 py-8 md:px-10 md:py-10">
             <a href={locationUrl} target="_blank" rel="noopener noreferrer" className="mx-auto inline-flex rounded-full border border-[#D8CFC4]/30 bg-[#D8CFC4]/10 px-4 py-2 text-xs sm:text-sm text-[#EFE9E2]">Yeni adresimiz: İnönü Mahallesi · Yenişehir / Mersin ↗</a>
             <h1 className="text-4xl md:text-6xl font-bold text-[#F5F5F5] leading-[1.15] tracking-[-0.02em]">
               Mersin Yenişehir'de Profesyonel Kadın Kuaförü
