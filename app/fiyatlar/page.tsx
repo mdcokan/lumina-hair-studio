@@ -9,6 +9,12 @@ export const metadata: Metadata = {
   alternates: { canonical: '/fiyatlar' },
   openGraph: { title: 'Hizmetler ve Fiyat Bilgisi | Lumina Hair Studio', description: 'Yenişehir İnönü’de saç kesimi, ombre, balyaj ve bakım. Güncel fiyat ve randevu için WhatsApp’tan ulaşın.', url: siteUrl + '/fiyatlar', type: 'website', locale: 'tr_TR', images: [shareImage] },
   description: 'Saç kesimi, renklendirme, ombre, balyaj ve bakım için Lumina Hair Studio ile WhatsApp üzerinden fiyat bilgisi alın.',
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Hizmetler ve Fiyat Bilgisi | Lumina Hair Studio',
+    description: 'Yenişehir İnönü’de saç kesimi, ombre, balyaj ve bakım. Güncel fiyat ve randevu için WhatsApp’tan ulaşın.',
+    images: [shareImage],
+  },
 };
 const services = [
   ['Kesim & Stil', 'Saç tipinize ve yüz hatlarınıza uygun bir kesimi birlikte planlayalım.', '/services/service-1.jpg'],
