@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import { siteUrl, shareImage } from '@/src/content/site';
 import Link from 'next/link';
 import Image from 'next/image';
-import { bookingUrl, whatsappUrl, phoneLink, phoneDisplay } from '@/src/content/contact';
+import { bookingUrl, whatsappUrl, phoneLink, phoneDisplay, fullAddress, locationUrl } from '@/src/content/contact';
 
 export const metadata: Metadata = {
   title: 'Hizmetler ve Fiyat Bilgisi | Lumina Hair Studio',
@@ -42,6 +42,11 @@ export default function PricesPage() {
           <a href={bookingUrl} target="_blank" rel="noopener noreferrer" className="rounded-full bg-[#D8CFC4] px-6 py-3.5 text-center font-semibold text-[#171411] hover:bg-[#EFE9E2]">WhatsApp ile randevu al</a>
           <a href={phoneLink} className="rounded-full border border-[#D8CFC4]/30 px-6 py-3.5 text-center text-[#D8CFC4]">{phoneDisplay}</a>
         </div>
+        <p className="mt-5 max-w-3xl text-sm leading-relaxed text-[#CFC7BC]">
+          <span className="font-medium text-[#F5F3EF]">Salon adresimiz:</span> {fullAddress}
+          {' · '}
+          <a href={locationUrl} target="_blank" rel="noopener noreferrer" className="font-medium text-[#D8CFC4] hover:text-white">Yol tarifi al ↗</a>
+        </p>
       </section>
       <section aria-label="Hizmetlerimiz" className="mx-auto grid max-w-6xl grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 px-5 pb-16">
         {services.map(([title, description, image]) => (
